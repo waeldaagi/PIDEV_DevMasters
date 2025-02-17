@@ -10,7 +10,6 @@ public class main {
     public static void main(String[] args) {
         ProjetServise projetServise = new ProjetServise();
         EquipeServise equipeServise = new EquipeServise();
-       // EquipeServise equipeServise = new EquipeServise();
         Equipe e = new Equipe("don",55,"sabri");
         Projet p = new Projet("java","30 jour","motaz",4);
         try {
