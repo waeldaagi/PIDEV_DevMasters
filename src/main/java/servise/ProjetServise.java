@@ -59,6 +59,6 @@ public class ProjetServise implements Iservise<Projet> {
             projets.add(p);
         }
         return projets;
-    }
+    }/
 }
 
