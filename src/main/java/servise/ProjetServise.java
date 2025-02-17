@@ -57,6 +57,7 @@ public class ProjetServise implements Iservise<Projet> {
             p.setNom_client(rs.getString("nom_client"));
             p.setIdEquipe(rs.getInt("id_equipe"));
             projets.add(p);
+//            projets.add(p);
         }
         return projets;
     }
