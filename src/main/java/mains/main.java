@@ -1,7 +1,7 @@
 package mains;
-import services.ServiceFormation;
+import services.ServiceParticipation;
 import services.ServiceEvennement;
-import models.Formation;
+import models.Participation;
 import models.Evennement;
 import java.sql.SQLException;
 import java.util.Date;
@@ -20,36 +20,36 @@ public class main {
             serviceEvent.ajouter(event);
 
             // Modifier un événement avec un ID spécifique
-            serviceEvent.modifier(2, "Hackathon IA", "Compétition sur l'intelligence artificielle", "Terminé");
+           // serviceEvent.modifier(2, "Hackathon IA", "Compétition sur l'intelligence artificielle", "Terminé");
 
             // Afficher la liste des événements
             System.out.println(serviceEvent.recuperer());
 
             // Supprimer un événement avec un ID spécifique
-            //serviceEvent.supprimer(4);
+            //serviceEvent.supprimer(1);
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-        // Gestion des formations
-        Formation formation = new Formation(0, "Formation Java", "Alice Smith", new Date(), "Apprentissage avancé de Java", 1 );
-        ServiceFormation serviceFormation = new ServiceFormation();
+        // Gestion des participations
+        Participation participation = new Participation(5, 1, new Date(), "Jury", "Informatique", "123456789", "Très bonne expérience", "Aucun");
+        ServiceParticipation serviceParticipation = new ServiceParticipation();
 
         try {
-            // Ajouter une formation
-            serviceFormation.ajouter(formation);
+            // Ajouter une participation
+            serviceParticipation.ajouter(participation);
 
-            // Modifier une formation avec un ID spécifique
-            serviceFormation.modifier(8, "Formation Spring Boot", "Bob Johnson", "Développement d'API avec Spring Boot");
+            // Modifier une participation avec un ID spécifique
+            //serviceParticipation.modifier(8, "Organisateur", "Marketing", "987654321");
 
-            // Afficher la liste des formations
-            System.out.println(serviceFormation.recuperer());
+            // Afficher la liste des participations
+            System.out.println(serviceParticipation.recuperer());
 
-            // Supprimer une formation avec un ID spécifique
-            serviceFormation.supprimer(12);
+            // Supprimer une participation avec un ID spécifique
+            //serviceParticipation.supprimer(12);
 
         } catch (SQLException e) {
-            System.err.println("Erreur Formation : " + e.getMessage());
+            System.err.println("Erreur Participation : " + e.getMessage());
         }
 
     }

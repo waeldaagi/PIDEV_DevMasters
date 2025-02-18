@@ -13,10 +13,10 @@ public class Evennement {
     private String lieu_event;
     private String  organisateur ;
     private String  statut;
-    private List<Formation> formations;
+    private List<Participation> participations;
 
     public Evennement() {
-        this.formations = new ArrayList<>();
+        this.participations = new ArrayList<>();
     }
 
     public Evennement( String nom_event, String description, Date date_event, String  lieu_event, String  organisateur, String  statut) {
@@ -26,7 +26,7 @@ public class Evennement {
         this.lieu_event = lieu_event;
         this.organisateur = organisateur;
         this.statut = statut;
-        this.formations = new ArrayList<>();
+        this.participations = new ArrayList<>();
     }
     public Evennement(int id_event, String nom_event, String description, Date date_event, String lieu_event, String  organisateur, String  statut) {
         this.id_event = id_event;
@@ -36,7 +36,7 @@ public class Evennement {
         this.lieu_event = lieu_event;
         this.organisateur = organisateur;
         this.statut = statut;
-        this.formations = new ArrayList<>();
+        this.participations = new ArrayList<>();
     }
 
     public int getId_event() {
@@ -94,12 +94,12 @@ public class Evennement {
     public void setStatut(String  statut) {
         this.statut = statut;
     }
-    public void addFormation(Formation formation) {
-        this.formations.add(formation);
+    public void addFormation(Participation participation) {
+        this.participations.add(participation);
     }
 
-    public List<Formation> getFormations() {
-        return formations;
+    public List<Participation> getFormations() {
+        return participations;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class Evennement {
                 ", lieu_event=" + lieu_event +
                 ", organisateur=" + organisateur +
                 ", statut=" + statut +
-                ", formations=" + formations +
+                ", formations=" + participations +
                 '}';
     }
 }
