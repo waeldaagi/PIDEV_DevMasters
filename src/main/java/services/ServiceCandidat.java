@@ -40,12 +40,11 @@ public class ServiceCandidat implements IServices<Candidat>{
     }
 
     @Override
-    public void modifier(int id, String nom, String mail) throws SQLException {
-        String sql = "UPDATE candidat SET nom=?, mail=? WHERE id_candidat=?";
+    public void modifier(int id, String nom) throws SQLException {
+        String sql = "UPDATE candidat SET nom=? WHERE id_candidat=?";
         PreparedStatement ste = cnx.prepareStatement(sql);
         ste.setString(1, nom);
-        ste.setString(2, mail);
-        ste.setInt(3, id);
+        ste.setInt(2, id);
         ste.executeUpdate();
         System.out.println("Candidat modifié");
         myDataBase.getInstance().getConnection().commit();

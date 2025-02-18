@@ -1,29 +1,30 @@
 package mains;
-import services.ServiceCandidat;
-import services.ServiceRecrutement;
-import models.Candidat;
-import models.Recrutement;
+import services.ServiceDemande;
+import services.ServiceOffreRecrutement;
+import models.Demande;
+import models.OffreRecrutement;
 import java.sql.SQLException;
 import java.util.Date;
 
 public class main {
     public static void main(String[] args) {
-        Recrutement r = new Recrutement( 5000, "Développeur", "Ouvert", new Date(), new Date());
-        ServiceRecrutement sr = new ServiceRecrutement();
+
+        OffreRecrutement r = new OffreRecrutement( new Date(), new Date(), 14500, "CDI");
+        ServiceOffreRecrutement sr = new ServiceOffreRecrutement();
 
         // Creating Candidat object
-        Candidat c = new Candidat("Doe", "John", "john.doe@example.com", "CDI", new Date(), 12);
-        ServiceCandidat sc = new ServiceCandidat();
+        Demande d = new Demande( 1, 2, "CDI", "path/cv", "dev java");
+        ServiceDemande sc = new ServiceDemande();
 
         try {
             sr.ajouter(r);
-            sr.modifier(2, "Ingénieur Logiciel", "accepté");
+            sr.modifier(2, "Ingénieur Logiciel");
             System.out.println(sr.recuperer());
-            sr.supprimer(7);
+            sr.supprimer(1);
 
-            // CRUD operations for Candidat
-            sc.ajouter(c);
-            sc.modifier(1, "prenom", "Jonathan");  // Example modification (changing prenom)
+            // CRUD operations for demande
+            sc.ajouter(d);
+            sc.modifier(1, "CDA");  // Example modification (changing prenom)
             System.out.println(sc.recuperer());
             sc.supprimer(1);
         } catch (SQLException e) {

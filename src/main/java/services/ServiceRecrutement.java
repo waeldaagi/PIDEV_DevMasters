@@ -41,12 +41,11 @@ public class ServiceRecrutement implements IServices<Recrutement> {
     }
 
     @Override
-    public void modifier(int id, String poste, String etat) throws SQLException {
-        String sql = "UPDATE recrutement SET poste=?, etat=? WHERE id_rec=?";
+    public void modifier(int id, String poste) throws SQLException {
+        String sql = "UPDATE recrutement SET poste=? WHERE id_rec=?";
         PreparedStatement ste = cnx.prepareStatement(sql);
         ste.setString(1, poste);
-        ste.setString(2, etat);
-        ste.setInt(3, id);
+        ste.setInt(2, id);
         ste.executeUpdate();
         System.out.println("Recrutement modifié");
         myDataBase.getInstance().getConnection().commit();
@@ -72,4 +71,5 @@ public class ServiceRecrutement implements IServices<Recrutement> {
         }
         return recrutements;
     }
+
 }
