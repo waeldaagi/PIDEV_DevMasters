@@ -39,9 +39,14 @@ public class EquipeServise implements Iservise<Equipe>{
     }
 
     @Override
-    public void modifier(Equipe e, String nom) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+    public void modifier(Equipe e, int id) throws SQLException {
+        String sql = "update equipe set nom_equipe = ?, nbr_employee = ?, nom_teqlead = ? where id_equipe = ? ";
+        PreparedStatement ps = cnx.prepareStatement(sql);
+        ps.setString(1,e.getNomEquipe());
+        ps.setInt(2,e.getNbrEmployee());
+        ps.setString(3,e.getNomTeqlead());
+        ps.executeUpdate();
+        System.out.println("Equipe modifier");
     }
 
     @Override

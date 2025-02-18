@@ -1,5 +1,6 @@
 package servise;
 
+import models.Equipe;
 import models.Projet;
 import tools.myDb;
 
@@ -37,10 +38,10 @@ public class ProjetServise implements Iservise<Projet> {
     }
 
     @Override
-    public void modifier(Projet e, String nom) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modifier(Equipe e, int id) throws SQLException {
 
     }
+
 
     @Override
     public List<Projet> getAll(Projet e) throws SQLException {
@@ -59,6 +60,6 @@ public class ProjetServise implements Iservise<Projet> {
             projets.add(p);
         }
         return projets;
-    }/
+    }
 }
 

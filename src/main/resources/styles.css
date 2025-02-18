@@ -1,0 +1,74 @@
+/* styles.css */
+
+/* Style général de l'AnchorPane */
+.root {
+    -fx-background-color: #ede2e2;
+    -fx-padding: 20;
+}
+
+/* Style des labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Style des champs de texte */
+.text-field {
+    -fx-font-size: 14px;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.text-field:focused {
+    -fx-border-color: #0078d7;
+    -fx-border-width: 2px;
+}
+
+/* Style du bouton */
+.button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #0078d7;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #005bb5;
+}
+
+.button:pressed {
+    -fx-background-color: #004080;
+}
+
+/* Style pour le logo */
+.logo {
+    -fx-background-image: url('ee3128a5-43cf-4eda-8c3f-86d2d05785b4-removebg-preview.png');
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 150px;
+}
+.vbox {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 10px;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.label {
+    -fx-font-size: 14px;
+}
+
+.label.title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}

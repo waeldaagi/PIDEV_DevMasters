@@ -1,8 +1,9 @@
+package test;
+
 import models.Equipe;
 import models.Projet;
 import servise.EquipeServise;
 import servise.ProjetServise;
-import tools.myDb;
 
 import java.sql.SQLException;
 
@@ -14,7 +15,7 @@ public class main {
         Projet p = new Projet("java","30 jour","motaz",4);
         try {
         //    equipeServise.ajouter(e);
-            /$/equipeServise.supprimer(2);
+            //equipeServise.supprimer(2);
           //  System.out.println(equipeServise.getAll(new Equipe()));
            // projetServise.ajouter(p);
             //projetServise.supprimer(3);
