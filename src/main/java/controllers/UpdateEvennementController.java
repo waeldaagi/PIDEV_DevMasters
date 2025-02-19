@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
 import services.ServiceEvennement;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -31,16 +33,41 @@ public class UpdateEvennementController {
     @FXML
     void update_evennement(ActionEvent event) {
         try {
-            // Récupération des valeurs des champs
-            int id = Integer.parseInt(id_e.getText());
-            String nom = nom_e.getText();
-            String description = description_r.getText();
-            String statut = statut_e.getText();
+            // Vérification de l'ID
+            if (id_e.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID de l'événement est requis !");
+                return;
+            }
+
+            int id = Integer.parseInt(id_e.getText().trim());
+
+            // Récupération et nettoyage des champs
+            String nom = nom_e.getText().trim();
+            String description = description_r.getText().trim();
+            String statut = statut_e.getText().trim();
+
+            // 1. Vérification des champs obligatoires
+            if (nom.isEmpty() || description.isEmpty() || statut.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis !");
+                return;
+            }
+
+            // 2. Vérification de la longueur minimale
+            if (nom.length() < 3 || description.length() < 3) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom et la description doivent contenir au moins 3 caractères !");
+                return;
+            }
+
+            // 3. Vérification du statut (doit être "Confirmé", "Annulé" ou "En attente")
+            if (!statut.matches("(?i)Confirmé|Annulé|En attente")) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Le statut doit être 'Confirmé', 'Annulé' ou 'En attente' !");
+                return;
+            }
 
             // Mise à jour de l'événement dans la base de données
             serviceEvennement.modifier(id, nom, description, statut);
 
-            System.out.println("Événement mis à jour avec succès !");
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Événement mis à jour avec succès !");
 
             // Charger la page "AfficherEvennement.fxml"
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEvennement.fxml"));
@@ -48,7 +75,7 @@ public class UpdateEvennementController {
 
             // Obtenir le contrôleur de la page AfficherEvennement
             AfficherEvennementController controller = loader.getController();
-            controller.refreshList(); // Appel de la méthode pour recharger la liste
+            controller.refreshList(); // Mise à jour de la liste
 
             // Changer de scène
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -56,11 +83,20 @@ public class UpdateEvennementController {
             stage.show();
 
         } catch (NumberFormatException e) {
-            System.err.println("Erreur : ID invalide.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID doit être un nombre valide !");
         } catch (SQLException e) {
-            System.err.println("Erreur SQL : " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Problème lors de la mise à jour : " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Erreur de chargement de la page AfficherEvennement.fxml");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur de chargement de la page AfficherEvennement.fxml");
         }
+    }
+
+    // Méthode pour afficher une alerte
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

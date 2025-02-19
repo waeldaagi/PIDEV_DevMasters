@@ -3,18 +3,19 @@ package controllers;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Alert;
 
 import models.Evennement;
 import services.ServiceEvennement;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date;
-import javafx.scene.control.DatePicker;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.time.LocalDate;
 
 public class AjoutEvennementContoller {
 
@@ -38,54 +39,74 @@ public class AjoutEvennementContoller {
 
     @FXML
     void ajouter_evennement(ActionEvent event) {
-        String nom = nom_event.getText();
-        String desc = description.getText();
-        String lieu = lieu_event.getText();
-        String org = organisateur.getText();
-        String stat = statut.getText();
+        String nom = nom_event.getText().trim();
+        String desc = description.getText().trim();
+        String lieu = lieu_event.getText().trim();
+        String org = organisateur.getText().trim();
+        String stat = statut.getText().trim();
+        LocalDate date = date_event.getValue(); // Récupération de la date sélectionnée
 
-        // Convert DatePicker value (LocalDate) to java.sql.Date
-        java.sql.Date sqlDate = null;
-        if (date_event.getValue() != null) {
-            sqlDate = Date.valueOf(date_event.getValue());
-        } else {
-            System.out.println("Erreur : Date non sélectionnée !");
-            return; // Stop execution if no date is selected
+        // 1. Contrôle de saisie
+        if (nom.isEmpty() || desc.isEmpty() || date == null ||
+                lieu.isEmpty() || org.isEmpty() || stat.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis !");
+            return;
         }
 
-        // Convert String date to java.sql.Date
-       // Date sqlDate = Date.valueOf(date); // Ensure date is in "YYYY-MM-DD" format
+        if (nom.length() < 3 || desc.length() < 3) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom et la description doivent contenir au moins 3 caractères !");
+            return;
+        }
 
-        // Create an instance of ServiceEvennement
+        if (date.isBefore(LocalDate.now())) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "La date de l'événement ne peut pas être dans le passé !");
+            return;
+        }
+
+        if (!stat.matches("(?i)Confirme|Annule|En attente")) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le statut doit être 'Confirmé', 'Annulé' ou 'En attente' !");
+            return;
+        }
+
+        // Convert DatePicker value (LocalDate) to java.sql.Date
+        java.sql.Date sqlDate = Date.valueOf(date);
+
+        // 2. Création et ajout de l'événement
         ServiceEvennement serviceEvennement = new ServiceEvennement();
         Evennement ev = new Evennement(nom, desc, sqlDate, lieu, org, stat);
 
         try {
-            // Add event to the database
             serviceEvennement.ajouter(ev);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Événement ajouté avec succès !");
         } catch (SQLException e) {
-            System.out.println("Erreur ajout événement: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Problème lors de l'ajout : " + e.getMessage());
+            return;
         }
 
+        // 3. Changement de scène pour afficher la liste des événements
         try {
-            // Load the FXML to display events
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEvennement.fxml"));
             Parent root = loader.load();
 
-            // Get the controller and pass the event data
             AfficherEvennementController ac = loader.getController();
-             ac.setListeEvenements(serviceEvennement.recuperer());  // Update the list of events
+            ac.setListeEvenements(serviceEvennement.recuperer()); // Mise à jour de la liste
 
-            // Switch scene
-            Stage stage = (Stage) nom_event.getScene().getWindow(); // Get the current stage
+            Stage stage = (Stage) nom_event.getScene().getWindow();
             stage.setScene(new Scene(root));
 
         } catch (IOException e) {
-            System.out.println("Erreur chargement FXML: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur chargement FXML: " + e.getMessage());
         } catch (SQLException e) {
-            System.out.println("Erreur récupération événements: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur récupération événements: " + e.getMessage());
         }
+    }
 
+    // Méthode pour afficher une alerte
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
-

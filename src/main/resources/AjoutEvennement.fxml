@@ -14,7 +14,7 @@
       <TextField fx:id="organisateur" layoutX="207.0" layoutY="221.0" />
       <TextField fx:id="statut" layoutX="207.0" layoutY="266.0" />
       <Button layoutX="274.0" layoutY="320.0" mnemonicParsing="false" onAction="#ajouter_evennement" text="ajouter" />
-      <Label layoutX="38.0" layoutY="28.0" text="nom de l'evennement" />
+      <Label layoutX="39.0" layoutY="28.0" text="nom de l'evennement" />
       <Label layoutX="38.0" layoutY="85.0" text="description" />
       <Label layoutX="38.0" layoutY="132.0" text="date de l'evennement" />
       <Label layoutX="77.0" layoutY="178.0" text="lieu" />
