@@ -37,9 +37,20 @@ public class ProjetService implements Iservise<Projet> {
         System.out.println("peojet suprimée");
     }
 
-    @Override
-    public void modifier(Equipe e) throws SQLException {
 
+
+    @Override
+    public void modifier(Projet e) throws SQLException {
+        String req = "UPDATE projet SET nom_projet = ?, dure = ?, manager = ?, nom_client = ?, id_equipe = ? WHERE id_projet = ?";
+        try (PreparedStatement ps = cnx.prepareStatement(req)) {
+            ps.setString(1, e.getNom_projet());
+            ps.setString(2, e.getDuree());
+            ps.setString(3, e.getManager());
+            ps.setString(4, e.getNom_client());
+            ps.setInt(5, e.getIdEquipe());
+            ps.setInt(6, e.getId_projet()); // Assurez-vous que getIdProjet() existe dans votre classe Projet
+            ps.executeUpdate();
+        }
     }
 
 
