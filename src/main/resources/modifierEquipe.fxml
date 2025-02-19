@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifierEquipeController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <Label text="Modifier une équipe">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Label text="ID de l'équipe à modifier :" />
+                <TextField fx:id="idEquipeTextField" />
+
+                <Label text="Nom de l'équipe :" />
+                <TextField fx:id="nomEquipeTextField" />
+
+                <Label text="Nombre d'employés :" />
+                <TextField fx:id="nbrEmployeeTextField" />
+
+                <Label text="Nom du Tech Lead :" />
+                <TextField fx:id="nomTeqleadTextField" />
+
+                <Button onAction="#modifierEquipe" text="Modifier" />
+
+                <Button onAction="#retour" text="Retour" />
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,4 +1,4 @@
-package servise;
+package service;
 
 import models.Equipe;
 import tools.myDb;
@@ -39,12 +39,13 @@ public class EquipeServise implements Iservise<Equipe>{
     }
 
     @Override
-    public void modifier(Equipe e, int id) throws SQLException {
+    public void modifier(Equipe e) throws SQLException {
         String sql = "update equipe set nom_equipe = ?, nbr_employee = ?, nom_teqlead = ? where id_equipe = ? ";
         PreparedStatement ps = cnx.prepareStatement(sql);
         ps.setString(1,e.getNomEquipe());
         ps.setInt(2,e.getNbrEmployee());
         ps.setString(3,e.getNomTeqlead());
+        ps.setInt(4,e.getIdEquipe());
         ps.executeUpdate();
         System.out.println("Equipe modifier");
     }

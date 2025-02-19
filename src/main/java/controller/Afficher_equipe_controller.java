@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import models.Equipe;
-import servise.EquipeServise;
+import service.EquipeServise;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,12 +29,12 @@ public class Afficher_equipe_controller {
         List<Equipe> equipes = ps.getAll(new Equipe());
 
         for (Equipe equipe : equipes) {
-            HBox teamBox = new HBox(10); // Spacing between elements
-            Label nameLabel = new Label("Nom: " + equipe.getNomEquipe());
-            Label employeesLabel = new Label("Employés: " + equipe.getNbrEmployee());
-            Label techleadLabel = new Label("Techlead: " + equipe.getNomTeqlead());
-
-            teamBox.getChildren().addAll(nameLabel, employeesLabel, techleadLabel);
+            HBox teamBox = new HBox(10);
+            Label idLabel = new Label("id :" +equipe.getIdEquipe());
+            Label nameLabel = new Label("Nom : " + equipe.getNomEquipe());
+            Label employeesLabel = new Label("Employés : " + equipe.getNbrEmployee());
+            Label techleadLabel = new Label("Techlead : " + equipe.getNomTeqlead());
+            teamBox.getChildren().addAll(idLabel, nameLabel, employeesLabel, techleadLabel);
             equipesContainer.getChildren().add(teamBox);
         }
     }
@@ -51,6 +51,14 @@ public class Afficher_equipe_controller {
     public void effacerEquipe(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/DeleteEquipe.fxml")); // Assurez-vous que le chemin est correct
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void modifierEquipe(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/modifierEquipe.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

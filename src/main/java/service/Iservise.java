@@ -1,4 +1,4 @@
-package servise;
+package service;
 
 import models.Equipe;
 
@@ -9,7 +9,7 @@ public interface Iservise<T> {
     void ajouter(T e) throws SQLException;
     void supprimer(int id) throws SQLException;
 
-    void modifier(Equipe e, int id) throws SQLException;
+    void modifier(Equipe e) throws SQLException;
 
     public List<T> getAll(T e) throws SQLException;
 }

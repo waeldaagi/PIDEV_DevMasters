@@ -1,4 +1,4 @@
-package servise;
+package service;
 
 import models.Equipe;
 import models.Projet;
@@ -8,10 +8,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjetServise implements Iservise<Projet> {
+public class ProjetService implements Iservise<Projet> {
     private Connection cnx;
 
-    public ProjetServise() {
+    public ProjetService() {
         cnx = myDb.getmyDb().getCnx();
     }
 
@@ -38,7 +38,7 @@ public class ProjetServise implements Iservise<Projet> {
     }
 
     @Override
-    public void modifier(Equipe e, int id) throws SQLException {
+    public void modifier(Equipe e) throws SQLException {
 
     }
 

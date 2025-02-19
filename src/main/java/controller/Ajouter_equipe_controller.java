@@ -14,9 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import models.Equipe;
-import servise.EquipeServise;
+import service.EquipeServise;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -33,63 +32,86 @@ public class Ajouter_equipe_controller {
     private TextField techLeadField;
 
     @FXML
-    private ImageView logoImageView; // Référence au logo
+    private ImageView logoImageView;
 
     @FXML
-    private Button addTeamButton; // Référence au bouton
+    private Button addTeamButton;
 
     @FXML
     private Button afficherBtn;
 
     @FXML
     public void initialize() {
-        // Animation de fondu pour le logo
         FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), logoImageView);
-        fadeTransition.setFromValue(0.0); // Début transparent
-        fadeTransition.setToValue(1.0);   // Fin opaque
-        fadeTransition.play(); // Lancer l'animation
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+        fadeTransition.play();
 
-        // Animation de déplacement pour le bouton
         addTeamButton.setOnMouseEntered(event -> {
             TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.2), addTeamButton);
-            translateTransition.setByY(-5); // Déplacer le bouton vers le haut de 5 pixels
+            translateTransition.setByY(-5);
             translateTransition.play();
         });
 
         addTeamButton.setOnMouseExited(event -> {
             TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(0.2), addTeamButton);
-            translateTransition.setByY(5); // Revenir à la position d'origine
+            translateTransition.setByY(5);
             translateTransition.play();
         });
     }
 
     @FXML
     public void ajouter(javafx.event.ActionEvent actionEvent) {
-        try {
-            ps.ajouter(new Equipe(NomEquipe_TF.getText(),Integer.parseInt(Nombre_empl_TF.getText()),techLeadField.getText()));
-        } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficherEquipe.fxml"));
-            try {
-                Parent root = loader.load();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+        // Validation des champs vides
+        if (NomEquipe_TF.getText().isEmpty() || Nombre_empl_TF.getText().isEmpty() || techLeadField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Champs vides", "Veuillez remplir tous les champs.");
+            return;
         }
 
+        // Validation du format du nombre d'employés
+        int nombreEmployes;
+        try {
+            nombreEmployes = Integer.parseInt(Nombre_empl_TF.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Veuillez entrer un nombre valide pour le nombre d'employés.");
+            return;
+        }
 
+        // Validation du nom de l'équipe (par exemple, pas de caractères spéciaux)
+        if (!NomEquipe_TF.getText().matches("[a-zA-Z0-9\\s]+")) {
+            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Le nom de l'équipe ne doit contenir que des lettres, des chiffres et des espaces.");
+            return;
+        }
+
+        // Validation du nom du tech lead (par exemple, pas de caractères spéciaux)
+        if (!techLeadField.getText().matches("[a-zA-Z\\s]+")) {
+            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Le nom du tech lead ne doit contenir que des lettres et des espaces.");
+            return;
+        }
+
+        try {
+            ps.ajouter(new Equipe(NomEquipe_TF.getText(), nombreEmployes, techLeadField.getText()));
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "L'équipe a été ajoutée avec succès !");
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de base de données", e.getMessage());
+        }
     }
+
     @FXML
     public void afficherEquipes(javafx.event.ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/afficherEquipe.fxml")); // Assurez-vous que le chemin est correct
+        Parent root = FXMLLoader.load(getClass().getResource("/afficherEquipe.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
-
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

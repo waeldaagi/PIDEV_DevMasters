@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AjouterProjetController">
+    <children>
+        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <children>
+                <Label text="Ajouter un projet">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Label text="Nom du projet :" />
+                <TextField fx:id="nomProjetTextField" />
+
+                <Label text="Durée :" />
+                <TextField fx:id="dureeTextField" />
+
+                <Label text="Manager :" />
+                <TextField fx:id="managerTextField" />
+
+                <Label text="Nom du client :" />
+                <TextField fx:id="nomClientTextField" />
+
+                <Label text="ID de l'équipe :" />
+                <TextField fx:id="idEquipeTextField" />
+
+                <Button onAction="#ajouterProjet" text="Ajouter" />
+
+                <HBox alignment="CENTER" spacing="10.0">
+                    <children>
+                        <Button onAction="#retour" text="Retour" />
+                        <Button onAction="#afficherProjets" text="Afficher les projets" />
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

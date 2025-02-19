@@ -8,11 +8,12 @@ public class Projet {
     private String nom_client;
     private int idEquipe;
     public Projet() {}
-    public Projet( String nom_projet, String duree, String manager, int idEquipe) {
+    public Projet( String nom_projet, String duree, String manager,String nom_client, int idEquipe) {
         this.nom_projet = nom_projet;
         this.duree = duree;
         this.manager = manager;
         this.idEquipe = idEquipe;
+        this.nom_client = nom_client;
     }
 
     public int getId_projet() {

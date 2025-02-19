@@ -3,8 +3,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import models.Equipe;
-import servise.EquipeServise;
+import service.EquipeServise;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -19,5 +18,4 @@ public class DeleteEquipeController {
     void supprimerEquipe(ActionEvent event) throws IOException, SQLException {
         ps.supprimer(Integer.parseInt(idEquipeTextField.getText()));
     }
-
 }
