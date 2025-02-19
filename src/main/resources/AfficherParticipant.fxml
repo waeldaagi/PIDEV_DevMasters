@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherParticipantController">
+   <children>
+      <ListView fx:id="list_participant" layoutX="14.0" layoutY="26.0" prefHeight="348.0" prefWidth="384.0" />
+      <TextField fx:id="id_part_delete" layoutX="405.0" layoutY="95.0" prefHeight="26.0" prefWidth="113.0" />
+      <Label layoutX="398.0" layoutY="46.0" text="donner l'id du participant à supprimer" />
+      <Button layoutX="534.0" layoutY="96.0" mnemonicParsing="false" onAction="#delete_participant" text="Delete" />
+      <Button layoutX="453.0" layoutY="236.0" mnemonicParsing="false" onAction="#go_update_paticipant" text="Update" />
+   </children>
+</AnchorPane>
