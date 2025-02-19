@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.Node;
 
 import java.io.IOException;
@@ -16,7 +18,6 @@ import java.sql.SQLException;
 
 import services.ServiceOffreRecrutement;
 import models.OffreRecrutement;
-
 
 public class AjoutOffreRecrutementController {
 
@@ -32,58 +33,62 @@ public class AjoutOffreRecrutementController {
     @FXML
     private TextField salaire;
 
-    // Declare the service as a class attribute
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
 
     @FXML
     void ajouter_offre(ActionEvent event) {
-        try {
-            // Convert DatePicker values to java.sql.Date
-            java.sql.Date sqlDate1 = (date_pub.getValue() != null) ? Date.valueOf(date_pub.getValue()) : null;
-            java.sql.Date sqlDate2 = (date_limite.getValue() != null) ? Date.valueOf(date_limite.getValue()) : null;
+        // Vérification des champs vides
+        if (date_pub.getValue() == null || date_limite.getValue() == null || poste.getText().trim().isEmpty() || salaire.getText().trim().isEmpty()) {
+            showAlert("Erreur", "Tous les champs doivent être remplis !");
+            return;
+        }
 
-            if (sqlDate1 == null || sqlDate2 == null) {
-                System.out.println("Erreur : Date non sélectionnée !");
+        // Validation du salaire
+        int salaireValue;
+        try {
+            salaireValue = Integer.parseInt(salaire.getText().trim());
+            if (salaireValue <= 0) {
+                showAlert("Erreur", "Le salaire doit être un nombre positif !");
                 return;
             }
-
-            int salaireValue = Integer.parseInt(salaire.getText().trim());
-            String posteValue = poste.getText();
-
-            // Create an OffreRecrutement object
-            OffreRecrutement offre = new OffreRecrutement(sqlDate1, sqlDate2, salaireValue, posteValue);
-
-            // Add the offer to the database
-            serviceOffre.ajouter(offre);
-            System.out.println("Offre ajoutée avec succès !");
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de l'offre : " + e.getMessage());
-            return;
         } catch (NumberFormatException e) {
-            System.out.println("Erreur: Veuillez saisir un salaire valide !");
+            showAlert("Erreur", "Veuillez saisir un salaire valide !");
             return;
         }
 
         try {
-            // Load the FXML to display offers
+            // Conversion des dates et création de l'objet OffreRecrutement
+            OffreRecrutement offre = new OffreRecrutement(
+                    Date.valueOf(date_pub.getValue()),
+                    Date.valueOf(date_limite.getValue()),
+                    salaireValue,
+                    poste.getText().trim()
+            );
+
+            // Ajout de l'offre
+            serviceOffre.ajouter(offre);
+            showAlert("Succès", "Offre ajoutée avec succès !");
+
+            // Chargement de l'affichage des offres
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherOffreRecrutement.fxml"));
             Parent root = loader.load();
-
-            // Get the controller and update the list of offers
             AfficherOffreRecrutementController ac = loader.getController();
             ac.setListeOffreRecrutement(serviceOffre.recuperer());
 
-            // Switch scene
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Liste des Offres");
             stage.show();
-        } catch (IOException e) {
-            System.out.println("Erreur chargement FXML: " + e.getMessage());
-        } catch (SQLException e) {
-            System.out.println("Erreur récupération des offres: " + e.getMessage());
+        } catch (SQLException | IOException e) {
+            showAlert("Erreur", "Une erreur est survenue : " + e.getMessage());
         }
+    }
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
-
