@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceDemande implements IServices<Demande>{
+public class ServiceDemande implements IServices<Demande> {
     private Connection cnx;
 
     public ServiceDemande() {
@@ -15,6 +15,11 @@ public class ServiceDemande implements IServices<Demande>{
 
     @Override
     public void ajouter(Demande d) throws SQLException {
+        if (d.getId_user() <= 0 || d.getId_offre() <= 0 || d.getType_contrat().trim().isEmpty() || d.getCv().trim().isEmpty() || d.getLettre_motivation().trim().isEmpty()) {
+            System.out.println("Erreur : Tous les champs doivent être remplis correctement.");
+            return;
+        }
+
         String sql = "INSERT INTO demande (id_user, id_offre, type_contrat, cv, lettre_motivation) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ste = cnx.prepareStatement(sql);
         ste.setInt(1, d.getId_user());
@@ -24,31 +29,38 @@ public class ServiceDemande implements IServices<Demande>{
         ste.setString(5, d.getLettre_motivation());
         ste.executeUpdate();
         System.out.println("Demande ajoutée");
-        myDataBase.getInstance().getConnection().commit();
+        cnx.commit();
     }
 
     @Override
     public void supprimer(int id) throws SQLException {
+        if (id <= 0) {
+            System.out.println("Erreur : ID invalide.");
+            return;
+        }
+
         String sql = "DELETE FROM demande WHERE id_demande=?";
         PreparedStatement ste = cnx.prepareStatement(sql);
         ste.setInt(1, id);
         ste.executeUpdate();
         System.out.println("Demande supprimée");
-        myDataBase.getInstance().getConnection().commit();
+        cnx.commit();
     }
 
     @Override
     public void modifier(int id, String type_contrat) throws SQLException {
+        if (id <= 0 || type_contrat.trim().isEmpty()) {
+            System.out.println("Erreur : ID ou type de contrat invalide.");
+            return;
+        }
+
         String sql = "UPDATE demande SET type_contrat=? WHERE id_demande=?";
         PreparedStatement ste = cnx.prepareStatement(sql);
-
-        // Set the new value for type_contrat
         ste.setString(1, type_contrat);
-        ste.setInt(2, id);  // Set the ID of the record to update
-
+        ste.setInt(2, id);
         ste.executeUpdate();
         System.out.println("Demande modifiée");
-        myDataBase.getInstance().getConnection().commit();
+        cnx.commit();
     }
 
     @Override
@@ -67,7 +79,6 @@ public class ServiceDemande implements IServices<Demande>{
             d.setCv(rs.getString("cv"));
             d.setLettre_motivation(rs.getString("lettre_motivation"));
             demandes.add(d);
-            myDataBase.getInstance().getConnection().commit();
         }
         return demandes;
     }

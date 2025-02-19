@@ -28,6 +28,20 @@ public class AfficherOffreRecrutementController {
     @FXML
     public void initialize() {
         refreshList(); // Charger la liste dès l’affichage de la page
+
+        // Listener pour détecter un clic sur un événement
+        list_offre.setOnMouseClicked(event -> {
+            String selectedOffre= list_offre.getSelectionModel().getSelectedItem();
+            if (selectedOffre != null) {
+                // Affiche l'événement sélectionné dans la console
+                System.out.println("offre sélectionné : " + selectedOffre);
+
+                int idOff = extractIdFromString(selectedOffre);
+                if (idOff != -1) {
+                    ouvrirAjoutDemande(idOff);
+                }
+            }
+        });
     }
 
     @FXML
@@ -64,7 +78,9 @@ public class AfficherOffreRecrutementController {
     public void setListeOffreRecrutement(List<OffreRecrutement> offres) {
         list_offre.getItems().clear();  // Clear the previous list
         for (OffreRecrutement re : offres) {
-            list_offre.getItems().add(re.getPoste() + " | "
+            list_offre.getItems().add(
+                    re.getId_offre() + " | " +
+                    re.getPoste() + " | "
                     + re.getDate_limite() + " | "
                     + re.getDate_pub() + " | "
                     + re.getSalaire() + "DT | " );
@@ -80,6 +96,7 @@ public class AfficherOffreRecrutementController {
             list_offre.getItems().clear(); // Vider la liste avant de la remplir à nouveau
             for (OffreRecrutement ev : evennements) {
                 list_offre.getItems().add(
+                        ev.getId_offre() + " | " +
                         ev.getPoste() + " | " +
                                 ev.getSalaire() + " | " +
                                 ev.getDate_pub() + " | " +
@@ -89,6 +106,39 @@ public class AfficherOffreRecrutementController {
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
+        }
+    }
+    // Méthode pour extraire l'ID de l'événement depuis la chaîne affichée dans la ListView
+    private int extractIdFromString(String offreString) {
+        try {
+            String[] parts = offreString.split("\\|");
+            if (parts.length > 0) {
+                return Integer.parseInt(parts[0].trim());
+            } else {
+                System.err.println("Erreur : La chaîne ne contient pas d'ID.");
+                return -1;
+            }
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            System.err.println("Erreur lors de l'extraction de l'ID : " + e.getMessage());
+            return -1;
+        }
+    }
+
+    // Méthode pour ouvrir la fenêtre d'ajout de participation
+    private void ouvrirAjoutDemande(int idOffre) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutDemande.fxml"));
+            Parent root = loader.load();
+
+            // Passer l'ID à AjoutParticipationController
+            AjoutDemandeController controller = loader.getController();
+            controller.setIdOffre(idOffre);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
