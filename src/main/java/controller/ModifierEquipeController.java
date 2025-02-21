@@ -1,24 +1,17 @@
 package controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Equipe;
 import service.EquipeServise;
 
-import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class ModifierEquipeController {
-
-    @FXML
-    private TextField idEquipeTextField;
+public class ModifierEquipeController implements Initializable {
 
     @FXML
     private TextField nomEquipeTextField;
@@ -27,63 +20,50 @@ public class ModifierEquipeController {
     private TextField nbrEmployeeTextField;
 
     @FXML
-    private TextField nomTeqleadTextField;
+    private TextField nomTechLeadTextField;
 
+    private Equipe equipe;
     private final EquipeServise equipeService = new EquipeServise();
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // This method is called after the FXML is loaded
+    }
+
+    // Method to set the selected team
+    public void setEquipe(Equipe equipe) {
+        this.equipe = equipe;
+        // Populate the fields with the selected team's data
+        nomEquipeTextField.setText(equipe.getNomEquipe());
+        nbrEmployeeTextField.setText(String.valueOf(equipe.getNbrEmployee()));
+        nomTechLeadTextField.setText(equipe.getNomTeqlead());
+    }
+
     @FXML
-    public void modifierEquipe(ActionEvent event) {
-        // Validation des champs
-        if (idEquipeTextField.getText().isEmpty() || nomEquipeTextField.getText().isEmpty() ||
-                nbrEmployeeTextField.getText().isEmpty() || nomTeqleadTextField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Champs vides", "Veuillez remplir tous les champs.");
-            return;
-        }
-
-        // Validation de l'ID et du nombre d'employés
-        int idEquipe, nbrEmployee;
+    private void modifierEquipe() {
         try {
-            idEquipe = Integer.parseInt(idEquipeTextField.getText());
-            nbrEmployee = Integer.parseInt(nbrEmployeeTextField.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Veuillez entrer des nombres valides pour l'ID et le nombre d'employés.");
-            return;
-        }
+            // Update the team with the new values
+            equipe.setNomEquipe(nomEquipeTextField.getText());
+            equipe.setNbrEmployee(Integer.parseInt(nbrEmployeeTextField.getText()));
+            equipe.setNomTeqlead(nomTechLeadTextField.getText());
 
-        try {
-            // Créer un objet Equipe avec les nouvelles valeurs
-            Equipe equipeModifiee = new Equipe(nomEquipeTextField.getText(), nbrEmployee, nomTeqleadTextField.getText());
-            equipeModifiee.setIdEquipe(idEquipe); // Assurez-vous que setIdEquipe existe dans votre classe Equipe
+            // Call the service to update the team
+            equipeService.modifier(equipe);
 
-            // Appeler le service pour modifier l'équipe
-            equipeService.modifier(equipeModifiee);
+            System.out.println("Équipe modifiée avec succès !");
 
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "L'équipe a été modifiée avec succès !");
-
+            // Close the current window after modification
+            Stage stage = (Stage) nomEquipeTextField.getScene().getWindow();
+            stage.close();
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Une erreur s'est produite lors de la modification de l'équipe : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
-    public void retour(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/afficherEquipe.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran précédent.");
-        }
-    }
-
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void annuler() {
+        // Close the current window without saving changes
+        Stage stage = (Stage) nomEquipeTextField.getScene().getWindow();
+        stage.close();
     }
 }

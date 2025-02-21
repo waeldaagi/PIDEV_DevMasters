@@ -21,6 +21,7 @@ public class MainFx extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Ajouter Equipe");
+        primaryStage.setMaximized(true); // Maximise la fenêtre
         primaryStage.show();
 
     }

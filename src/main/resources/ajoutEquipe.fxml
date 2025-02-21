@@ -8,39 +8,54 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Ajouter_equipe_controller">
-    <VBox fx:id="root" alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-        <ImageView fx:id="logoImageView" fitHeight="150.0" fitWidth="150.0">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AjouterEquipeController">
+
+       <!-- Header with Logo and Title -->
+    <VBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <!-- Logo -->
+        <ImageView fitHeight="100.0" fitWidth="100.0">
             <image>
                 <Image url="@ee3128a5-43cf-4eda-8c3f-86d2d05785b4-removebg-preview.png" />
             </image>
         </ImageView>
 
-        <GridPane hgap="10" vgap="10">
-            <Label text="Nom de l'équipe:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <TextField fx:id="NomEquipe_TF" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-            <Label text="Nombre de Employee:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <TextField fx:id="Nombre_empl_TF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-            <Label text="Nom du Techlead:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <TextField fx:id="techLeadField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints />
-                <RowConstraints />
-                <RowConstraints />
-            </rowConstraints>
-        </GridPane>
+           <!-- Title -->
+        <Label styleClass="header-label" text="Ajouter une Équipe">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
     </VBox>
 
-    <Button fx:id="addTeamButton" layoutX="447.0" layoutY="346.0" onAction="#ajouter" text="Ajouter l'équipe" />
-    <Button fx:id="afficherBtn" layoutX="20.0" layoutY="346.0" onAction="#afficherEquipes" text="Afficher les équipes" />
+    <!-- Form for Adding a Team -->
+    <GridPane hgap="10" layoutX="150.0" layoutY="227.0" vgap="10">
+        <Label styleClass="form-label" text="Nom de l'équipe:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nomEquipeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label styleClass="form-label" text="Nombre d'employés:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="nbrEmployeeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label styleClass="form-label" text="Nom du Techlead:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="nomTechLeadTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox alignment="CENTER" layoutX="150.0" layoutY="320.0" spacing="20.0" />
+     <Button layoutX="167.0" layoutY="371.0" onAction="#ajouterEquipe" styleClass="action-button" text="Ajouter" />
+     <Button layoutX="300.0" layoutY="371.0" onAction="#retour" styleClass="action-button" text="Retour" />
 </AnchorPane>

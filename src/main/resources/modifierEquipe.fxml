@@ -1,43 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifierEquipeController">
-    <children>
-        <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="10.0">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-            <children>
-                <Label text="Modifier une équipe">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ModifierEquipeController">
 
-                <Label text="ID de l'équipe à modifier :" />
-                <TextField fx:id="idEquipeTextField" />
+    <!-- Header with Logo and Title -->
+    <VBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <!-- Logo -->
+        <ImageView fitHeight="100.0" fitWidth="100.0">
+            <image>
+                <Image url="@ee3128a5-43cf-4eda-8c3f-86d2d05785b4-removebg-preview.png" />
+            </image>
+        </ImageView>
 
-                <Label text="Nom de l'équipe :" />
-                <TextField fx:id="nomEquipeTextField" />
+        <!-- Title -->
+        <Label styleClass="header-label" text="Modifier l'Équipe">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
+    </VBox>
 
-                <Label text="Nombre d'employés :" />
-                <TextField fx:id="nbrEmployeeTextField" />
+    <!-- Form for Modifying a Team -->
+    <GridPane hgap="10" layoutX="150.0" layoutY="212.0" vgap="10">
+        <Label styleClass="form-label" text="Nom de l'équipe:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nomEquipeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Nom du Tech Lead :" />
-                <TextField fx:id="nomTeqleadTextField" />
+        <Label styleClass="form-label" text="Nombre d'employés:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="nbrEmployeeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Button onAction="#modifierEquipe" text="Modifier" />
+        <Label styleClass="form-label" text="Nom du Techlead:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="nomTechLeadTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-                <Button onAction="#retour" text="Retour" />
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
 
-            </children>
-        </VBox>
-    </children>
+    <!-- Buttons -->
+    <HBox alignment="CENTER" layoutX="150.0" layoutY="320.0" spacing="20.0" />
+     <Button layoutX="138.0" layoutY="366.0" onAction="#modifierEquipe" styleClass="action-button" text="Modifier" />
+     <Button layoutX="266.0" layoutY="366.0" onAction="#annuler" styleClass="action-button" text="Annuler" />
 </AnchorPane>
