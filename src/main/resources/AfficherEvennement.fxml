@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherEvennementController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherEvennementController" stylesheets="style1.css">
+
    <children>
       <ListView fx:id="list_event" layoutX="15.0" layoutY="14.0" prefHeight="354.0" prefWidth="460.0" />
       <Button layoutX="548.0" layoutY="284.0" mnemonicParsing="false" onAction="#go_update_evennement" text="Update" />

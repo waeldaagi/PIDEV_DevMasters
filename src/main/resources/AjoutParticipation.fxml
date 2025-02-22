@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutParticipationController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutParticipationController" stylesheets="style1.css">
    <children>
       <TextField fx:id="role_p" layoutX="202.0" layoutY="33.0" />
       <TextField fx:id="depart_participant" layoutX="202.0" layoutY="90.0" />
