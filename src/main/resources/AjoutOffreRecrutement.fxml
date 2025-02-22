@@ -6,8 +6,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutOffreRecrutementController" stylesheets="@style.css">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutOffreRecrutementController">
    <children>
       <TextField fx:id="salaire" layoutX="240.0" layoutY="134.0" />
       <TextField fx:id="poste" layoutX="240.0" layoutY="174.0" />

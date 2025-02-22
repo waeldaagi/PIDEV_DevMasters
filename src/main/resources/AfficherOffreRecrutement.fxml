@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherOffreRecrutementController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherOffreRecrutementController" stylesheets="@style.css">
    <children>
       <ListView fx:id="list_offre" layoutX="14.0" layoutY="21.0" prefHeight="357.0" prefWidth="466.0" />
       <Button layoutX="537.0" layoutY="223.0" mnemonicParsing="false" onAction="#go_update_offre" text="UPDATE" />

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherDemandeController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherDemandeController" stylesheets="@style.css">
    <children>
       <ListView fx:id="list_demande" layoutX="43.0" layoutY="30.0" prefHeight="308.0" prefWidth="290.0" />
       <TextField fx:id="id_d_delete" layoutX="365.0" layoutY="95.0" />

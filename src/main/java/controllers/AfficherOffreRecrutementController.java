@@ -74,7 +74,7 @@ public class AfficherOffreRecrutementController {
     }
 
 
-    // Method to update the ListView with events
+    // Method to update the ListView with offres
     public void setListeOffreRecrutement(List<OffreRecrutement> offres) {
         list_offre.getItems().clear();  // Clear the previous list
         for (OffreRecrutement re : offres) {
