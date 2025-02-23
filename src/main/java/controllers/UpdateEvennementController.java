@@ -43,6 +43,7 @@ public class UpdateEvennementController {
                 Evennement ev = serviceEvennement.getById(idEvent); // Assurez-vous que cette méthode existe
                 if (ev != null) {
                     id_e.setText(String.valueOf(ev.getId_event()));
+                    id_e.setEditable(false); // Make the ID text field non-editable
                     nom_e.setText(ev.getNom_event());
                     description_r.setText(ev.getDescription()); // Ajout de la description
                     statut_e.setText(ev.getStatut()); // Ajout du statut
