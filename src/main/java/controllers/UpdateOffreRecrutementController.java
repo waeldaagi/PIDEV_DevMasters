@@ -24,39 +24,59 @@ public class UpdateOffreRecrutementController {
     private TextField poste;
 
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
+    private Integer idOffre; // Declare idOffre as an instance variable
 
+    // Method to set the ID of the offer
+    public void setIdOffre(Integer idOffre) {
+        this.idOffre = idOffre; // Assign idOffre
+        loadOffreDetails(); // Call method to load offer details
+    }
+
+    // Method to load offer details based on the offer ID
+    private void loadOffreDetails() {
+        if (idOffre != null) {
+            try {
+                OffreRecrutement offre = serviceOffre.getById(idOffre); // Assuming this method exists in your service
+                if (offre != null) {
+                    id_offre.setText(String.valueOf(offre.getId_offre())); // Display ID in text field
+                    poste.setText(offre.getPoste()); // Display poste in text field
+                    id_offre.setEditable(false); // Make the ID text field non-editable
+                } else {
+                    showAlert("Erreur", "Offre non trouvée !");
+                }
+            } catch (SQLException e) {
+                showAlert("Erreur", "Erreur SQL lors de la récupération des détails : " + e.getMessage());
+            }
+        }
+    }
+
+    // Method to update the offer
     @FXML
     void update_offre(ActionEvent event) {
-        // Vérification des champs vides
-        if (id_offre.getText().trim().isEmpty() || poste.getText().trim().isEmpty()) {
-            showAlert("Erreur", "Tous les champs doivent être remplis !");
+        // Check if the 'poste' field is empty
+        if (poste.getText().trim().isEmpty()) {
+            showAlert("Erreur", "Le poste ne peut pas être vide !");
             return;
         }
 
         try {
-            // Récupération des valeurs des champs
-            int id = Integer.parseInt(id_offre.getText().trim());
-            String p = poste.getText().trim();
-
-            // Mise à jour de l'offre dans la base de données
-            serviceOffre.modifier(id, p);
+            String p = poste.getText().trim(); // Get the 'poste' value
+            serviceOffre.modifier(idOffre, p); // Update the offer with the new 'poste' value
             showAlert("Succès", "Offre mise à jour avec succès !");
 
-            // Chargement de la page AfficherOffreRecrutement.fxml
+            // Load the "AfficherOffreRecrutement.fxml" page
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherOffreRecrutement.fxml"));
             Parent root = loader.load();
 
-            // Obtenir le contrôleur de la page et rafraîchir la liste
+            // Get the controller of the loaded page
             AfficherOffreRecrutementController controller = loader.getController();
-            controller.refreshList();
+            controller.refreshList(); // Refresh the list after updating
 
-            // Changer de scène
+            // Navigate to the new scene
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
 
-        } catch (NumberFormatException e) {
-            showAlert("Erreur", "ID invalide. Veuillez entrer un nombre !");
         } catch (SQLException e) {
             showAlert("Erreur", "Erreur SQL : " + e.getMessage());
         } catch (IOException e) {
@@ -64,11 +84,12 @@ public class UpdateOffreRecrutementController {
         }
     }
 
+    // Method to show an alert with the specified title and message
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Alert alert = new Alert(AlertType.ERROR); // Create an error alert
+        alert.setTitle(title); // Set the title
+        alert.setHeaderText(null); // No header
+        alert.setContentText(message); // Set the content text
+        alert.showAndWait(); // Show the alert and wait for user response
     }
 }

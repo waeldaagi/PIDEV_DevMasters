@@ -2,14 +2,9 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import java.io.IOException;
 import java.sql.SQLException;
 
 import services.ServiceDemande;
@@ -58,23 +53,12 @@ public class AjoutDemandeController {
             serviceDemande.ajouter(demande);
             showAlert("Succès", "Demande ajoutée avec succès !");
 
-            // Chargement de la page AfficherDemande.fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherDemande.fxml"));
-            Parent root = loader.load();
-
-            // Obtenir le contrôleur de la page et rafraîchir la liste
-            AfficherDemandeController controller = loader.getController();
-            controller.refreshList();
-
-            // Changer de scène
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            // Fermer la fenêtre actuelle
+            Stage stage = (Stage) cv.getScene().getWindow();
+            stage.close();
 
         } catch (SQLException e) {
             showAlert("Erreur", "Erreur SQL : " + e.getMessage());
-        } catch (IOException e) {
-            showAlert("Erreur", "Erreur de chargement de la page AfficherDemande.fxml");
         }
     }
 

@@ -82,4 +82,24 @@ public class ServiceDemande implements IServices<Demande> {
         }
         return demandes;
     }
+    public List<Demande> recupererDemandeParOffre(int idOffre) throws SQLException {
+        String sql = "SELECT * FROM demande WHERE id_offre = ?";
+        PreparedStatement ste = cnx.prepareStatement(sql);
+        ste.setInt(1, idOffre);
+        ResultSet rs = ste.executeQuery();
+        List<Demande> demandes = new ArrayList<>();
+
+        while (rs.next()) {
+            Demande d = new Demande();
+            d.setId_demande(rs.getInt("id_demande"));
+            d.setId_user(rs.getInt("id_user"));
+            d.setId_offre(rs.getInt("id_offre"));
+            d.setType_contrat(rs.getString("type_contrat"));
+            d.setCv(rs.getString("cv"));
+            d.setLettre_motivation(rs.getString("lettre_motivation"));
+            demandes.add(d);
+        }
+        return demandes;
+    }
+
 }

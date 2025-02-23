@@ -35,6 +35,12 @@ public class AjoutOffreRecrutementController {
 
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
 
+    // Initialize method to set the current date for date_pub
+    public void initialize() {
+        // Set the current system date to the date_pub DatePicker
+        date_pub.setValue(java.time.LocalDate.now());
+    }
+
     @FXML
     void ajouter_offre(ActionEvent event) {
         // Vérification des champs vides
@@ -79,13 +85,21 @@ public class AjoutOffreRecrutementController {
             stage.setScene(new Scene(root));
             stage.setTitle("Liste des Offres");
             stage.show();
-        } catch (SQLException | IOException e) {
-            showAlert("Erreur", "Une erreur est survenue : " + e.getMessage());
+        } catch (SQLException e) {
+            showAlert("Erreur SQL", "Une erreur SQL est survenue : " + e.getMessage());
+        } catch (IOException e) {
+            showAlert("Erreur", "Une erreur est survenue lors du chargement de la page : " + e.getMessage());
         }
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert;
+        if (title.equals("Erreur")) {
+            alert = new Alert(AlertType.ERROR);
+        } else {
+            alert = new Alert(AlertType.INFORMATION);
+        }
+
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

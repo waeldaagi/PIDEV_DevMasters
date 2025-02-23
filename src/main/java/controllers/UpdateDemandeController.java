@@ -26,6 +26,13 @@ public class UpdateDemandeController {
 
     private final ServiceDemande serviceDemande = new ServiceDemande();
 
+    // Method to set the ID of the demande
+    public void setIdDemande(Integer idDemande) {
+        // Set the ID value and make it non-editable
+        id_d.setText(String.valueOf(idDemande));
+        id_d.setEditable(false); // Make the ID text field non-editable
+    }
+
     @FXML
     void update_demande(ActionEvent event) {
         // Vérification des champs vides
@@ -65,6 +72,7 @@ public class UpdateDemandeController {
         }
     }
 
+    // Method to show an alert with the specified title and message
     private void showAlert(String title, String message) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle(title);
