@@ -6,13 +6,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherParticipantController" stylesheets="style1.css">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherParticipantController">
    <children>
-      <ListView fx:id="list_participant" layoutX="14.0" layoutY="26.0" prefHeight="348.0" prefWidth="384.0" />
-      <TextField fx:id="id_part_delete" layoutX="405.0" layoutY="95.0" prefHeight="26.0" prefWidth="113.0" />
-      <Label layoutX="398.0" layoutY="46.0" text="donner l'id du participant à supprimer" />
-      <Button layoutX="534.0" layoutY="96.0" mnemonicParsing="false" onAction="#delete_participant" text="Delete" />
-      <Button layoutX="453.0" layoutY="236.0" mnemonicParsing="false" onAction="#go_update_paticipant" text="Update" />
+      <Button layoutX="244.0" layoutY="270.0" mnemonicParsing="false" onAction="#go_update_paticipant" text="Update" />
+      <TextField fx:id="id_part_delete" layoutX="243.0" layoutY="95.0" prefHeight="26.0" prefWidth="113.0" />
+      <ListView fx:id="list_participant" layoutX="13.0" layoutY="4.0" prefHeight="322.0" prefWidth="574.0" />
+      <Label layoutX="433.0" layoutY="329.0" text="sellectionner un participant " />
+      <Button layoutX="461.0" layoutY="359.0" mnemonicParsing="false" onAction="#delete_participant" prefHeight="26.0" prefWidth="91.0" text="Delete" />
    </children>
 </AnchorPane>

@@ -6,14 +6,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherEvennementController" stylesheets="style1.css">
+<AnchorPane prefHeight="424.0" prefWidth="662.0" stylesheets="style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherEvennementController">
 
    <children>
-      <ListView fx:id="list_event" layoutX="15.0" layoutY="14.0" prefHeight="354.0" prefWidth="460.0" />
-      <Button layoutX="548.0" layoutY="284.0" mnemonicParsing="false" onAction="#go_update_evennement" text="Update" />
-      <Button layoutX="625.0" layoutY="164.0" mnemonicParsing="false" onAction="#delete_evennement" text="Delete" />
-      <TextField fx:id="id_event_delete" layoutX="489.0" layoutY="164.0" prefHeight="26.0" prefWidth="118.0" />
-      <Label layoutX="475.0" layoutY="107.0" text="donner l'id de l'evennement à supprimer" />
+      <TextField fx:id="id_event_delete" layoutX="321.0" layoutY="200.0" prefHeight="26.0" prefWidth="118.0" />
+      <ListView fx:id="list_event" layoutX="14.0" layoutY="14.0" prefHeight="354.0" prefWidth="463.0" />
+      <Button layoutX="550.0" layoutY="226.0" mnemonicParsing="false" onAction="#go_update_evennement" prefHeight="26.0" prefWidth="90.0" text="Update" />
+      <Button layoutX="553.0" layoutY="297.0" mnemonicParsing="false" onAction="#delete_evennement" prefHeight="26.0" prefWidth="83.0" text="Delete" />
+      <Label layoutX="461.0" layoutY="266.0" text="      selectionner un evennement pour le supprimer" />
+      <Label layoutX="475.0" layoutY="191.0" text="selectionner un evennement pour le modifier" />
+      <Label layoutX="517.0" layoutY="80.0" text="selectionner un evennement " />
+      <Button layoutX="526.0" layoutY="123.0" mnemonicParsing="false" onAction="#voirListP" prefHeight="26.0" prefWidth="134.0" text="voir liste participants" />
    </children>
 </AnchorPane>

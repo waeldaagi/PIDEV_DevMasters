@@ -72,7 +72,25 @@ private Connection cnx;
         }
         return evenements;
     }
+    public Evennement getById(int idEvent) throws SQLException {
+        String sql = "SELECT * FROM evennement WHERE id_event = ?";
+        PreparedStatement pstmt = cnx.prepareStatement(sql);
+        pstmt.setInt(1, idEvent);
+        ResultSet rs = pstmt.executeQuery();
 
+        if (rs.next()) {
+            return new Evennement(
+                    rs.getInt("id_event"),
+                    rs.getString("nom_event"),
+                    rs.getString("description"),
+                    rs.getDate("date_event"),
+                    rs.getString("lieu_event"),
+                    rs.getString("organisateur"),
+                    rs.getString("statut")
+            );
+        }
+        return null; // Si aucun événement trouvé
+    }
 
 
 

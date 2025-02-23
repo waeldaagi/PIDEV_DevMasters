@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
+import java.util.HashMap;
 
 public class AfficherEvennementController {
 
@@ -22,89 +24,113 @@ public class AfficherEvennementController {
     @FXML
     private TextField id_event_delete;
     private final ServiceEvennement serviceEvennement = new ServiceEvennement(); // Instance du service
+    private final Map<String, Integer> eventMap = new HashMap<>(); // Associer affichage ↔ ID réel
+    private String selectedEvent; // Member variable to hold the selected event
+
     @FXML
     public void initialize() {
         refreshList(); // Charger la liste dès l’affichage de la page
 
         // Listener pour détecter un clic sur un événement
         list_event.setOnMouseClicked(event -> {
-            String selectedEvent = list_event.getSelectionModel().getSelectedItem();
+            selectedEvent = list_event.getSelectionModel().getSelectedItem(); // Update the selected event
             if (selectedEvent != null) {
                 // Affiche l'événement sélectionné dans la console
                 System.out.println("Événement sélectionné : " + selectedEvent);
-
-                int idEvent = extractIdFromString(selectedEvent);
-                if (idEvent != -1) {
-                    ouvrirAjoutParticipation(idEvent);
-                }
             }
         });
     }
 
     @FXML
     void delete_evennement(ActionEvent event) {
-        try {
-            int id = Integer.parseInt(id_event_delete.getText());
-            serviceEvennement.supprimer(id); // Suppression de l’événement
-            refreshList(); // Actualiser la liste après suppression
-        } catch (NumberFormatException e) {
-            System.err.println("Erreur : ID invalide.");
-        } catch (SQLException e) {
-            System.err.println("Erreur SQL lors de la suppression de l'événement : " + e.getMessage());
+        String selectedEvent = list_event.getSelectionModel().getSelectedItem();
+        if (selectedEvent == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
+        }
+
+        Integer idEvent = eventMap.get(selectedEvent);
+        if (idEvent != null) {
+            try {
+                serviceEvennement.supprimer(idEvent);
+                refreshList();
+                System.out.println("Événement supprimé avec succès !");
+            } catch (SQLException e) {
+                System.err.println("Erreur SQL lors de la suppression de l'événement : " + e.getMessage());
+            }
+        } else {
+            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
         }
     }
 
     @FXML
     void go_update_evennement(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateEvennement.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (selectedEvent == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
         }
 
+        Integer idEvent = eventMap.get(selectedEvent);
+        if (idEvent != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateEvennement.fxml"));
+                Parent root = loader.load();
 
+                // Passer l'ID à UpdateEvennementController
+                UpdateEvennementController controller = loader.getController();
+                controller.setIdEvent(idEvent); // Make sure this method exists in UpdateEvennementController
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
+        }
     }
+
     // Method to update the ListView with events
     public void setListeEvenements(List<Evennement> events) {
         list_event.getItems().clear();  // Clear the previous list
         for (Evennement ev : events) {
             list_event.getItems().add(
-                    ev.getId_event() + " | " +
-                    ev.getNom_event() + " | " +
-                            ev.getDescription() + " | " +
-                            ev.getDate_event() + " | " +
-                            ev.getLieu_event() + " | " +
-                            ev.getOrganisateur() + " | " +
-                            ev.getStatut()
+                    //ev.getId_event() + " | " +
+                    "Nom de l'événement : " + ev.getNom_event() + "\n" +
+                            "Description : " + ev.getDescription() + "\n" +
+                            "Date de l'événement : " + ev.getDate_event() + "\n" +
+                            "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
+                            "Organisateur : " + ev.getOrganisateur() + "\n" +
+                            "Statut : " + ev.getStatut()
             );
-
         }
     }
+
     // Rafraîchir la liste des événements
     public void refreshList() {
         try {
-            List<Evennement> evennements = serviceEvennement.recuperer(); // Récupérer les événements depuis la BD
-            list_event.getItems().clear(); // Vider la liste avant de la remplir à nouveau
+            List<Evennement> evennements = serviceEvennement.recuperer();
+            list_event.getItems().clear();
+            eventMap.clear(); // Réinitialiser la map
+
             for (Evennement ev : evennements) {
-                list_event.getItems().add(
-                        ev.getId_event() + " | " +
-                        ev.getNom_event() + " | " +
-                                ev.getDescription() + " | " +
-                                ev.getDate_event() + " | " +
-                                ev.getLieu_event() + " | " +
-                                ev.getOrganisateur() + " | " +
-                                ev.getStatut()
-                );
+                String eventText =
+                        "Nom de l'événement : " + ev.getNom_event() + "\n" +
+                        "Description : " + ev.getDescription() + "\n" +
+                        "Date de l'événement : " + ev.getDate_event() + "\n" +
+                        "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
+                        "Organisateur : " + ev.getOrganisateur() + "\n" +
+                        "Statut : " + ev.getStatut();
+
+                list_event.getItems().add(eventText);
+                eventMap.put(eventText, ev.getId_event()); // Associer affichage ↔ ID réel
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
         }
     }
+
     // Méthode pour extraire l'ID de l'événement depuis la chaîne affichée dans la ListView
     private int extractIdFromString(String eventString) {
         try {
@@ -121,21 +147,32 @@ public class AfficherEvennementController {
         }
     }
 
-    // Méthode pour ouvrir la fenêtre d'ajout de participation
-    private void ouvrirAjoutParticipation(int idEvent) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutParticipation.fxml"));
-            Parent root = loader.load();
+    public void voirListP(ActionEvent actionEvent) {
+        if (selectedEvent == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
+        }
 
-            // Passer l'ID à AjoutParticipationController
-            AjoutParticipationController controller = loader.getController();
-            controller.setIdEvent(idEvent);
+        Integer idEvent = eventMap.get(selectedEvent);
+        if (idEvent != null) {
+            try {
+                // Chargez le FXML pour le contrôleur des participants
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherParticipant.fxml"));
+                Parent root = loader.load();
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+                // Passer l'ID à AfficherParticipantController
+                AfficherParticipantController controller = loader.getController();
+                controller.refreshListByEventId(idEvent); // Méthode pour charger les participants par ID
+
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
         }
     }
+
 }

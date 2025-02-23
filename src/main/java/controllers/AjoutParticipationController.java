@@ -84,7 +84,9 @@ public class AjoutParticipationController {
             System.out.println("Participation ajoutée avec succès !");
 
             // Redirection vers AfficherParticipation.fxml après ajout réussi
-            goToAfficherParticipation(event);
+           // goToAfficherEvent(event);
+            fermerFenetre(event);
+
         } catch (Exception e) {
             System.err.println("Erreur lors de l'ajout de la participation : " + e.getMessage());
             showAlert("Erreur", "Une erreur est survenue lors de l'ajout de la participation.");
@@ -100,18 +102,22 @@ public class AjoutParticipationController {
         alert.showAndWait();
     }
 
-    // Méthode pour aller vers AfficherParticipation.fxml après participation
-    private void goToAfficherParticipation(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherParticipant.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("Erreur lors du chargement de AfficherParticipation.fxml : " + e.getMessage());
-            showAlert("Erreur", "Impossible d'afficher la liste des participations.");
-        }
+//    // Méthode pour aller vers AfficherParticipation.fxml après participation
+//    private void goToAfficherEvent(ActionEvent event) {
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEmplEvent.fxml"));
+//            Parent root = loader.load();
+//
+//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//            stage.setScene(new Scene(root));
+//            stage.show();
+//        } catch (IOException e) {
+//            System.err.println("Erreur lors du chargement de AfficherParticipation.fxml : " + e.getMessage());
+//            showAlert("Erreur", "Impossible d'afficher la liste des participations.");
+//        }
+//    }
+    private void fermerFenetre(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

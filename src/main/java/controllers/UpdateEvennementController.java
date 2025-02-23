@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
+import models.Evennement;
 import services.ServiceEvennement;
 
 import java.io.IOException;
@@ -16,9 +17,9 @@ import java.sql.SQLException;
 
 public class UpdateEvennementController {
 
+
     @FXML
     private TextField id_e;
-
     @FXML
     private TextField nom_e;
 
@@ -28,62 +29,73 @@ public class UpdateEvennementController {
     @FXML
     private TextField statut_e;
 
-    private final ServiceEvennement serviceEvennement = new ServiceEvennement(); // Instance du service
+    private final ServiceEvennement serviceEvennement = new ServiceEvennement();
+    private Integer idEvent; // ID de l'événement à modifier
+
+    public void setIdEvent(Integer idEvent) {
+        this.idEvent = idEvent;
+        loadEventDetails(); // Charger les détails de l'événement
+    }
+
+    private void loadEventDetails() {
+        if (idEvent != null) {
+            try {
+                Evennement ev = serviceEvennement.getById(idEvent); // Assurez-vous que cette méthode existe
+                if (ev != null) {
+                    id_e.setText(String.valueOf(ev.getId_event()));
+                    nom_e.setText(ev.getNom_event());
+                    description_r.setText(ev.getDescription()); // Ajout de la description
+                    statut_e.setText(ev.getStatut()); // Ajout du statut
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Événement non trouvé !");
+                }
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Erreur lors de la récupération des détails : " + e.getMessage());
+            }
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "ID de l'événement invalide !");
+        }
+    }
 
     @FXML
     void update_evennement(ActionEvent event) {
         try {
-            // Vérification de l'ID
-            if (id_e.getText().isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID de l'événement est requis !");
-                return;
-            }
-
-            int id = Integer.parseInt(id_e.getText().trim());
-
-            // Récupération et nettoyage des champs
             String nom = nom_e.getText().trim();
             String description = description_r.getText().trim();
             String statut = statut_e.getText().trim();
 
-            // 1. Vérification des champs obligatoires
+            // Vérification des champs obligatoires
             if (nom.isEmpty() || description.isEmpty() || statut.isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis !");
                 return;
             }
 
-            // 2. Vérification de la longueur minimale
+            // Vérification des valeurs
             if (nom.length() < 3 || description.length() < 3) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Le nom et la description doivent contenir au moins 3 caractères !");
                 return;
             }
 
-            // 3. Vérification du statut (doit être "Confirmé", "Annulé" ou "En attente")
             if (!statut.matches("(?i)Confirmé|Annulé|En attente")) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Le statut doit être 'Confirmé', 'Annulé' ou 'En attente' !");
                 return;
             }
 
-            // Mise à jour de l'événement dans la base de données
-            serviceEvennement.modifier(id, nom, description, statut);
-
+            // Mise à jour dans la base de données
+            serviceEvennement.modifier(idEvent, nom, description, statut);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Événement mis à jour avec succès !");
 
-            // Charger la page "AfficherEvennement.fxml"
+            // Retour à la liste des événements
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEvennement.fxml"));
             Parent root = loader.load();
 
-            // Obtenir le contrôleur de la page AfficherEvennement
             AfficherEvennementController controller = loader.getController();
-            controller.refreshList(); // Mise à jour de la liste
+            controller.refreshList();
 
-            // Changer de scène
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
 
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID doit être un nombre valide !");
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Problème lors de la mise à jour : " + e.getMessage());
         } catch (IOException e) {
@@ -91,7 +103,6 @@ public class UpdateEvennementController {
         }
     }
 
-    // Méthode pour afficher une alerte
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -100,3 +111,4 @@ public class UpdateEvennementController {
         alert.showAndWait();
     }
 }
+

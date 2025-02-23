@@ -74,4 +74,37 @@ public class ServiceParticipation implements IServices<Participation>{
         }
         return participations;
     }
+    public List<Participation> recupererParEvenement(int idEvent) throws SQLException {
+        List<Participation> participations = new ArrayList<>();
+        String query = "SELECT * FROM participation WHERE id_event = ?"; // Assurez-vous que le nom de la table est correct
+
+        // Utiliser la connexion cnx déjà établie
+        try (PreparedStatement preparedStatement = cnx.prepareStatement(query)) {
+            preparedStatement.setInt(1, idEvent);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                // Créer un objet Participation à partir des résultats
+                Participation participation = new Participation();
+                participation.setId_participation(resultSet.getInt("id_participation"));
+                participation.setId_event(resultSet.getInt("id_event"));
+                participation.setId_user(resultSet.getInt("id_user"));
+                participation.setDate_participation(resultSet.getDate("date_participation"));
+                participation.setRole_participant(resultSet.getString("role_participant"));
+                participation.setDepart_participant(resultSet.getString("depart_participant"));
+                participation.setContact(resultSet.getString("contact"));
+                participation.setExperience_event(resultSet.getString("experience_event"));
+                participation.setRemarque(resultSet.getString("remarque"));
+
+                participations.add(participation);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des participations : " + e.getMessage());
+            throw e; // Relancer l'exception pour la gérer ailleurs si nécessaire
+        }
+        return participations;
+    }
+
+
+
 }

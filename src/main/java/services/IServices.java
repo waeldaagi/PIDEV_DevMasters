@@ -7,4 +7,6 @@ public interface IServices<T> {
     void modifier(int id, String field1, String field2 , String field3) throws SQLException;
     List<T> recuperer() throws SQLException;
 
+
+
 }
