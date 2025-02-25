@@ -19,6 +19,9 @@ import java.sql.SQLException;
 import services.ServiceOffreRecrutement;
 import models.OffreRecrutement;
 
+import org.controlsfx.control.Notifications;
+import javafx.geometry.Pos;
+
 public class AjoutOffreRecrutementController {
 
     @FXML
@@ -43,13 +46,11 @@ public class AjoutOffreRecrutementController {
 
     @FXML
     void ajouter_offre(ActionEvent event) {
-        // Vérification des champs vides
         if (date_pub.getValue() == null || date_limite.getValue() == null || poste.getText().trim().isEmpty() || salaire.getText().trim().isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
 
-        // Validation du salaire
         int salaireValue;
         try {
             salaireValue = Integer.parseInt(salaire.getText().trim());
@@ -63,7 +64,6 @@ public class AjoutOffreRecrutementController {
         }
 
         try {
-            // Conversion des dates et création de l'objet OffreRecrutement
             OffreRecrutement offre = new OffreRecrutement(
                     Date.valueOf(date_pub.getValue()),
                     Date.valueOf(date_limite.getValue()),
@@ -71,11 +71,16 @@ public class AjoutOffreRecrutementController {
                     poste.getText().trim()
             );
 
-            // Ajout de l'offre
             serviceOffre.ajouter(offre);
-            showAlert("Succès", "Offre ajoutée avec succès !");
 
-            // Chargement de l'affichage des offres
+            // **🔔 Show a Toast Notification**
+            Notifications.create()
+                    .title("Offre ajoutée")
+                    .text("Votre offre de recrutement a été ajoutée avec succès.")
+                    .position(Pos.BOTTOM_RIGHT)
+                    .showConfirm();
+
+            // Redirect to the offer list
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherOffreRecrutement.fxml"));
             Parent root = loader.load();
             AfficherOffreRecrutementController ac = loader.getController();
