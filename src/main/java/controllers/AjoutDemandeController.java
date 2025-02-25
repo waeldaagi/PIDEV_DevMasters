@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import services.ServiceDemande;
 import models.Demande;
 
+import javafx.stage.FileChooser;
+import java.io.File;
+
 public class AjoutDemandeController {
 
     @FXML
@@ -68,5 +71,47 @@ public class AjoutDemandeController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    void cv_pdf(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner un fichier PDF");
+
+        // Filtrer pour n'afficher que les fichiers PDF
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Ouvrir le dialogue de sélection de fichier
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        // Vérifier si un fichier a été sélectionné
+        if (selectedFile != null) {
+            cv.setText(selectedFile.getAbsolutePath()); // Mettre le chemin dans le champ texte
+        } else {
+            showAlert("Information", "Aucun fichier sélectionné.");
+        }
+
+    }
+    @FXML
+    void lettre_pdf(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Sélectionner une lettre de motivation");
+
+        // Filtrer pour n'afficher que les fichiers PDF ou TXT
+        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf");
+        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("Fichiers Texte (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().addAll(pdfFilter, txtFilter);
+
+        // Ouvrir le dialogue de sélection de fichier
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        // Vérifier si un fichier a été sélectionné
+        if (selectedFile != null) {
+            lettre.setText(selectedFile.getAbsolutePath()); // Mettre le chemin dans le champ texte
+        } else {
+            showAlert("Information", "Aucun fichier sélectionné.");
+        }
+
     }
 }

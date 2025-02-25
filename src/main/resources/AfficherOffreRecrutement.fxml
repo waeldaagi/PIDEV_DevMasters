@@ -8,9 +8,10 @@
 <AnchorPane prefHeight="499.0" prefWidth="789.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherOffreRecrutementController">
    <children>
       <TextField fx:id="id_offre" layoutX="401.0" layoutY="137.0" prefHeight="26.0" prefWidth="66.0" />
-      <ListView fx:id="list_offre" layoutX="14.0" layoutY="24.0" prefHeight="422.0" prefWidth="618.0" />
-      <Button layoutX="709.0" layoutY="202.0" mnemonicParsing="false" onAction="#go_update_offre" text="UPDATE" />
-      <Button layoutX="709.0" layoutY="111.0" mnemonicParsing="false" onAction="#delete_offre" prefHeight="41.0" prefWidth="95.0" text="DELETE" />
-      <Button layoutX="673.0" layoutY="293.0" mnemonicParsing="false" onAction="#demande_go" prefHeight="42.0" prefWidth="246.0" text="AFFICHER LES DEMANDE" />
+      <ListView fx:id="list_offre" layoutX="14.0" layoutY="24.0" prefHeight="370.0" prefWidth="618.0" />
+      <Button layoutX="647.0" layoutY="77.0" mnemonicParsing="false" onAction="#go_update_offre" prefHeight="42.0" prefWidth="231.0" text="Update une offre" />
+      <Button layoutX="647.0" layoutY="24.0" mnemonicParsing="false" onAction="#delete_offre" prefHeight="42.0" prefWidth="231.0" text="Delete une offre" />
+      <Button layoutX="79.0" layoutY="411.0" mnemonicParsing="false" onAction="#demande_go" prefHeight="42.0" prefWidth="458.0" text="Sélectionner une offre pour afficher les demandes" />
+      <Button layoutX="651.0" layoutY="353.0" mnemonicParsing="false" onAction="#exporte_pdf" prefHeight="42.0" prefWidth="220.0" text="Exporter les offres en pdf" />
    </children>
 </AnchorPane>

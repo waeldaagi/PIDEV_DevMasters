@@ -17,6 +17,12 @@ import javafx.scene.Node;
 import java.io.IOException;
 import java.sql.SQLException;
 
+
+
+import org.apache.pdfbox.pdmodel.*;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import java.io.IOException;
+
 public class AfficherOffreRecrutementController {
 
     @FXML
@@ -162,6 +168,59 @@ public class AfficherOffreRecrutementController {
         } else {
             System.err.println("Erreur : ID introuvable pour l'offre sélectionnée.");
         }
+    }
+
+    @FXML
+    void exporte_pdf(ActionEvent event) {
+        PDDocument document = new PDDocument();
+        try {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+
+            float margin = 50;
+            float yStart = page.getMediaBox().getHeight() - margin;
+            float lineSpacing = 20;
+            float yPosition = yStart;
+
+            contentStream.beginText();
+            contentStream.newLineAtOffset(margin, yPosition);
+            contentStream.showText("Liste des Offres de Recrutement:");
+            contentStream.endText();
+            yPosition -= lineSpacing; // Move down
+
+            contentStream.setFont(PDType1Font.HELVETICA, 10);
+
+            for (String offreText : list_offre.getItems()) {
+                if (yPosition < margin) { // New page if needed
+                    contentStream.close();
+                    page = new PDPage();
+                    document.addPage(page);
+                    contentStream = new PDPageContentStream(document, page);
+                    contentStream.setFont(PDType1Font.HELVETICA, 10);
+                    yPosition = yStart;
+                }
+
+                contentStream.beginText();
+                contentStream.newLineAtOffset(margin, yPosition);
+                contentStream.showText(offreText.replace("\n", " | ")); // Format text
+                contentStream.endText();
+                yPosition -= lineSpacing;
+            }
+
+            contentStream.close();
+
+            // Save PDF
+            document.save("Offres_Recrutement.pdf");
+            document.close();
+            System.out.println("PDF exporté avec succès !");
+        } catch (IOException e) {
+            System.err.println("Erreur lors de la création du PDF : " + e.getMessage());
+        }
+
+
     }
 
 }
