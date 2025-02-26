@@ -3,6 +3,7 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import models.OffreRecrutement;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import services.ServiceOffreRecrutement;
 import java.util.List;
 import java.util.HashMap;
@@ -178,22 +179,72 @@ public class AfficherOffreRecrutementController {
             document.addPage(page);
 
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
 
             float margin = 50;
+            float pageWidth = page.getMediaBox().getWidth();
             float yStart = page.getMediaBox().getHeight() - margin;
-            float lineSpacing = 20;
             float yPosition = yStart;
 
+            // === Add Image at Top Right ===
+            String imagePath = "C:/Users/Yass/projet_pidev/log.PNG"; // Change this path
+            PDImageXObject pdImage = PDImageXObject.createFromFile(imagePath, document);
+            float imageWidth = 80, imageHeight = 80;
+            float imageX = pageWidth - imageWidth - margin;
+            float imageY = yStart - imageHeight;
+            contentStream.drawImage(pdImage, imageX, imageY, imageWidth, imageHeight);
+
+            // === Title with Dark Blue Color and New Line ===
+            contentStream.setNonStrokingColor(0, 0, 139); // Dark Blue (RGB)
             contentStream.beginText();
-            contentStream.newLineAtOffset(margin, yPosition);
-            contentStream.showText("Liste des Offres de Recrutement:");
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16); // Bigger font
+            contentStream.newLineAtOffset(margin, yPosition - 50);
+            contentStream.showText("Liste des Offres de Recrutement");
             contentStream.endText();
-            yPosition -= lineSpacing; // Move down
+            contentStream.setNonStrokingColor(0, 0, 0); // Reset to black
+            yPosition -= 80; // Move down for spacing
 
             contentStream.setFont(PDType1Font.HELVETICA, 10);
 
-            for (String offreText : list_offre.getItems()) {
+            // === Table Headers ===
+            float[] columnWidths = {150, 80, 100, 100}; // Widths for columns
+            String[] headers = {"Poste", "Salaire", "Date Pub.", "Date Limite"};
+
+            float xPos = margin;
+            for (String header : headers) {
+                contentStream.beginText();
+                contentStream.newLineAtOffset(xPos, yPosition);
+                contentStream.showText(header);
+                contentStream.endText();
+                xPos += columnWidths[headers.length - 1];
+            }
+            yPosition -= 20;
+
+            // === Draw Separator Line ===
+            contentStream.moveTo(margin, yPosition);
+            contentStream.lineTo(pageWidth - margin, yPosition);
+            contentStream.stroke();
+            yPosition -= 20;
+
+            // === List Content ===
+            for (OffreRecrutement offre : serviceOffre.recuperer()) {
+                xPos = margin;
+                String[] rowData = {
+                        offre.getPoste(),
+                        String.valueOf(offre.getSalaire()),
+                        offre.getDate_pub().toString(),
+                        offre.getDate_limite().toString()
+                };
+
+                for (String data : rowData) {
+                    contentStream.beginText();
+                    contentStream.newLineAtOffset(xPos, yPosition);
+                    contentStream.showText(data);
+                    contentStream.endText();
+                    xPos += columnWidths[rowData.length - 1];
+                }
+                yPosition -= 20;
+
                 if (yPosition < margin) { // New page if needed
                     contentStream.close();
                     page = new PDPage();
@@ -202,25 +253,17 @@ public class AfficherOffreRecrutementController {
                     contentStream.setFont(PDType1Font.HELVETICA, 10);
                     yPosition = yStart;
                 }
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(margin, yPosition);
-                contentStream.showText(offreText.replace("\n", " | ")); // Format text
-                contentStream.endText();
-                yPosition -= lineSpacing;
             }
 
             contentStream.close();
 
-            // Save PDF
+            // === Save PDF ===
             document.save("Offres_Recrutement.pdf");
             document.close();
             System.out.println("PDF exporté avec succès !");
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             System.err.println("Erreur lors de la création du PDF : " + e.getMessage());
         }
-
-
     }
 
 }

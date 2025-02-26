@@ -3,6 +3,7 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import models.OffreRecrutement;
 import services.ServiceOffreRecrutement;
 
@@ -13,13 +14,30 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import javafx.scene.image.Image;
+import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class AfficherCandidatController {
+    @FXML
+    private ImageView qr_code;
+
 
     @FXML
     private ListView<String> list_candidat;
+
 
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
 
@@ -28,8 +46,18 @@ public class AfficherCandidatController {
 
     @FXML
     public void initialize() {
-        refreshList(); // Charger la liste dès l’affichage de la page
-
+        refreshList();
+        generateQRCode();  // Generate QR Code when the page loads
+        displayQRCode();
+        qr_code.setImage(new Image("file:qr_code.png"));// Display QR Code in ImageView// Charger la liste dès l’affichage de la page
+        // Add listener to the search field
+        recherche_offre.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                refreshList(); // If empty, show all offers
+            } else {
+                filterOffers(newValue.trim().toLowerCase()); // Otherwise, filter offers
+            }
+        });
         // Listener pour détecter un clic sur une offre
         list_candidat.setOnMouseClicked(event -> {
             String selectedOffre = list_candidat.getSelectionModel().getSelectedItem();
@@ -93,7 +121,14 @@ public class AfficherCandidatController {
 
     @FXML
     public void chercher_offre(javafx.event.ActionEvent actionEvent) {
-        String query = recherche_offre.getText().toLowerCase(); // Get the search query and convert it to lowercase
+        String query = recherche_offre.getText().trim().toLowerCase(); // Get the search query and trim spaces
+
+        // If the search field is empty, refresh the full list
+        if (query.isEmpty()) {
+            refreshList();
+            return;
+        }
+
         list_candidat.getItems().clear(); // Clear the current list of offers
 
         try {
@@ -102,7 +137,6 @@ public class AfficherCandidatController {
             for (OffreRecrutement offre : offres) {
                 // Check if the job position (Poste) contains the query
                 if (offre.getPoste().toLowerCase().contains(query)) {
-
                     // Format the offer information to display in the ListView
                     String offerText = String.format(
                             "Poste: %s\nSalaire: %sDT\nDate de publication: %s\nDate limite: %s\n-------------------------------",
@@ -120,6 +154,65 @@ public class AfficherCandidatController {
             System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
         }
     }
+    private void generateQRCode() {
+        try {
+            // Get the job list and format it
+            StringBuilder qrData = new StringBuilder("Liste des Offres:\n");
+
+            List<OffreRecrutement> offres = serviceOffre.recuperer(); // Fetch offers
+            for (OffreRecrutement offre : offres) {
+                qrData.append("Poste: ").append(offre.getPoste()).append("\n")
+                        .append("Salaire: ").append(offre.getSalaire()).append(" DT\n")
+                        .append("Date de publication: ").append(offre.getDate_pub()).append("\n")
+                        .append("Date limite: ").append(offre.getDate_limite()).append("\n")
+                        .append("------------------------------\n");
+            }
+
+            // Generate and save the QR code
+            String filePath = "qr_code.png";
+            BitMatrix matrix = new MultiFormatWriter().encode(qrData.toString(), BarcodeFormat.QR_CODE, 300, 300);
+            Path path = Paths.get(filePath);
+            MatrixToImageWriter.writeToPath(matrix, "PNG", path);
+
+            System.out.println("✅ QR Code generated with job list!");
+        } catch (Exception e) {
+            System.err.println("❌ Error generating QR Code: " + e.getMessage());
+        }
+    }
+
+    private void displayQRCode() {
+        File file = new File("qr_code.png"); // Ensure the QR Code image exists
+        if (file.exists()) {
+            qr_code.setImage(new Image(file.toURI().toString())); // Load image into ImageView
+        } else {
+            System.err.println("QR Code image not found!");
+        }
+    }
+
+    private void filterOffers(String query) {
+        list_candidat.getItems().clear(); // Clear the list before filtering
+
+        try {
+            List<OffreRecrutement> offres = serviceOffre.recuperer();
+
+            for (OffreRecrutement offre : offres) {
+                if (offre.getPoste().toLowerCase().contains(query)) {
+                    String offerText = String.format(
+                            "Poste: %s\nSalaire: %sDT\nDate de publication: %s\nDate limite: %s\n-------------------------------",
+                            offre.getPoste(),
+                            offre.getSalaire(),
+                            offre.getDate_pub(),
+                            offre.getDate_limite()
+                    );
+                    list_candidat.getItems().add(offerText);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
+        }
+    }
+
+
 
 
 }
