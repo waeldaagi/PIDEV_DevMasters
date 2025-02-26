@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
+import org.controlsfx.control.Notifications;
+import javafx.util.Duration;
+import javafx.geometry.Pos;
 
 public class AjoutEvennementContoller {
 
@@ -77,7 +80,15 @@ public class AjoutEvennementContoller {
 
         try {
             serviceEvennement.ajouter(ev);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Événement ajouté avec succès !");
+
+            // Show success notification
+            Notifications.create()
+                    .title("Succès")
+                    .text("L'événement '" + nom + "' a été ajouté avec succès !")
+                    .hideAfter(Duration.seconds(5))
+                    .position(Pos.BOTTOM_RIGHT)
+                    .showInformation();
+
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Problème lors de l'ajout : " + e.getMessage());
             return;
@@ -99,6 +110,7 @@ public class AjoutEvennementContoller {
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur récupération événements: " + e.getMessage());
         }
+
     }
 
     // Méthode pour afficher une alerte

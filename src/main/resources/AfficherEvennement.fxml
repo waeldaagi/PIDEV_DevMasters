@@ -17,5 +17,6 @@
       <Label layoutX="475.0" layoutY="191.0" text="selectionner un evennement pour le modifier" />
       <Label layoutX="517.0" layoutY="80.0" text="selectionner un evennement " />
       <Button layoutX="526.0" layoutY="123.0" mnemonicParsing="false" onAction="#voirListP" prefHeight="26.0" prefWidth="134.0" text="voir liste participants" />
+      <Button layoutX="147.0" layoutY="383.0" mnemonicParsing="false" onAction="#pdf_exp" prefHeight="26.0" prefWidth="143.0" text="exporter un pdf detaillée" />
    </children>
 </AnchorPane>
