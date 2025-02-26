@@ -6,13 +6,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutEvennementContoller" stylesheets="style1.css">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="style1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutEvennementContoller">
    <children>
       <TextField fx:id="nom_event" layoutX="207.0" layoutY="24.0" />
       <TextField fx:id="description" layoutX="104.0" layoutY="81.0" prefHeight="26.0" prefWidth="355.0" />
       <TextField fx:id="lieu_event" layoutX="207.0" layoutY="174.0" />
       <TextField fx:id="organisateur" layoutX="207.0" layoutY="221.0" />
-      <TextField fx:id="statut" layoutX="207.0" layoutY="266.0" />
       <Button layoutX="274.0" layoutY="320.0" mnemonicParsing="false" onAction="#ajouter_evennement" text="ajouter" />
       <Label layoutX="39.0" layoutY="28.0" text="nom de l'evennement" />
       <Label layoutX="38.0" layoutY="85.0" text="description" />
@@ -21,6 +20,5 @@
       <Label layoutX="38.0" layoutY="225.0" text="L'organisateur" />
       <Label layoutX="38.0" layoutY="270.0" />
       <DatePicker fx:id="date_event" layoutX="194.0" layoutY="128.0" />
-      <Label layoutX="49.0" layoutY="270.0" text="statut" />
    </children>
 </AnchorPane>

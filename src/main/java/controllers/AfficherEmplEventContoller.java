@@ -39,7 +39,6 @@ public class AfficherEmplEventContoller {
             String selectedEvent = events_empl.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
                 System.out.println("Événement sélectionné : " + selectedEvent);
-
                 Integer idEvent = eventMap.get(selectedEvent);
                 if (idEvent != null) {
                     ouvrirAjoutParticipation(idEvent);
@@ -48,7 +47,13 @@ public class AfficherEmplEventContoller {
                 }
             }
         });
+
+        // Ajouter un listener sur le champ de recherche pour filtrer les événements
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterEvent(newValue.toLowerCase());
+        });
     }
+
 
     // Mettre à jour la ListView avec les événements sans afficher l'ID
     public void refreshList() {
@@ -91,25 +96,56 @@ public class AfficherEmplEventContoller {
         }
     }
 
-    public void chercher_event(ActionEvent actionEvent) {
-        String query = searchField.getText().toLowerCase(); // Récupérer le texte et le convertir en minuscules
-        events_empl.getItems().clear(); // Effacer la liste actuelle
+//    public void chercher_event(ActionEvent actionEvent) {
+//        String query = searchField.getText().toLowerCase(); // Récupérer le texte et le convertir en minuscules
+//        events_empl.getItems().clear(); // Effacer la liste actuelle
+//
+//        try {
+//            List<Evennement> evennements = serviceEvennement.recuperer(); // Récupérer tous les événements
+//
+//            for (Evennement ev : evennements) {
+//                // Vérifier si le nom de l'événement ou d'autres détails correspondent à la requête
+//                if (ev.getNom_event().toLowerCase().contains(query) ||
+//                        ev.getDescription().toLowerCase().contains(query) ||
+//                        ev.getLieu_event().toLowerCase().contains(query)) {
+//
+//                    String eventText = "Nom de l'événement : " + ev.getNom_event() + "\n" +
+//                            "Description : " + ev.getDescription() + "\n" +
+//                            "Date de l'événement : " + ev.getDate_event() + "\n" +
+//                            "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
+//                            "Organisateur : " + ev.getOrganisateur() + "\n" +
+//                            "Statut : " + ev.getStatut();
+//
+//                    events_empl.getItems().add(eventText);
+//                    eventMap.put(eventText, ev.getId_event()); // Associer affichage ↔ ID réel
+//                }
+//            }
+//        } catch (SQLException e) {
+//            System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
+//        }
+//
+//    }
+    private void filterEvent(String query) {
+        events_empl.getItems().clear(); // Vider la liste avant de filtrer
+        eventMap.clear(); // Réinitialiser la map pour éviter des erreurs
 
         try {
-            List<Evennement> evennements = serviceEvennement.recuperer(); // Récupérer tous les événements
+            List<Evennement> evennements = serviceEvennement.recuperer();
 
             for (Evennement ev : evennements) {
-                // Vérifier si le nom de l'événement ou d'autres détails correspondent à la requête
                 if (ev.getNom_event().toLowerCase().contains(query) ||
                         ev.getDescription().toLowerCase().contains(query) ||
                         ev.getLieu_event().toLowerCase().contains(query)) {
 
-                    String eventText = "Nom de l'événement : " + ev.getNom_event() + "\n" +
-                            "Description : " + ev.getDescription() + "\n" +
-                            "Date de l'événement : " + ev.getDate_event() + "\n" +
-                            "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
-                            "Organisateur : " + ev.getOrganisateur() + "\n" +
-                            "Statut : " + ev.getStatut();
+                    String eventText = String.format(
+                            "Nom de l'événement : %s\nDescription : %s\nDate : %s\nLieu : %s\nOrganisateur : %s\nStatut : %s",
+                            ev.getNom_event(),
+                            ev.getDescription(),
+                            ev.getDate_event(),
+                            ev.getLieu_event(),
+                            ev.getOrganisateur(),
+                            ev.getStatut()
+                    );
 
                     events_empl.getItems().add(eventText);
                     eventMap.put(eventText, ev.getId_event()); // Associer affichage ↔ ID réel
@@ -118,6 +154,6 @@ public class AfficherEmplEventContoller {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
         }
-
     }
+
 }

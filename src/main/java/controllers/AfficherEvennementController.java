@@ -1,6 +1,8 @@
 package controllers;
 
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Optional;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -33,6 +37,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class AfficherEvennementController {
+
 
     @FXML
     private ListView<String> list_event;
@@ -125,18 +130,18 @@ public class AfficherEvennementController {
     // Rafraîchir la liste des événements
     public void refreshList() {
         try {
-            List<Evennement> evennements = serviceEvennement.recuperer();
+            List<Evennement> evennements = serviceEvennement.recuperer(); // Récupérer les événements mis à jour
             list_event.getItems().clear();
             eventMap.clear(); // Réinitialiser la map
 
             for (Evennement ev : evennements) {
                 String eventText =
                         "Nom de l'événement : " + ev.getNom_event() + "\n" +
-                        "Description : " + ev.getDescription() + "\n" +
-                        "Date de l'événement : " + ev.getDate_event() + "\n" +
-                        "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
-                        "Organisateur : " + ev.getOrganisateur() + "\n" +
-                        "Statut : " + ev.getStatut();
+                                "Description : " + ev.getDescription() + "\n" +
+                                "Date de l'événement : " + ev.getDate_event() + "\n" +
+                                "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
+                                "Organisateur : " + ev.getOrganisateur() + "\n" +
+                                "Statut : " + ev.getStatut();
 
                 list_event.getItems().add(eventText);
                 eventMap.put(eventText, ev.getId_event()); // Associer affichage ↔ ID réel
@@ -145,6 +150,7 @@ public class AfficherEvennementController {
             System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
         }
     }
+
 
     // Méthode pour extraire l'ID de l'événement depuis la chaîne affichée dans la ListView
     private int extractIdFromString(String eventString) {
@@ -341,6 +347,34 @@ public class AfficherEvennementController {
             return null; // Return null if not found
         }
     }
+    @FXML
+    void annuler_event(ActionEvent event) {
+        if (selectedEvent == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
+        }
+
+        // Obtenir l'ID de l'événement sélectionné
+        Integer idEvent = eventMap.get(selectedEvent);
+        if (idEvent == null) {
+            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
+            return;
+        }
+
+        try {
+            // Mettre à jour le statut de l'événement à "annulé"
+            serviceEvennement.annulerEvenement(idEvent); // Assurez-vous que cette méthode existe dans votre service
+            System.out.println("L'événement a été annulé avec succès !");
+
+            // Rafraîchir la liste pour refléter les changements
+            refreshList(); // Appeler refreshList pour mettre à jour l'affichage
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'annulation de l'événement : " + e.getMessage());
+        }
+    }
+
+
+
 
 
 }

@@ -46,12 +46,11 @@ public class AjoutEvennementContoller {
         String desc = description.getText().trim();
         String lieu = lieu_event.getText().trim();
         String org = organisateur.getText().trim();
-        String stat = statut.getText().trim();
         LocalDate date = date_event.getValue(); // Récupération de la date sélectionnée
+        String statut = "Confirmé"; // Statut fixé automatiquement
 
         // 1. Contrôle de saisie
-        if (nom.isEmpty() || desc.isEmpty() || date == null ||
-                lieu.isEmpty() || org.isEmpty() || stat.isEmpty()) {
+        if (nom.isEmpty() || desc.isEmpty() || date == null || lieu.isEmpty() || org.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Tous les champs doivent être remplis !");
             return;
         }
@@ -66,17 +65,12 @@ public class AjoutEvennementContoller {
             return;
         }
 
-        if (!stat.matches("(?i)Confirme|Annule|En attente")) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le statut doit être 'Confirmé', 'Annulé' ou 'En attente' !");
-            return;
-        }
-
         // Convert DatePicker value (LocalDate) to java.sql.Date
         java.sql.Date sqlDate = Date.valueOf(date);
 
         // 2. Création et ajout de l'événement
         ServiceEvennement serviceEvennement = new ServiceEvennement();
-        Evennement ev = new Evennement(nom, desc, sqlDate, lieu, org, stat);
+        Evennement ev = new Evennement(nom, desc, sqlDate, lieu, org, statut); // Statut déjà défini
 
         try {
             serviceEvennement.ajouter(ev);
@@ -84,7 +78,7 @@ public class AjoutEvennementContoller {
             // Show success notification
             Notifications.create()
                     .title("Succès")
-                    .text("L'événement '" + nom + "' a été ajouté avec succès !")
+                    .text("L'événement '" + nom + "' a été ajouté avec succès avec le statut 'Confirmé' !")
                     .hideAfter(Duration.seconds(5))
                     .position(Pos.BOTTOM_RIGHT)
                     .showInformation();
@@ -110,8 +104,8 @@ public class AjoutEvennementContoller {
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur récupération événements: " + e.getMessage());
         }
-
     }
+
 
     // Méthode pour afficher une alerte
     private void showAlert(Alert.AlertType type, String title, String content) {

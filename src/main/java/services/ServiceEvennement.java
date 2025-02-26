@@ -3,6 +3,9 @@ import models.Evennement;
 import tools.myDataBase;
 
 import java.sql.Date;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -91,6 +94,46 @@ private Connection cnx;
         }
         return null; // Si aucun événement trouvé
     }
+
+    public void modifierEvent(int id, String description, Date date_event, String lieu_event, String organisateur) throws SQLException {
+        String sql = "UPDATE evennement SET description=?, date_event=?, lieu_event=?, organisateur=? WHERE id_event=?";
+        PreparedStatement ste = cnx.prepareStatement(sql);
+        ste.setString(1, description);
+        ste.setDate(2, new java.sql.Date(date_event.getTime())); // Conversion en java.sql.Date
+        ste.setString(3, lieu_event);
+        ste.setString(4, organisateur);
+        ste.setInt(5, id);
+        ste.executeUpdate();
+        System.out.println("Événement mis à jour !");
+        myDataBase.getInstance().getConnection().commit();
+    }
+    public void annulerEvenement(int idEvent) throws SQLException { // Déclaration de l'exception
+        myDataBase dbInstance = myDataBase.getInstance();
+        Connection conn = dbInstance.getConnection();
+
+        try {
+            if (conn == null || conn.isClosed()) {
+                conn = DriverManager.getConnection(dbInstance.URL, dbInstance.USER, dbInstance.pwd);
+                System.out.println("Nouvelle connexion établie");
+            }
+
+            String query = "UPDATE evennement SET statut = 'annulé' WHERE id_event = ?";
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, idEvent);
+            pstmt.executeUpdate();
+            System.out.println("Événement annulé avec succès");
+
+        } catch (SQLException e) {
+            // Propager l'exception si une erreur se produit
+            throw e;
+        } finally {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+        }
+    }
+
+
 
 
 
