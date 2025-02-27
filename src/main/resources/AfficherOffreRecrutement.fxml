@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,5 +14,6 @@
       <Button layoutX="647.0" layoutY="24.0" mnemonicParsing="false" onAction="#delete_offre" prefHeight="42.0" prefWidth="231.0" text="Delete une offre" />
       <Button layoutX="79.0" layoutY="411.0" mnemonicParsing="false" onAction="#demande_go" prefHeight="42.0" prefWidth="458.0" text="Sélectionner une offre pour afficher les demandes" />
       <Button layoutX="651.0" layoutY="353.0" mnemonicParsing="false" onAction="#exporte_pdf" prefHeight="42.0" prefWidth="220.0" text="Exporter les offres en pdf" />
+      <ChoiceBox fx:id="poste" layoutX="672.0" layoutY="138.0" prefHeight="30.0" prefWidth="178.0" />
    </children>
 </AnchorPane>

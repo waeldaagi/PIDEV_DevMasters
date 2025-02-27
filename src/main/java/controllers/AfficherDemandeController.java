@@ -17,8 +17,14 @@ import javafx.scene.Node;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+
+import javafx.scene.control.ListCell;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.geometry.Pos;
+import java.awt.Desktop;
+import java.io.File;
 
 public class AfficherDemandeController {
 
@@ -26,27 +32,21 @@ public class AfficherDemandeController {
     private TextField id_d_delete;
 
     @FXML
-    private ListView<String> list_demande;
+    private ListView<Demande> list_demande;
 
     private final ServiceDemande serviceDemande = new ServiceDemande();
+    private int selectedOffreId;
+    private Demande selectedDemand;
 
-    private int selectedOffreId;  // Variable to store the selected offer ID
-    private String selectedDemand; // Variable to store the selected demand
-
-    private final Map<String, Integer> demandeMap = new HashMap<>(); // To associate displayed text with demand ID
-
-    // Method to set the selected offer's ID
     public void setSelectedOffre(int idOffre) {
         this.selectedOffreId = idOffre;
-        refreshList();  // Refresh the list after setting the ID
+        refreshList();
     }
 
     public void initialize() {
         refreshList();
-
-        // Listener to detect a click on a demand
         list_demande.setOnMouseClicked((MouseEvent event) -> {
-            selectedDemand = list_demande.getSelectionModel().getSelectedItem(); // Set the selected demand
+            selectedDemand = list_demande.getSelectionModel().getSelectedItem();
             if (selectedDemand != null) {
                 System.out.println("Demande sélectionnée : " + selectedDemand);
             }
@@ -60,17 +60,13 @@ public class AfficherDemandeController {
             return;
         }
 
-        Integer idDemand = demandeMap.get(selectedDemand); // Get the ID of the selected demand
-        if (idDemand != null) {
-            try {
-                serviceDemande.supprimer(idDemand); // Delete the demand from the database
-                refreshList(); // Refresh the list after deletion
-                System.out.println("Demande supprimée avec succès !");
-            } catch (SQLException e) {
-                System.err.println("Erreur SQL lors de la suppression de la demande : " + e.getMessage());
-            }
-        } else {
-            System.err.println("Erreur : ID introuvable pour la demande sélectionnée.");
+        try {
+            // Directly use selectedDemand.getId_demande()
+            serviceDemande.supprimer(selectedDemand.getId_demande());
+            refreshList(); // Refresh the list to reflect the changes
+            System.out.println("Demande supprimée avec succès !");
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL lors de la suppression de la demande : " + e.getMessage());
         }
     }
 
@@ -79,7 +75,6 @@ public class AfficherDemandeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateDemande.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -88,51 +83,60 @@ public class AfficherDemandeController {
         }
     }
 
-    // Method to update the ListView with demands
-    public void setList_demande(List<Demande> demandes) {
-        list_demande.getItems().clear(); // Clear previous list
-        demandeMap.clear(); // Clear previous map
+    public void refreshList() {
+        try {
+            List<Demande> demandes = serviceDemande.recupererDemandeParOffre(selectedOffreId);
+            list_demande.getItems().clear();
 
-        for (Demande re : demandes) {
-            String demandeText = String.format(
-                    "Lettre de motivation: %-30s\n" +   // Motivation letter on a new line, maximum 30 characters width
-                            "Type contrat: %-20s\n" +   // Contract type (type_contrat)
-                            "Cv: %-20s\n" +   // CV (cv)
-                            "-------------------------------", // Separator line
-                    re.getLettre_motivation(),
-                    re.getType_contrat(),
-                    re.getCv()
-            );
+            list_demande.setCellFactory(lv -> new ListCell<Demande>() {
+                @Override
+                protected void updateItem(Demande demande, boolean empty) {
+                    super.updateItem(demande, empty);
+                    if (empty || demande == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        // Text information
+                        Text demandeText = new Text(
+                                "Type de contrat: " + demande.getType_contrat()
+                        );
 
-            list_demande.getItems().add(demandeText);
-            demandeMap.put(demandeText, re.getId_demande()); // Associate displayed text with demand ID
+                        // Lettre de motivation button
+                        Button openLettreButton = new Button("📄 Ouvrir Lettre");
+                        openLettreButton.setOnAction(e -> openPDF(demande.getLettre_motivation()));
+
+                        // CV button
+                        Button openCvButton = new Button("📄 Ouvrir CV");
+                        openCvButton.setOnAction(e -> openPDF(demande.getCv()));
+
+                        // Layout for buttons and text
+                        HBox cellContent = new HBox(10, demandeText, openLettreButton, openCvButton);
+                        cellContent.setAlignment(Pos.CENTER_LEFT);
+                        setGraphic(cellContent);
+                    }
+                }
+            });
+
+            list_demande.getItems().addAll(demandes);
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des demandes : " + e.getMessage());
         }
     }
 
-    // Method to refresh the list with updated data
-    public void refreshList() {
-        try {
-            // Retrieve demands for the selected offer
-            List<Demande> demandes = serviceDemande.recupererDemandeParOffre(selectedOffreId);
-            list_demande.getItems().clear(); // Clear list before filling it again
-            demandeMap.clear(); // Clear the map
-
-            for (Demande ev : demandes) {
-                String demandeText = String.format(
-                        "Lettre de motivation: %-30s\n" +   // Motivation letter on a new line, maximum 30 characters width
-                                "Type contrat: %-20s\n" +   // Contract type (type_contrat)
-                                "Cv: %-20s\n" +   // CV (cv)
-                                "-------------------------------", // Separator line
-                        ev.getLettre_motivation(),
-                        ev.getType_contrat(),
-                        ev.getCv()
-                );
-
-                list_demande.getItems().add(demandeText);
-                demandeMap.put(demandeText, ev.getId_demande()); // Associate displayed text with demand ID
+    private void openPDF(String filePath) {
+        if (filePath != null && !filePath.isEmpty()) {
+            File file = new File(filePath);
+            if (file.exists()) {
+                try {
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
+                    System.err.println("Erreur lors de l'ouverture du fichier PDF : " + e.getMessage());
+                }
+            } else {
+                System.err.println("Le fichier PDF n'existe pas : " + filePath);
             }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des demandes : " + e.getMessage());
+        } else {
+            System.err.println("Aucun fichier PDF spécifié.");
         }
     }
 }

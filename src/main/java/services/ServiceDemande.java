@@ -101,5 +101,19 @@ public class ServiceDemande implements IServices<Demande> {
         }
         return demandes;
     }
+    public boolean checkDemande(int idOffre, int idUser) throws SQLException {
+        String query = "SELECT COUNT(*) FROM demande WHERE id_offre = ? AND id_user = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(query)) {
+            stmt.setInt(1, idOffre);
+            stmt.setInt(2, idUser);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retourne true si une demande existe
+            }
+        }
+        return false;
+    }
+
+
 
 }

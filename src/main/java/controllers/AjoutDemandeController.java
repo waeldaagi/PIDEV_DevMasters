@@ -2,8 +2,7 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*; // Updated: Changed import to include ChoiceBox
 import javafx.stage.Stage;
 import java.sql.SQLException;
 
@@ -22,7 +21,7 @@ public class AjoutDemandeController {
     private TextField lettre;
 
     @FXML
-    private TextField type_contrat;
+    private ChoiceBox<String> type_contrat; // Updated: Changed from TextField to ChoiceBox
 
     private int idOffre; // Stocker l'ID de l'offre sélectionnée
 
@@ -34,14 +33,19 @@ public class AjoutDemandeController {
     }
 
     @FXML
+    public void initialize() { // Updated: Initialize ChoiceBox values
+        type_contrat.getItems().addAll("CDI", "CDD", "Stage", "Freelance"); // Example contract types
+    }
+
+    @FXML
     void ajouter_demande(ActionEvent event) {
         // Récupération des valeurs saisies
         String cv_d = cv.getText().trim();
         String lettre_d = lettre.getText().trim();
-        String type = type_contrat.getText().trim();
+        String type = type_contrat.getValue(); // Updated: Get value from ChoiceBox
 
         // Vérification des champs vides
-        if (cv_d.isEmpty() || lettre_d.isEmpty() || type.isEmpty()) {
+        if (cv_d.isEmpty() || lettre_d.isEmpty() || type == null || type.isEmpty()) { // Updated: Check for null ChoiceBox selection
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
@@ -91,8 +95,8 @@ public class AjoutDemandeController {
         } else {
             showAlert("Information", "Aucun fichier sélectionné.");
         }
-
     }
+
     @FXML
     void lettre_pdf(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -112,6 +116,5 @@ public class AjoutDemandeController {
         } else {
             showAlert("Information", "Aucun fichier sélectionné.");
         }
-
     }
 }

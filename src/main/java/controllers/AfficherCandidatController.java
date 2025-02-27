@@ -1,10 +1,12 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import models.OffreRecrutement;
+import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
 
 import java.awt.event.ActionEvent;
@@ -100,6 +102,17 @@ public class AfficherCandidatController {
     // Méthode pour ouvrir la fenêtre d'ajout de demande avec l'ID sélectionné
     private void ouvrirAjoutDemande(int idOffre) {
         try {
+            ServiceDemande serviceDemande = new ServiceDemande();
+            int idUser = getCurrentUserId(); // Replace with your method to get the current user's ID
+
+            // Check if the user has already made a request for this offer
+            if (serviceDemande.checkDemande(idOffre, idUser)) {
+                // If the user has already made a request, show a message or handle it
+                showAlert("Vous avez déjà fait une demande pour cette offre.", Alert.AlertType.INFORMATION);
+                // Optionally, you can show a dialog to the user instead of a print statement
+                return; // Prevent opening the new scene if the request already exists
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutDemande.fxml"));
             Parent root = loader.load();
 
@@ -110,50 +123,28 @@ public class AfficherCandidatController {
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
+    // Method to show an alert
+    private void showAlert(String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+    private int getCurrentUserId() {
+        return 1;
+    }
+
     @FXML
     private TextField recherche_offre;
 
 
-
-    @FXML
-    public void chercher_offre(javafx.event.ActionEvent actionEvent) {
-        String query = recherche_offre.getText().trim().toLowerCase(); // Get the search query and trim spaces
-
-        // If the search field is empty, refresh the full list
-        if (query.isEmpty()) {
-            refreshList();
-            return;
-        }
-
-        list_candidat.getItems().clear(); // Clear the current list of offers
-
-        try {
-            List<OffreRecrutement> offres = serviceOffre.recuperer(); // Retrieve all job offers
-
-            for (OffreRecrutement offre : offres) {
-                // Check if the job position (Poste) contains the query
-                if (offre.getPoste().toLowerCase().contains(query)) {
-                    // Format the offer information to display in the ListView
-                    String offerText = String.format(
-                            "Poste: %s\nSalaire: %sDT\nDate de publication: %s\nDate limite: %s\n-------------------------------",
-                            offre.getPoste(),
-                            offre.getSalaire(),
-                            offre.getDate_pub(),
-                            offre.getDate_limite()
-                    );
-
-                    // Add the formatted offer text to the ListView
-                    list_candidat.getItems().add(offerText);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
-        }
-    }
     private void generateQRCode() {
         try {
             // Get the job list and format it

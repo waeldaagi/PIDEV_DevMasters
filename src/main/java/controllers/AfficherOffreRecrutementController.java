@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import models.OffreRecrutement;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -24,24 +25,32 @@ import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 
+
+
 public class AfficherOffreRecrutementController {
 
     @FXML
     private ListView<String> list_offre;
     @FXML
     private TextField id_offre;
+
+    @FXML
+    private ChoiceBox<String> poste; // Make sure the type matches your FXML
+
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
     private final Map<String, Integer> offreMap = new HashMap<>(); // Associer affichage ↔ ID réel
     private String selectedOffre; // Variable pour stocker l'offre sélectionnée
 
     @FXML
     public void initialize() {
-        refreshList();
-        // Charger la liste dès l’affichage de la page
+        refreshList(); // Load offers
 
-        // Listener pour détecter un clic sur une offre
+        // Populate the ChoiceBox with job titles
+        poste.getItems().addAll("Développeur", "Designer", "Ingénieur", "Manager", "Analyste");
+
+        // Listener for the ListView to update the ChoiceBox based on selection
         list_offre.setOnMouseClicked(event -> {
-            selectedOffre = list_offre.getSelectionModel().getSelectedItem(); // Mettre à jour l'offre sélectionnée
+            selectedOffre = list_offre.getSelectionModel().getSelectedItem();
             if (selectedOffre != null) {
                 System.out.println("Offre sélectionnée : " + selectedOffre);
             }
@@ -77,28 +86,30 @@ public class AfficherOffreRecrutementController {
         }
 
         Integer idOffre = offreMap.get(selectedOffre);
-        if (idOffre != null) {
+        String selectedPoste = poste.getValue(); // Get selected poste from ChoiceBox
+
+        if (idOffre != null && selectedPoste != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateOffreRecrutement.fxml"));
-                Parent root = loader.load();
+                // Update the offer with the selected poste
+                serviceOffre.modifier(idOffre, selectedPoste);  // Calling the modifier method
 
-                // Passer l'ID à UpdateOffreRecrutementController
-                UpdateOffreRecrutementController controller = loader.getController();
-                controller.setIdOffre(idOffre);
+                // Go to the UpdateOffreRecrutement screen if needed (or handle updates directly here)
+                System.out.println("Offre modifiée avec succès!");
 
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+                // Optionally, refresh the list to reflect changes
+                refreshList();
+
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de la mise à jour de l'offre : " + e.getMessage());
             }
         } else {
-            System.err.println("Erreur : ID introuvable pour l'offre sélectionnée.");
+            System.err.println("Erreur : ID ou Poste introuvable pour l'offre sélectionnée.");
         }
     }
 
     // Mise à jour de la liste des offres
     public void refreshList() {
+
         try {
             List<OffreRecrutement> offres = serviceOffre.recuperer();
             list_offre.getItems().clear();
@@ -265,5 +276,8 @@ public class AfficherOffreRecrutementController {
             System.err.println("Erreur lors de la création du PDF : " + e.getMessage());
         }
     }
+
+
+
 
 }

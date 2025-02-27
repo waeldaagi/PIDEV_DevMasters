@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Alert;
@@ -15,12 +16,14 @@ import javafx.scene.Node;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import services.ServiceOffreRecrutement;
 import models.OffreRecrutement;
 
 import org.controlsfx.control.Notifications;
 import javafx.geometry.Pos;
+
 
 public class AjoutOffreRecrutementController {
 
@@ -30,8 +33,11 @@ public class AjoutOffreRecrutementController {
     @FXML
     private DatePicker date_pub;
 
+   // @FXML
+   // private TextField poste;
+
     @FXML
-    private TextField poste;
+    private ChoiceBox<String> poste; // Updated from TextField to ChoiceBox
 
     @FXML
     private TextField salaire;
@@ -42,11 +48,15 @@ public class AjoutOffreRecrutementController {
     public void initialize() {
         // Set the current system date to the date_pub DatePicker
         date_pub.setValue(java.time.LocalDate.now());
+        // Populate the ChoiceBox with example job positions
+
+        poste.getItems().addAll(Arrays.asList("Développeur", "Analyste", "Designer", "Chef de projet"));
+
     }
 
     @FXML
     void ajouter_offre(ActionEvent event) {
-        if (date_pub.getValue() == null || date_limite.getValue() == null || poste.getText().trim().isEmpty() || salaire.getText().trim().isEmpty()) {
+        if (date_pub.getValue() == null || date_limite.getValue() == null || poste.getValue() == null || salaire.getText().trim().isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
@@ -68,7 +78,7 @@ public class AjoutOffreRecrutementController {
                     Date.valueOf(date_pub.getValue()),
                     Date.valueOf(date_limite.getValue()),
                     salaireValue,
-                    poste.getText().trim()
+                    poste.getValue().trim() // Updated to use ChoiceBox value
             );
 
             serviceOffre.ajouter(offre);
