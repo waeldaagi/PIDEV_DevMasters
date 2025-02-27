@@ -5,11 +5,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Evennement;
 import services.ServiceEvennement;
+import services.ServiceParticipation;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,6 +28,7 @@ public class AfficherEmplEventContoller {
     @FXML
     private TextField searchField;
 
+    private final ServiceParticipation serviceParticipant = new ServiceParticipation();
     private final ServiceEvennement serviceEvennement = new ServiceEvennement(); // Instance du service
     private final Map<String, Integer> eventMap = new HashMap<>(); // Associer affichage ↔ ID réel
 
@@ -80,23 +83,40 @@ public class AfficherEmplEventContoller {
 
     // Méthode pour ouvrir la fenêtre d'ajout de participation
     private void ouvrirAjoutParticipation(int idEvent) {
+        int idUser = 9; // Remplace ça par load réel de l'utilisateur connecté
         try {
+            if (serviceParticipant.checkParticipation(idEvent, idUser)) {
+                showAlert("Information", "Vous avez déjà participé à cet événement.", Alert.AlertType.INFORMATION);
+                return; // Arrête l'exécution
+            }
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutParticipation.fxml"));
             Parent root = loader.load();
 
             // Passer l'ID à AjoutParticipationController
             AjoutParticipationController controller = loader.getController();
             controller.setIdEvent(idEvent);
+            controller.setUserId(idUser); // Passer aussi l'ID utilisateur
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
 
-//    public void chercher_event(ActionEvent actionEvent) {
+    // Méthode pour afficher une alerte
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
+    //    public void chercher_event(ActionEvent actionEvent) {
 //        String query = searchField.getText().toLowerCase(); // Récupérer le texte et le convertir en minuscules
 //        events_empl.getItems().clear(); // Effacer la liste actuelle
 //

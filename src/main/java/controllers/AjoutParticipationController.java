@@ -30,6 +30,7 @@ public class AjoutParticipationController {
 
     @FXML
     private ChoiceBox<String> role_p;
+    private int userId;
 
     private int idEvent; // Stocker l'ID de l'événement sélectionné
 
@@ -65,7 +66,7 @@ public class AjoutParticipationController {
             return;
         }
 
-        int idUser = 1;
+        int idUser = 9;
         LocalDate dateParticipation = LocalDate.now();
         Date dateParticipationUtil = Date.from(dateParticipation.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -95,4 +96,8 @@ public class AjoutParticipationController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+    public void setUserId(int idUser) {
+        this.userId = idUser; // Assure-toi que 'userId' est bien défini comme un attribut dans la classe
+    }
+
 }
