@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -14,6 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.Node;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -24,6 +27,14 @@ import models.OffreRecrutement;
 import org.controlsfx.control.Notifications;
 import javafx.geometry.Pos;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
 
 public class AjoutOffreRecrutementController {
 
@@ -33,8 +44,7 @@ public class AjoutOffreRecrutementController {
     @FXML
     private DatePicker date_pub;
 
-   // @FXML
-   // private TextField poste;
+
 
     @FXML
     private ChoiceBox<String> poste; // Updated from TextField to ChoiceBox
@@ -42,10 +52,27 @@ public class AjoutOffreRecrutementController {
     @FXML
     private TextField salaire;
 
+    @FXML
+    private AnchorPane AnchorPane;
+
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
 
     // Initialize method to set the current date for date_pub
     public void initialize() {
+        URL imageUrl = getClass().getResource("/backgound.jpg");
+        if (imageUrl != null) {
+            Image backgroundImage = new Image(imageUrl.toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            AnchorPane.setBackground(new Background(bgImage));
+        } else {
+            System.err.println("Erreur : Image de fond introuvable !");
+        }
         // Set the current system date to the date_pub DatePicker
         date_pub.setValue(java.time.LocalDate.now());
         // Populate the ChoiceBox with example job positions

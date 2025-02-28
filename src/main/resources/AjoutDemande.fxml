@@ -7,8 +7,9 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="502.0" prefWidth="666.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutDemandeController">
+<AnchorPane prefHeight="506.0" prefWidth="668.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutDemandeController">
    <children>
+      <AnchorPane fx:id="anchorPane" layoutX="-1.0" layoutY="-2.0" prefHeight="506.0" prefWidth="668.0" />
       <Label layoutX="29.0" layoutY="33.0" text="donne moi le type de contrat " />
       <Label layoutX="29.0" layoutY="93.0" text="Curriculum Vitae (CV)" />
       <Label layoutX="29.0" layoutY="159.0" prefHeight="18.0" prefWidth="143.0" text="lettre de motivation" />

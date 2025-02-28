@@ -6,6 +6,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+import javafx.scene.layout.AnchorPane;
 import models.Demande;
 import services.ServiceDemande;
 
@@ -15,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +28,15 @@ import javafx.geometry.Pos;
 import java.awt.Desktop;
 import java.io.File;
 
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
+
 public class AfficherDemandeController {
 
     @FXML
@@ -33,6 +44,9 @@ public class AfficherDemandeController {
 
     @FXML
     private ListView<Demande> list_demande;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     private final ServiceDemande serviceDemande = new ServiceDemande();
     private int selectedOffreId;
@@ -44,6 +58,20 @@ public class AfficherDemandeController {
     }
 
     public void initialize() {
+        URL imageUrl = getClass().getResource("/backgound.jpg");
+        if (imageUrl != null) {
+            Image backgroundImage = new Image(imageUrl.toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            anchorPane.setBackground(new Background(bgImage));
+        } else {
+            System.err.println("Erreur : Image de fond introuvable !");
+        }
         refreshList();
         list_demande.setOnMouseClicked((MouseEvent event) -> {
             selectedDemand = list_demande.getSelectionModel().getSelectedItem();

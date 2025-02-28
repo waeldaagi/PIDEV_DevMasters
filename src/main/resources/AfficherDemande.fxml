@@ -7,10 +7,14 @@
 
 <AnchorPane prefHeight="507.0" prefWidth="740.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherDemandeController">
    <children>
+      <AnchorPane fx:id="anchorPane" layoutY="3.0" prefHeight="507.0" prefWidth="740.0">
+         <children>
+            <AnchorPane fx:id="AnchorPane" prefHeight="513.0" prefWidth="740.0" />
+            <Button layoutX="608.0" layoutY="319.0" mnemonicParsing="false" onAction="#delete_d" text="delete" />
+         </children></AnchorPane>
       <TextField fx:id="id_d_delete" layoutX="149.0" layoutY="103.0" />
       <Button layoutX="319.0" layoutY="253.0" mnemonicParsing="false" onAction="#update_d" text="update" />
-      <ListView fx:id="list_demande" layoutX="43.0" layoutY="30.0" prefHeight="378.0" prefWidth="682.0" />
-      <Button layoutX="629.0" layoutY="430.0" mnemonicParsing="false" onAction="#delete_d" text="delete" />
+      <ListView fx:id="list_demande" layoutX="43.0" layoutY="30.0" prefHeight="280.0" prefWidth="645.0" />
 
 
    </children>

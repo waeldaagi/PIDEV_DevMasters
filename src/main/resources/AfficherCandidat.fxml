@@ -7,9 +7,12 @@
 
 <AnchorPane prefHeight="504.0" prefWidth="774.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherCandidatController">
    <children>
-      <ListView fx:id="list_candidat" layoutX="23.0" layoutY="113.0" prefHeight="344.0" prefWidth="730.0" />
-      <TextField fx:id="recherche_offre" layoutX="204.0" layoutY="41.0" prefHeight="33.0" prefWidth="306.0" />
-      <ImageView fx:id="qr_code" fitHeight="92.0" fitWidth="129.0" layoutX="33.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+      <AnchorPane fx:id="anchorPane" layoutY="-1.0" prefHeight="504.0" prefWidth="774.0">
+         <children>
+            <TextField fx:id="recherche_offre" layoutX="56.0" layoutY="56.0" prefHeight="33.0" prefWidth="306.0" />
+            <ImageView fx:id="qr_code" fitHeight="54.0" fitWidth="106.0" layoutX="387.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" />
+         </children></AnchorPane>
+      <ListView fx:id="list_candidat" layoutX="23.0" layoutY="113.0" prefHeight="344.0" prefWidth="502.0" />
 
    </children>
 </AnchorPane>

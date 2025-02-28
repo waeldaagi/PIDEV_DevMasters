@@ -3,9 +3,12 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import models.OffreRecrutement;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import services.ServiceOffreRecrutement;
+
+import java.net.URL;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,17 @@ import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.io.IOException;
 
+import java.util.Date;
+
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
+
 
 
 public class AfficherOffreRecrutementController {
@@ -37,12 +51,29 @@ public class AfficherOffreRecrutementController {
     @FXML
     private ChoiceBox<String> poste; // Make sure the type matches your FXML
 
+    @FXML
+    private AnchorPane anchorPane;
+
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
     private final Map<String, Integer> offreMap = new HashMap<>(); // Associer affichage ↔ ID réel
     private String selectedOffre; // Variable pour stocker l'offre sélectionnée
 
     @FXML
     public void initialize() {
+        URL imageUrl = getClass().getResource("/backgound.jpg");
+        if (imageUrl != null) {
+            Image backgroundImage = new Image(imageUrl.toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            anchorPane.setBackground(new Background(bgImage));
+        } else {
+            System.err.println("Erreur : Image de fond introuvable !");
+        }
         refreshList(); // Load offers
 
         // Populate the ChoiceBox with job titles
@@ -107,24 +138,33 @@ public class AfficherOffreRecrutementController {
         }
     }
 
+
     // Mise à jour de la liste des offres
     public void refreshList() {
-
         try {
             List<OffreRecrutement> offres = serviceOffre.recuperer();
             list_offre.getItems().clear();
             offreMap.clear(); // Réinitialiser la map
 
+            Date currentDate = new Date(); // Current date
+
             for (OffreRecrutement offre : offres) {
+                // Ensure that date_limite is a Date type
+                Date dateLimite = offre.getDate_limite();
+
+                // Format the offer's display text
                 String offreText = String.format(
                         "Poste: %s\nSalaire: %s\nDate de publication: %s\nDate limite: %s\n-------------------------------",
                         offre.getPoste(),
-                        offre.getSalaire(),
+                        (double) offre.getSalaire(),
                         offre.getDate_pub(),
                         offre.getDate_limite()
                 );
 
-
+                // If the deadline has passed, prepend "Offre Hors Service"
+                if (dateLimite.before(currentDate)) {
+                    offreText = "       !!  !!         Offre Hors Service        !!   !!\n" + offreText; // Prepend message if expired
+                }
 
                 list_offre.getItems().add(offreText);
                 offreMap.put(offreText, offre.getId_offre()); // Associer affichage ↔ ID réel
@@ -275,6 +315,21 @@ public class AfficherOffreRecrutementController {
         } catch (IOException | SQLException e) {
             System.err.println("Erreur lors de la création du PDF : " + e.getMessage());
         }
+    }
+
+    @FXML
+    void go_ajout(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutOffreRecrutement.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

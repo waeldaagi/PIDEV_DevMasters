@@ -10,8 +10,10 @@ import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
 
 import java.awt.event.ActionEvent;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,9 +30,28 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import javafx.scene.image.Image;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
 
 public class AfficherCandidatController {
     @FXML
@@ -40,6 +61,10 @@ public class AfficherCandidatController {
     @FXML
     private ListView<String> list_candidat;
 
+    @FXML
+    private AnchorPane anchorPane;
+
+
 
     private final ServiceOffreRecrutement serviceOffre = new ServiceOffreRecrutement();
 
@@ -48,6 +73,20 @@ public class AfficherCandidatController {
 
     @FXML
     public void initialize() {
+        URL imageUrl = getClass().getResource("/backgound.jpg");
+        if (imageUrl != null) {
+            Image backgroundImage = new Image(imageUrl.toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            anchorPane.setBackground(new Background(bgImage));
+        } else {
+            System.err.println("Erreur : Image de fond introuvable !");
+        }
         refreshList();
         generateQRCode();  // Generate QR Code when the page loads
         displayQRCode();
@@ -82,20 +121,40 @@ public class AfficherCandidatController {
             list_candidat.getItems().clear();
             offreIdMap.clear(); // Clear previous stored data
 
-            for (OffreRecrutement offre : offres) {
-                String displayText = String.format(
-                        "Poste: %s\nSalaire: %sDT\nDate de publication: %s\nDate limite: %s\n-------------------------------",
-                        offre.getPoste(),
-                        offre.getSalaire(),
-                        offre.getDate_pub(),
-                        offre.getDate_limite()
-                );
+            LocalDate today = LocalDate.now(); // Get today's date
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Format dates
 
-                list_candidat.getItems().add(displayText);
-                offreIdMap.put(displayText, offre.getId_offre()); // Store ID
+            for (OffreRecrutement offre : offres) {
+                if (offre.getDate_limite() == null) {
+                    System.err.println("Offre avec ID " + offre.getId_offre() + " a une date limite null.");
+                    continue; // Skip this offer
+                }
+
+                // Convert java.util.Date to LocalDate
+                Date dateLimiteUtil = offre.getDate_limite();
+                LocalDate dateLimite = Instant.ofEpochMilli(dateLimiteUtil.getTime())
+                        .atZone(ZoneId.systemDefault()).toLocalDate();
+
+                if (!dateLimite.isBefore(today)) { // Check if offer is still valid
+                    String displayText = String.format(
+                            "Poste: %s\nSalaire: %.2f DT\nDate de publication: %s\nDate limite: %s\n-------------------------------",
+                            offre.getPoste(),
+                            (double) offre.getSalaire(),
+                            (offre.getDate_pub() != null) ? Instant.ofEpochMilli(offre.getDate_pub().getTime())
+                                    .atZone(ZoneId.systemDefault()).toLocalDate().format(formatter) : "N/A",
+                            dateLimite.format(formatter) // Convert LocalDate to formatted String
+                    );
+
+                    list_candidat.getItems().add(displayText);
+                    offreIdMap.put(displayText, offre.getId_offre()); // Store ID
+                }
             }
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Une erreur inattendue s'est produite : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -127,6 +186,7 @@ public class AfficherCandidatController {
             e.printStackTrace();
         }
     }
+
     // Method to show an alert
     private void showAlert(String message, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
@@ -202,8 +262,6 @@ public class AfficherCandidatController {
             System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
         }
     }
-
-
 
 
 }

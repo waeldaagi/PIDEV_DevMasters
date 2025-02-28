@@ -2,15 +2,29 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*; // Updated: Changed import to include ChoiceBox
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.net.URL;
 import java.sql.SQLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.io.File;
 
 import services.ServiceDemande;
 import models.Demande;
 
 import javafx.stage.FileChooser;
-import java.io.File;
+
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
 
 public class AjoutDemandeController {
 
@@ -21,9 +35,12 @@ public class AjoutDemandeController {
     private TextField lettre;
 
     @FXML
-    private ChoiceBox<String> type_contrat; // Updated: Changed from TextField to ChoiceBox
+    private ChoiceBox<String> type_contrat;
 
-    private int idOffre; // Stocker l'ID de l'offre sélectionnée
+    private int idOffre;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     private final ServiceDemande serviceDemande = new ServiceDemande();
 
@@ -33,34 +50,63 @@ public class AjoutDemandeController {
     }
 
     @FXML
-    public void initialize() { // Updated: Initialize ChoiceBox values
-        type_contrat.getItems().addAll("CDI", "CDD", "Stage", "Freelance"); // Example contract types
+    public void initialize() {
+        URL imageUrl = getClass().getResource("/backgound.jpg");
+        if (imageUrl != null) {
+            Image backgroundImage = new Image(imageUrl.toExternalForm());
+            BackgroundImage bgImage = new BackgroundImage(
+                    backgroundImage,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.CENTER,
+                    new BackgroundSize(100, 100, true, true, true, true)
+            );
+            anchorPane.setBackground(new Background(bgImage));
+        } else {
+            System.err.println("Erreur : Image de fond introuvable !");
+        }
+        type_contrat.getItems().addAll("CDI", "CDD", "Stage", "Freelance");
     }
 
     @FXML
     void ajouter_demande(ActionEvent event) {
-        // Récupération des valeurs saisies
         String cv_d = cv.getText().trim();
         String lettre_d = lettre.getText().trim();
-        String type = type_contrat.getValue(); // Updated: Get value from ChoiceBox
+        String type = type_contrat.getValue();
 
-        // Vérification des champs vides
-        if (cv_d.isEmpty() || lettre_d.isEmpty() || type == null || type.isEmpty()) { // Updated: Check for null ChoiceBox selection
+        if (cv_d.isEmpty() || lettre_d.isEmpty() || type == null || type.isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
 
-        // ID de l'utilisateur connecté (à adapter si nécessaire)
+        try {
+            Path destinationFolder = Path.of("C:/xampp/htdocs");
+            Files.createDirectories(destinationFolder);
+
+            Path cvSource = Path.of(cv_d);
+            Path lettreSource = Path.of(lettre_d);
+
+            Path cvDestination = destinationFolder.resolve(cvSource.getFileName());
+            Path lettreDestination = destinationFolder.resolve(lettreSource.getFileName());
+
+            Files.copy(cvSource, cvDestination, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(lettreSource, lettreDestination, StandardCopyOption.REPLACE_EXISTING);
+
+            cv_d = cvDestination.toString();
+            lettre_d = lettreDestination.toString();
+        } catch (Exception e) {
+            showAlert("Erreur", "Erreur lors de la copie des fichiers : " + e.getMessage());
+            return;
+        }
+
         int idUser = 1;
 
-        // Création de l'objet Demande
         Demande demande = new Demande(0, idUser, idOffre, type, cv_d, lettre_d);
 
         try {
             serviceDemande.ajouter(demande);
             showAlert("Succès", "Demande ajoutée avec succès !");
 
-            // Fermer la fenêtre actuelle
             Stage stage = (Stage) cv.getScene().getWindow();
             stage.close();
 
@@ -81,17 +127,11 @@ public class AjoutDemandeController {
     void cv_pdf(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner un fichier PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf"));
 
-        // Filtrer pour n'afficher que les fichiers PDF
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(extFilter);
-
-        // Ouvrir le dialogue de sélection de fichier
         File selectedFile = fileChooser.showOpenDialog(null);
-
-        // Vérifier si un fichier a été sélectionné
         if (selectedFile != null) {
-            cv.setText(selectedFile.getAbsolutePath()); // Mettre le chemin dans le champ texte
+            cv.setText(selectedFile.getAbsolutePath());
         } else {
             showAlert("Information", "Aucun fichier sélectionné.");
         }
@@ -101,18 +141,14 @@ public class AjoutDemandeController {
     void lettre_pdf(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Sélectionner une lettre de motivation");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf"),
+                new FileChooser.ExtensionFilter("Fichiers Texte (*.txt)", "*.txt")
+        );
 
-        // Filtrer pour n'afficher que les fichiers PDF ou TXT
-        FileChooser.ExtensionFilter pdfFilter = new FileChooser.ExtensionFilter("Fichiers PDF (*.pdf)", "*.pdf");
-        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("Fichiers Texte (*.txt)", "*.txt");
-        fileChooser.getExtensionFilters().addAll(pdfFilter, txtFilter);
-
-        // Ouvrir le dialogue de sélection de fichier
         File selectedFile = fileChooser.showOpenDialog(null);
-
-        // Vérifier si un fichier a été sélectionné
         if (selectedFile != null) {
-            lettre.setText(selectedFile.getAbsolutePath()); // Mettre le chemin dans le champ texte
+            lettre.setText(selectedFile.getAbsolutePath());
         } else {
             showAlert("Information", "Aucun fichier sélectionné.");
         }
