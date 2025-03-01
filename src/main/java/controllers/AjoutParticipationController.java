@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import models.Participation;
+import services.QRCodeGenerator;
 import services.ServiceParticipation;
 
 import java.util.Date;
@@ -60,13 +61,12 @@ public class AjoutParticipationController {
         String experience = experience_event.getValue();
         String remarqueText = remarque.getText().trim();
 
-        // Vérification du numéro de téléphone (exactement 8 chiffres)
         if (!numTel.matches("\\d{8}")) {
             showAlert("Erreur de saisie", "Le numéro de téléphone doit contenir exactement 8 chiffres.");
             return;
         }
 
-        int idUser = 1;
+        int idUser = 1; // Remplace par la vraie ID utilisateur
         LocalDate dateParticipation = LocalDate.now();
         Date dateParticipationUtil = Date.from(dateParticipation.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -75,7 +75,21 @@ public class AjoutParticipationController {
         ServiceParticipation service = new ServiceParticipation();
         try {
             service.ajouter(participation);
-            showAlert("Succès", "Participation ajoutée avec succès !");
+
+            // Fetch User & Event Details
+            String username = service.getUserNameById(idUser);
+            String eventDetails = service.getEventDetailsById(idEvent);
+
+            // Prepare QR Code Data
+            // Include dynamic event URL with event ID as a parameter
+            String qrData = "https://sahar-khiari.github.io/PIDEV_DevMasters/event_participation.html?event_id=" + idEvent + "&username=" + username + "&role=" + role;
+
+            String filePath = "C:/Users/PC/Desktop/QRCode_" + username + ".png";
+
+            // Generate QR Code
+            QRCodeGenerator.generateQRCode(qrData, filePath);
+
+            showAlert("Succès", "Participation ajoutée avec succès ! QR Code généré !");
             System.out.println("Participation ajoutée avec succès !");
             fermerFenetre(event);
         } catch (Exception e) {
@@ -83,6 +97,7 @@ public class AjoutParticipationController {
             showAlert("Erreur", "Une erreur est survenue lors de l'ajout de la participation.");
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

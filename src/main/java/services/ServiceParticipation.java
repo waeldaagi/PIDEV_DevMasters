@@ -134,4 +134,27 @@ public class ServiceParticipation implements IServices<Participation> {
         }
         return false;
     }
+    public String getUserNameById(int idUser) throws SQLException {
+        String sql = "SELECT username FROM users WHERE id = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql)) {
+            stmt.setInt(1, idUser);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("username");
+            }
+        }
+        return "Unknown User";
+    }
+    public String getEventDetailsById(int idEvent) throws SQLException {
+        String sql = "SELECT nom_event, date_event, lieu_event FROM evennement WHERE id_event = ?";
+        try (PreparedStatement stmt = cnx.prepareStatement(sql)) {
+            stmt.setInt(1, idEvent);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("nom_event") + " | " + rs.getDate("date_event") + " | " + rs.getString("lieu_event");
+            }
+        }
+        return "Unknown Event";
+    }
+
 }
