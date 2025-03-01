@@ -12,12 +12,12 @@ public class main {
     public static void main(String[] args) {
 
         // Gestion des Evennement
-        Evennement event = new Evennement( "Conférence Tech", "Conférence sur les nouvelles technologies", new Date(), "Paris", "John Doe", "Prévu");
+       // Evennement event = new Evennement( "Conférence Tech", "Conférence sur les nouvelles technologies", new Date(), "Paris", "John Doe", "Prévu");
         ServiceEvennement serviceEvent = new ServiceEvennement();
 
         try {
             // Ajouter un événement
-            serviceEvent.ajouter(event);
+           // serviceEvent.ajouter(event);
 
             // Modifier un événement avec un ID spécifique
            // serviceEvent.modifier(2, "Hackathon IA", "Compétition sur l'intelligence artificielle", "Terminé");

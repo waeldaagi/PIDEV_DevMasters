@@ -1,16 +1,13 @@
 package controllers;
 
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
 import models.Evennement;
 import services.ServiceEvennement;
 import java.util.List;
 import javafx.event.ActionEvent;
-import javafx.scene.control.TextField;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,136 +17,201 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Optional;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import services.Example;
+
 
 public class AfficherEvennementController {
-
-
     @FXML
-    private ListView<String> list_event;
+    private ListView<HBox> list_event; // The ListView that will display the events
+
     @FXML
     private TextField id_event_delete;
     private final ServiceEvennement serviceEvennement = new ServiceEvennement(); // Instance du service
     private final Map<String, Integer> eventMap = new HashMap<>(); // Associer affichage ↔ ID réel
-    private String selectedEvent; // Member variable to hold the selected event
+    private Evennement selectedEvennement;// Member variable to hold the selected event
+    ObservableList<HBox> eventList = FXCollections.observableArrayList();
+    // Vérifier que la liste des événements est bien initialisée
+   // List<Evennement> evennements = getEvennements();
 
     @FXML
     public void initialize() {
-        refreshList(); // Charger la liste dès l’affichage de la page
+        refreshList();
 
-        // Listener pour détecter un clic sur un événement
         list_event.setOnMouseClicked(event -> {
-            selectedEvent = list_event.getSelectionModel().getSelectedItem(); // Update the selected event
-            if (selectedEvent != null) {
-                // Affiche l'événement sélectionné dans la console
-                System.out.println("Événement sélectionné : " + selectedEvent);
+            HBox selectedHBox = list_event.getSelectionModel().getSelectedItem();
+            if (selectedHBox != null) {
+                selectedEvennement = (Evennement) selectedHBox.getUserData();
+                if (selectedEvennement != null) {
+                    System.out.println("Événement sélectionné : " + selectedEvennement.getNom_event());
+                }
+            }
+        });
+
+    }
+
+
+    @FXML
+    void delete_evennement(ActionEvent event) {
+        if (selectedEvennement == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
+        }
+
+        try {
+            serviceEvennement.supprimer(selectedEvennement.getId_event());
+            refreshList();
+            System.out.println("Événement supprimé avec succès !");
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL lors de la suppression de l'événement : " + e.getMessage());
+        }
+    }
+
+
+    @FXML
+    void go_update_evennement(ActionEvent event) {
+        if (selectedEvennement == null) {
+            System.err.println("Erreur : Aucun événement sélectionné.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateEvennement.fxml"));
+            Parent root = loader.load();
+
+            UpdateEvennementController controller = loader.getController();
+            controller.setIdEvent(selectedEvennement.getId_event()); // Passer l'ID directement
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // Method to update the ListView with events
+    public void setListeEvenements(List<Evennement> events) {
+        ObservableList<HBox> eventList = FXCollections.observableArrayList();
+
+        for (Evennement ev : events) {
+            // Création des labels pour chaque attribut
+            Label nomLabel = new Label("Nom: " + ev.getNom_event());
+            Label descLabel = new Label("Description: " + ev.getDescription()); // Assure-toi que la méthode est correcte
+            Label dateLabel = new Label("Date: " + ev.getDate_event().toString());
+            Label lieuLabel = new Label("Lieu: " + ev.getLieu_event());
+            Label organisateurLabel = new Label("Organisateur: " + ev.getOrganisateur());
+            Label statutLabel = new Label("Statut: " + ev.getStatut());
+
+            // Charger l'image depuis une URL ou un fichier
+            ImageView imageView = new ImageView();
+            if (ev.getImg_event() != null && !ev.getImg_event().isEmpty()) {
+                Image image = new Image("file:" + ev.getImg_event(), 100, 100, true, true);
+                imageView.setImage(image);
+            }
+
+            // Mise en page avec un VBox pour aligner les infos verticalement
+            VBox eventDetails = new VBox(nomLabel, descLabel, dateLabel, lieuLabel, organisateurLabel, statutLabel);
+            eventDetails.setSpacing(5);
+
+            // HBox contenant les détails et l’image
+            HBox eventHBox = new HBox(imageView, eventDetails);
+            eventHBox.setSpacing(10);
+            eventHBox.setAlignment(Pos.CENTER_LEFT);
+            eventHBox.setUserData(ev);
+
+            eventList.add(eventHBox);
+        }
+
+        // Affecter la liste à la ListView
+        list_event.setItems(eventList);
+
+        // Set custom cell factory
+        list_event.setCellFactory(list -> new ListCell<HBox>() {
+            @Override
+            protected void updateItem(HBox item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+                }
             }
         });
     }
 
-    @FXML
-    void delete_evennement(ActionEvent event) {
-        String selectedEvent = list_event.getSelectionModel().getSelectedItem();
-        if (selectedEvent == null) {
-            System.err.println("Erreur : Aucun événement sélectionné.");
-            return;
-        }
 
-        Integer idEvent = eventMap.get(selectedEvent);
-        if (idEvent != null) {
-            try {
-                serviceEvennement.supprimer(idEvent);
-                refreshList();
-                System.out.println("Événement supprimé avec succès !");
-            } catch (SQLException e) {
-                System.err.println("Erreur SQL lors de la suppression de l'événement : " + e.getMessage());
-            }
-        } else {
-            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
-        }
-    }
-
-    @FXML
-    void go_update_evennement(ActionEvent event) {
-        if (selectedEvent == null) {
-            System.err.println("Erreur : Aucun événement sélectionné.");
-            return;
-        }
-
-        Integer idEvent = eventMap.get(selectedEvent);
-        if (idEvent != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateEvennement.fxml"));
-                Parent root = loader.load();
-
-                // Passer l'ID à UpdateEvennementController
-                UpdateEvennementController controller = loader.getController();
-                controller.setIdEvent(idEvent); // Make sure this method exists in UpdateEvennementController
-
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
-        }
-    }
-
-    // Method to update the ListView with events
-    public void setListeEvenements(List<Evennement> events) {
-        list_event.getItems().clear();  // Clear the previous list
-        for (Evennement ev : events) {
-            list_event.getItems().add(
-                    //ev.getId_event() + " | " +
-                    "Nom de l'événement : " + ev.getNom_event() + "\n" +
-                            "Description : " + ev.getDescription() + "\n" +
-                            "Date de l'événement : " + ev.getDate_event() + "\n" +
-                            "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
-                            "Organisateur : " + ev.getOrganisateur() + "\n" +
-                            "Statut : " + ev.getStatut()
-            );
-        }
-    }
 
     // Rafraîchir la liste des événements
     public void refreshList() {
         try {
-            List<Evennement> evennements = serviceEvennement.recuperer(); // Récupérer les événements mis à jour
+            List<Evennement> evennements = serviceEvennement.recuperer();
             list_event.getItems().clear();
-            eventMap.clear(); // Réinitialiser la map
+
+            ObservableList<HBox> eventList = FXCollections.observableArrayList();
 
             for (Evennement ev : evennements) {
-                String eventText =
-                        "Nom de l'événement : " + ev.getNom_event() + "\n" +
-                                "Description : " + ev.getDescription() + "\n" +
-                                "Date de l'événement : " + ev.getDate_event() + "\n" +
-                                "Lieu de l'événement : " + ev.getLieu_event() + "\n" +
-                                "Organisateur : " + ev.getOrganisateur() + "\n" +
-                                "Statut : " + ev.getStatut();
+                // Création des labels pour chaque attribut
+                Label nomLabel = new Label("Nom: " + ev.getNom_event());
+                Label descLabel = new Label("Description: " + ev.getDescription());
+                Label dateLabel = new Label("Date: " + ev.getDate_event().toString());
+                Label lieuLabel = new Label("Lieu: " + ev.getLieu_event());
+                Label organisateurLabel = new Label("Organisateur: " + ev.getOrganisateur());
+                Label statutLabel = new Label("Statut: " + ev.getStatut());
 
-                list_event.getItems().add(eventText);
-                eventMap.put(eventText, ev.getId_event()); // Associer affichage ↔ ID réel
+                // Charger l'image depuis une URL ou un fichier
+                ImageView imageView = new ImageView();
+                if (ev.getImg_event() != null && !ev.getImg_event().isEmpty()) {
+                    Image image = new Image("file:" + ev.getImg_event(), 100, 100, true, true);
+                    imageView.setImage(image);
+                }
+
+                // Mise en page avec un VBox pour aligner les infos verticalement
+                VBox eventDetails = new VBox(nomLabel, descLabel, dateLabel, lieuLabel, organisateurLabel, statutLabel);
+                eventDetails.setSpacing(5);
+
+                // HBox contenant les détails et l’image
+                HBox eventHBox = new HBox(imageView, eventDetails);
+                eventHBox.setSpacing(10);
+                eventHBox.setAlignment(Pos.CENTER_LEFT);
+                eventHBox.setUserData(ev);
+
+                eventList.add(eventHBox);
             }
+
+            // Affecter la liste à la ListView
+            list_event.setItems(eventList);
+
+            // Set custom cell factory
+            list_event.setCellFactory(list -> new ListCell<HBox>() {
+                @Override
+                protected void updateItem(HBox item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(item);
+                    }
+                }
+            });
+
         } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des événements : " + e.getMessage());
+            System.err.println("Erreur : " + e.getMessage());
         }
     }
+
 
 
     // Méthode pour extraire l'ID de l'événement depuis la chaîne affichée dans la ListView
@@ -169,32 +231,26 @@ public class AfficherEvennementController {
     }
 
     public void voirListP(ActionEvent actionEvent) {
-        if (selectedEvent == null) {
+        if (selectedEvennement == null) {
             System.err.println("Erreur : Aucun événement sélectionné.");
             return;
         }
 
-        Integer idEvent = eventMap.get(selectedEvent);
-        if (idEvent != null) {
-            try {
-                // Chargez le FXML pour le contrôleur des participants
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherParticipant.fxml"));
-                Parent root = loader.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherParticipant.fxml"));
+            Parent root = loader.load();
 
-                // Passer l'ID à AfficherParticipantController
-                AfficherParticipantController controller = loader.getController();
-                controller.refreshListByEventId(idEvent); // Méthode pour charger les participants par ID
+            AfficherParticipantController controller = loader.getController();
+            controller.refreshListByEventId(selectedEvennement.getId_event()); // Passer l'ID directement
 
-                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
     @FXML
     void pdf_exp(ActionEvent event) {
         PDDocument document = new PDDocument();
@@ -347,34 +403,78 @@ public class AfficherEvennementController {
             return null; // Return null if not found
         }
     }
+
     @FXML
     void annuler_event(ActionEvent event) {
-        if (selectedEvent == null) {
+        if (selectedEvennement == null) {
             System.err.println("Erreur : Aucun événement sélectionné.");
             return;
         }
 
-        // Obtenir l'ID de l'événement sélectionné
-        Integer idEvent = eventMap.get(selectedEvent);
-        if (idEvent == null) {
-            System.err.println("Erreur : ID introuvable pour l'événement sélectionné.");
-            return;
-        }
-
         try {
-            // Mettre à jour le statut de l'événement à "annulé"
-            serviceEvennement.annulerEvenement(idEvent); // Assurez-vous que cette méthode existe dans votre service
-            System.out.println("L'événement a été annulé avec succès !");
+            // Annuler l'événement dans la base de données
+            serviceEvennement.annulerEvenement(selectedEvennement.getId_event());
 
-            // Rafraîchir la liste pour refléter les changements
-            refreshList(); // Appeler refreshList pour mettre à jour l'affichage
+            // Récupérer la liste des participants à cet événement
+            List<String> participantContacts = serviceEvennement.getParticipantContacts(selectedEvennement.getId_event());
+
+            // Vérifier si la liste des contacts est vide
+            if (participantContacts.isEmpty()) {
+                System.out.println("Aucun participant trouvé pour cet événement.");
+            } else {
+                // Envoyer un SMS à chaque participant
+                for (String contact : participantContacts) {
+                    if (!contact.startsWith("+")) {
+                        contact = "+216" + contact;  // Ajoute le code pays si absent
+                    }
+
+                    String message = "L'événement '" + selectedEvennement.getNom_event() + "' a été annulé. Nous nous excusons pour le désagrément.";
+
+                    try {
+                        // Utiliser la classe Example pour envoyer un SMS
+                        Example.sendSms(contact, message);
+                        System.out.println("SMS envoyé à : " + contact);
+                    } catch (Exception e) {
+                        System.err.println("Erreur lors de l'envoi du SMS à " + contact + ": " + e.getMessage());
+                    }
+                }
+            }
+
+            // Mettre à jour la liste ou l'interface utilisateur après l'annulation
+            refreshList();
+            System.out.println("L'événement a été annulé avec succès et les participants ont été informés par SMS !");
         } catch (SQLException e) {
             System.err.println("Erreur lors de l'annulation de l'événement : " + e.getMessage());
         }
     }
 
 
+    @FXML
+    void ajout_ev(ActionEvent event) {
+        try {
+            // Try loading the FXML file for the new scene
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutEvennement.fxml"));
+            Parent root = loader.load();
 
+            // Set the scene in the current stage (same window)
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load the page.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 
 }

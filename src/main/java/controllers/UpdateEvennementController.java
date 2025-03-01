@@ -2,12 +2,18 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import models.Evennement;
 import services.ServiceEvennement;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date; // Pour les dates SQL
 import java.time.LocalDate;
@@ -90,10 +96,21 @@ public class UpdateEvennementController {
             serviceEvennement.modifierEvent(idEvent, description, Date.valueOf(date), lieu, organisateur);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Événement mis à jour avec succès !");
 
+            // ✅ Retour à afficherevennement.fxml après mise à jour
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/afficherevennement.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur SQL", "Problème lors de la mise à jour : " + e.getMessage());
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Problème de chargement de la page : " + e.getMessage());
         }
     }
+
 
     // ✅ Fonction pour afficher une alerte
     private void showAlert(Alert.AlertType type, String title, String content) {
@@ -103,4 +120,5 @@ public class UpdateEvennementController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
 }

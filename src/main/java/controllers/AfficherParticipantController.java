@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
@@ -134,5 +135,32 @@ public class AfficherParticipantController {
             System.err.println("Erreur lors de la récupération des participations : " + e.getMessage());
         }
     }
+    @FXML
+    void return_lp(ActionEvent event) {
+        try {
+            // Load the FXML file for the "afficheremplEvent.fxml" page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEvennement.fxml"));
+            Parent root = loader.load();
+
+            // Set the new scene in the current stage (same window)
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load the page.", Alert.AlertType.ERROR);
+        }
+    }
+    public void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
 
 }

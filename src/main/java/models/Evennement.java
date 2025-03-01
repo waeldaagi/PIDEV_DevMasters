@@ -13,22 +13,24 @@ public class Evennement {
     private String lieu_event;
     private String  organisateur ;
     private String  statut;
+    private String img_event;
     private List<Participation> participations;
 
     public Evennement() {
         this.participations = new ArrayList<>();
     }
 
-    public Evennement( String nom_event, String description, Date date_event, String  lieu_event, String  organisateur, String  statut) {
+    public Evennement( String nom_event, String description, Date date_event, String  lieu_event, String  organisateur, String  statut ,String img_event) {
         this.nom_event = nom_event;
         this.description = description;
         this.date_event = date_event;
         this.lieu_event = lieu_event;
         this.organisateur = organisateur;
         this.statut = statut;
+        this.img_event = img_event;
         this.participations = new ArrayList<>();
     }
-    public Evennement(int id_event, String nom_event, String description, Date date_event, String lieu_event, String  organisateur, String  statut) {
+    public Evennement(int id_event, String nom_event, String description, Date date_event, String lieu_event, String  organisateur, String  statut ,String img_event) {
         this.id_event = id_event;
         this.nom_event = nom_event;
         this.description = description;
@@ -36,6 +38,7 @@ public class Evennement {
         this.lieu_event = lieu_event;
         this.organisateur = organisateur;
         this.statut = statut;
+        this.img_event = img_event;
         this.participations = new ArrayList<>();
     }
 
@@ -77,6 +80,14 @@ public class Evennement {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImg_event() {
+        return img_event;
+    }
+
+    public void setImg_event(String img_event) {
+        this.img_event = img_event;
     }
 
     public void setDate_event(Date date_event) {

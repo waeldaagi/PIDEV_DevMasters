@@ -66,7 +66,7 @@ public class AjoutParticipationController {
             return;
         }
 
-        int idUser = 9;
+        int idUser = 1;
         LocalDate dateParticipation = LocalDate.now();
         Date dateParticipationUtil = Date.from(dateParticipation.atStartOfDay(ZoneId.systemDefault()).toInstant());
 

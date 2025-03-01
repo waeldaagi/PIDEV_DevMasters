@@ -12,6 +12,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServiceEvennement implements IServices<Evennement> {
     private Connection cnx;
 
@@ -21,7 +25,7 @@ public class ServiceEvennement implements IServices<Evennement> {
 
     @Override
     public void ajouter(Evennement e) throws SQLException {
-        String sql = "INSERT INTO evennement (nom_event, description, date_event, lieu_event, organisateur, statut) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO evennement (nom_event, description, date_event, lieu_event, organisateur, statut, img_event) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ste = cnx.prepareStatement(sql)) {
             ste.setString(1, e.getNom_event());
             ste.setString(2, e.getDescription());
@@ -29,6 +33,7 @@ public class ServiceEvennement implements IServices<Evennement> {
             ste.setString(4, e.getLieu_event());
             ste.setString(5, e.getOrganisateur());
             ste.setString(6, e.getStatut());
+            ste.setString(7, e.getImg_event());
             ste.executeUpdate();
             System.out.println("Événement ajouté");
             cnx.commit();
@@ -84,6 +89,7 @@ public class ServiceEvennement implements IServices<Evennement> {
                 e.setLieu_event(rs.getString("lieu_event"));
                 e.setOrganisateur(rs.getString("organisateur"));
                 e.setStatut(rs.getString("statut"));
+                e.setImg_event(rs.getString("img_event"));
                 evenements.add(e);
             }
         } catch (SQLException e) {
@@ -107,7 +113,8 @@ public class ServiceEvennement implements IServices<Evennement> {
                         rs.getDate("date_event"),
                         rs.getString("lieu_event"),
                         rs.getString("organisateur"),
-                        rs.getString("statut")
+                        rs.getString("statut"),
+                        rs.getString("img_event")
                 );
             }
         } catch (SQLException e) {
@@ -146,4 +153,32 @@ public class ServiceEvennement implements IServices<Evennement> {
             throw e;
         }
     }
+    // Get participant contacts by event ID
+    public List<String> getParticipantContacts(int eventId) throws SQLException {
+        List<String> contacts = new ArrayList<>();
+        String query = "SELECT contact FROM participation WHERE id_event = ?";
+
+        try (Connection connection = myDataBase.getInstance().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String contact = resultSet.getString("contact");
+                // Vérifier que le contact n'est pas vide
+                if (contact != null && !contact.isEmpty()) {
+                    contacts.add(contact);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur SQL lors de la récupération des contacts : " + e.getMessage());
+            throw e;
+        }
+
+        return contacts;
+    }
+
+
+
 }

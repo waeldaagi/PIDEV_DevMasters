@@ -31,7 +31,7 @@ public class HomeEventController {
     @FXML
     void gerer_evennement(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjoutEvennement.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherEvennement.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
