@@ -54,6 +54,35 @@
         </dependency>
 
 
+        <!-- HTTP Client for API calls -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2</version>
+        </dependency>
+
+        <!-- JSON Parser -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+
+        <!-- OkHttp for HTTP requests -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.3</version>
+        </dependency>
+
+        <!-- JSON Parsing (Gson) -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.9</version>
+        </dependency>
+
+
 
 
 

@@ -1,15 +1,16 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import models.OffreRecrutement;
+import services.OpenAIService;
+import services.OpenRouterService;
 import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
 
-import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -44,13 +45,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.image.ImageView;
 
 public class AfficherCandidatController {
@@ -63,6 +58,15 @@ public class AfficherCandidatController {
 
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private TextArea chatArea;
+
+    @FXML
+    private TextField inputField;
+
+    @FXML
+    private VBox chatVBox;
 
 
 
@@ -261,6 +265,72 @@ public class AfficherCandidatController {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des offres : " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void handleSend(ActionEvent event) {
+
+
+        String userInput = inputField.getText();
+
+        if (userInput.trim().isEmpty()) {
+            return;
+        }
+
+        // Display user input in the chat (as a chat bubble)
+        Label userMessage = new Label("You: " + userInput);
+        userMessage.getStyleClass().add("chat-bubble");
+        userMessage.getStyleClass().add("user-bubble");
+        chatVBox.getChildren().add(userMessage);  // Add user message to VBox
+
+        // Send message to OpenRouter API
+        new Thread(() -> {
+            try {
+                OpenRouterService openRouterService = new OpenRouterService();
+                String botResponse = openRouterService.sendMessageToOpenRouter(userInput);
+
+                // Debugging: Log raw bot response
+                System.out.println("Bot response: " + botResponse);
+
+                // Clean and sanitize the bot's response
+                String cleanedResponse = cleanUpResponse(botResponse);
+                String sanitizedResponse = sanitizeResponse(cleanedResponse);
+
+                // Create a label for the bot's response and add it to the VBox
+                javafx.application.Platform.runLater(() -> {
+                    Label botMessage = new Label("Bot: " + sanitizedResponse);
+                    botMessage.getStyleClass().add("chat-bubble");
+                    botMessage.getStyleClass().add("bot-bubble");
+                    chatVBox.getChildren().add(botMessage);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    Label errorMessage = new Label("Bot: Error communicating with AI.");
+                    chatVBox.getChildren().add(errorMessage);
+                });
+            }
+        }).start();
+
+        // Clear input field
+        inputField.clear();
+    }
+
+    // Clean up the response (remove unwanted non-ASCII characters)
+    private String cleanUpResponse(String response) {
+        if (response != null) {
+            response = response.replaceAll("[^\\x00-\\x7F]", "");  // Only keep ASCII characters
+        }
+        return response;
+    }
+
+    // Sanitize the response (remove unnecessary spaces and newlines)
+    private String sanitizeResponse(String response) {
+        if (response != null) {
+            response = response.replaceAll("\\s+", " ").trim();  // Replace multiple spaces with a single space
+            response = response.replace("\n", " ");  // Remove any newlines
+        }
+        return response;
     }
 
 
