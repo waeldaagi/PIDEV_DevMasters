@@ -1,4 +1,4 @@
-/*package services;
+package services;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class OpenRouterService {
-    private static final String API_KEY = "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"; // Your API key
+    private static final String API_KEY = "your-api-key-here"; // Your API key
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions"; // Correct URL
 
     private final OkHttpClient client = new OkHttpClient();
@@ -73,4 +73,4 @@ public class OpenRouterService {
             }
         }
     }
-}*/
+}

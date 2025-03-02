@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import models.OffreRecrutement;
-//import services.OpenRouterService;
+import services.OpenRouterService;
 import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
 
@@ -259,7 +259,7 @@ public class AfficherCandidatController {
         }
     }
 
-    /*@FXML
+    @FXML
     private void handleSend(ActionEvent event) {
 
 
@@ -323,7 +323,7 @@ public class AfficherCandidatController {
             response = response.replace("\n", " ");  // Remove any newlines
         }
         return response;
-    }*/
+    }
 
 
 }
