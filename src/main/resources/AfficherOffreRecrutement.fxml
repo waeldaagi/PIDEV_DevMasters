@@ -8,12 +8,14 @@
 
 <AnchorPane prefHeight="536.0" prefWidth="923.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficherOffreRecrutementController">
    <children>
-      <AnchorPane fx:id="anchorPane" prefHeight="536.0" prefWidth="923.0" />
+      <AnchorPane fx:id="anchorPane" layoutY="-14.0" prefHeight="549.0" prefWidth="923.0">
+         <children>
+            <Button layoutX="180.0" layoutY="461.0" mnemonicParsing="false" onAction="#demande_go" prefHeight="42.0" prefWidth="458.0" text="Sélectionner une offre pour afficher les demandes" />
+         </children></AnchorPane>
       <TextField fx:id="id_offre" layoutX="401.0" layoutY="137.0" prefHeight="26.0" prefWidth="66.0" />
-      <ListView fx:id="list_offre" layoutX="14.0" layoutY="24.0" prefHeight="370.0" prefWidth="618.0" />
+      <ListView fx:id="list_offre" layoutX="23.0" layoutY="48.0" prefHeight="392.0" prefWidth="614.0" />
       <Button layoutX="647.0" layoutY="170.0" mnemonicParsing="false" onAction="#go_update_offre" prefHeight="42.0" prefWidth="231.0" text="Update une offre" />
       <Button layoutX="647.0" layoutY="115.0" mnemonicParsing="false" onAction="#delete_offre" prefHeight="42.0" prefWidth="231.0" text="Delete une offre" />
-      <Button layoutX="79.0" layoutY="411.0" mnemonicParsing="false" onAction="#demande_go" prefHeight="42.0" prefWidth="458.0" text="Sélectionner une offre pour afficher les demandes" />
       <Button layoutX="651.0" layoutY="353.0" mnemonicParsing="false" onAction="#exporte_pdf" prefHeight="42.0" prefWidth="220.0" text="Exporter les offres en pdf" />
       <ChoiceBox fx:id="poste" layoutX="672.0" layoutY="219.0" prefHeight="30.0" prefWidth="178.0" />
       <Button layoutX="647.0" layoutY="44.0" mnemonicParsing="false" onAction="#go_ajout" prefHeight="42.0" prefWidth="231.0" text="Ajouter une offre" />

@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import models.OffreRecrutement;
+import services.OpenAIService;
 import services.OpenRouterService;
 import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
@@ -28,17 +29,24 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import javafx.scene.image.Image;
+import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class AfficherCandidatController {
     @FXML
@@ -261,8 +269,6 @@ public class AfficherCandidatController {
 
     @FXML
     private void handleSend(ActionEvent event) {
-
-
         String userInput = inputField.getText();
 
         if (userInput.trim().isEmpty()) {

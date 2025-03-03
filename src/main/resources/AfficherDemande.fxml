@@ -9,12 +9,15 @@
    <children>
       <AnchorPane fx:id="anchorPane" layoutY="3.0" prefHeight="507.0" prefWidth="740.0">
          <children>
-            <AnchorPane fx:id="AnchorPane" prefHeight="513.0" prefWidth="740.0" />
-            <Button layoutX="608.0" layoutY="319.0" mnemonicParsing="false" onAction="#delete_d" text="delete" />
+            <AnchorPane fx:id="AnchorPane" prefHeight="513.0" prefWidth="740.0">
+               <children>
+                  <Button layoutX="614.0" layoutY="427.0" mnemonicParsing="false" onAction="#delete_d" text="delete" />
+                  <Button layoutX="35.0" layoutY="22.0" mnemonicParsing="false" onAction="#back" text="&lt;--" />
+               </children></AnchorPane>
          </children></AnchorPane>
       <TextField fx:id="id_d_delete" layoutX="149.0" layoutY="103.0" />
       <Button layoutX="319.0" layoutY="253.0" mnemonicParsing="false" onAction="#update_d" text="update" />
-      <ListView fx:id="list_demande" layoutX="43.0" layoutY="30.0" prefHeight="280.0" prefWidth="645.0" />
+      <ListView fx:id="list_demande" layoutX="31.0" layoutY="74.0" prefHeight="350.0" prefWidth="666.0" />
 
 
    </children>

@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class OpenRouterService {
-    private static final String API_KEY = "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"; // Your API key
+    private static final String API_KEY = "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"; // Your API key
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions"; // Correct URL
 
     private final OkHttpClient client = new OkHttpClient();
@@ -50,7 +50,6 @@ public class OpenRouterService {
         // Read the response from the API
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
-            // Print error response for debugging
             try (InputStreamReader reader = new InputStreamReader(connection.getErrorStream())) {
                 JsonElement response = JsonParser.parseReader(reader);
                 System.out.println("Error Response: " + response.toString());
@@ -61,15 +60,25 @@ public class OpenRouterService {
         // If the response is okay, process it
         try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
             JsonElement response = JsonParser.parseReader(reader);
-            JsonObject choicesObject = response.getAsJsonObject().getAsJsonArray("choices").get(0).getAsJsonObject();
+            System.out.println("Full Response: " + response.toString());  // Log the full response
 
-            // Safely get the "content" field with a null check
-            if (choicesObject != null && choicesObject.has("message")) {
-                return choicesObject.getAsJsonObject("message").get("content").getAsString();
+            // Safely handle empty or malformed responses
+            if (response.isJsonObject() && response.getAsJsonObject().has("choices")) {
+                JsonArray choicesArray = response.getAsJsonObject().getAsJsonArray("choices");
+                if (choicesArray != null && choicesArray.size() > 0) {
+                    JsonObject choicesObject = choicesArray.get(0).getAsJsonObject();
+
+                    // Ensure the "message" field exists and is not null
+                    if (choicesObject != null && choicesObject.has("message")) {
+                        return choicesObject.getAsJsonObject("message").get("content").getAsString();
+                    } else {
+                        return "Message field missing in the response.";
+                    }
+                } else {
+                    return "No choices found in the response.";
+                }
             } else {
-                // Log the full response to check the structure
-                System.out.println("Full Response: " + response.toString());
-                return "No response content found.";
+                return "Unexpected response format or no choices found.";
             }
         }
     }
