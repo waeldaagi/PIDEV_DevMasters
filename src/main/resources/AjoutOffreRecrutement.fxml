@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="479.0" prefWidth="767.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjoutOffreRecrutementController">
+
+   <children>
+      <AnchorPane fx:id="AnchorPane" layoutX="-4.0" layoutY="-4.0" prefHeight="490.0" prefWidth="776.0">
+         <children>
+            <Button layoutX="20.0" layoutY="14.0" mnemonicParsing="false" onAction="#baack" prefHeight="18.0" prefWidth="66.0" text="&lt;-" />
+            <Button layoutX="369.0" layoutY="242.0" mnemonicParsing="false" onAction="#ajouter_offre" text="ajouter" />
+         </children></AnchorPane>
+      <TextField fx:id="salaire" layoutX="240.0" layoutY="134.0" prefHeight="33.0" prefWidth="196.0" />
+      <Label layoutX="108.0" layoutY="53.0" text="date de publication" />
+      <Label layoutX="108.0" layoutY="95.0" text="date limite" />
+      <Label layoutX="108.0" layoutY="138.0" text="salaire" />
+      <Label layoutX="110.0" layoutY="178.0" text="poste" />
+      <DatePicker fx:id="date_pub" layoutX="240.0" layoutY="49.0" />
+      <DatePicker fx:id="date_limite" layoutX="240.0" layoutY="91.0" />
+      <ChoiceBox fx:id="poste" layoutX="236.0" layoutY="183.0" prefHeight="30.0" prefWidth="196.0" />
+   </children>
+</AnchorPane>

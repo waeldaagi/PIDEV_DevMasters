@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="516.0" prefWidth="711.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UpdateDemandeController">
+   <children>
+      <Label layoutX="64.0" layoutY="70.0" text="id demande à modifier" />
+      <TextField fx:id="id_d" layoutX="217.0" layoutY="66.0" />
+      <Button layoutX="255.0" layoutY="250.0" mnemonicParsing="false" onAction="#update_demande" text="UPDATE" />
+      <TextField fx:id="type_c" layoutX="217.0" layoutY="116.0" />
+      <Label layoutX="70.0" layoutY="120.0" text="type contrat" />
+   </children>
+</AnchorPane>
