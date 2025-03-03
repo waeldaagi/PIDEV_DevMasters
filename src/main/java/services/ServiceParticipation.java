@@ -156,5 +156,20 @@ public class ServiceParticipation implements IServices<Participation> {
         }
         return "Unknown Event";
     }
+    public String getUserEmailById(int userId) {
+        String email = "";
+        String query = "SELECT email FROM users WHERE id = ?"; // Adjust the table and column names
+        try (PreparedStatement ps = myDataBase.getInstance().getConnection().prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                email = rs.getString("email");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération de l'email : " + e.getMessage());
+        }
+        return email;
+    }
+
 
 }

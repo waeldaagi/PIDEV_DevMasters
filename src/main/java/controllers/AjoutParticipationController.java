@@ -1,5 +1,13 @@
 package controllers;
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
@@ -9,11 +17,21 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 import models.Participation;
 import services.QRCodeGenerator;
+
 import services.ServiceParticipation;
 
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.io.IOException;
+import java.util.Base64;
+
+
 
 public class AjoutParticipationController {
 
@@ -66,7 +84,7 @@ public class AjoutParticipationController {
             return;
         }
 
-        int idUser = 1; // Remplace par la vraie ID utilisateur
+        int idUser = 12; // Remplace par la vraie ID utilisateur
         LocalDate dateParticipation = LocalDate.now();
         Date dateParticipationUtil = Date.from(dateParticipation.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -76,21 +94,24 @@ public class AjoutParticipationController {
         try {
             service.ajouter(participation);
 
-            // Fetch User & Event Details
+            // 🔹 Fetch User Email
+            String userEmail = service.getUserEmailById(idUser); // You need to implement this method
             String username = service.getUserNameById(idUser);
             String eventDetails = service.getEventDetailsById(idEvent);
 
-            // Prepare QR Code Data
-            // Include dynamic event URL with event ID as a parameter
-            String qrData = "https://sahar-khiari.github.io/PIDEV_DevMasters/event_participation.html?event_id=" + idEvent + "&username=" + username + "&role=" + role;
-
+            // 🔹 Prepare QR Code Data
+            String qrData = "https://sahar-khiari.github.io/evnets_participer/event_participation.html?event_id=" + idEvent + "&username=" + username + "&role=" + role;
             String filePath = "C:/Users/PC/Desktop/QRCode_" + username + ".png";
 
-            // Generate QR Code
+            // 🔹 Generate QR Code
             QRCodeGenerator.generateQRCode(qrData, filePath);
 
-            showAlert("Succès", "Participation ajoutée avec succès ! QR Code généré !");
-            System.out.println("Participation ajoutée avec succès !");
+            // 🔹 Send Email with QR Code
+            sendEmailWithQRCode(userEmail, username, filePath);
+            //QRCodeGeneratorAPI.generateQRCode(qrData, filePath);
+
+
+            showAlert("Succès", "Participation ajoutée avec succès ! QR Code envoyé par email.");
             fermerFenetre(event);
         } catch (Exception e) {
             System.err.println("Erreur lors de l'ajout de la participation : " + e.getMessage());
@@ -114,5 +135,49 @@ public class AjoutParticipationController {
     public void setUserId(int idUser) {
         this.userId = idUser; // Assure-toi que 'userId' est bien défini comme un attribut dans la classe
     }
+
+    private void sendEmailWithQRCode(String recipientEmail, String username, String filePath) {
+        Email from = new Email("khiarisahar55@gmail.com"); // Remplace avec ton email
+        Email to = new Email(recipientEmail);
+        Content content = new Content("text/plain", "test");
+        Mail mail = new Mail(from, "test", to, content);
+
+        try {
+            // Lire le fichier QR code
+            byte[] fileData = readFileAsBytes(filePath);
+            String encodedFile = Base64.getEncoder().encodeToString(fileData);
+            Attachments attachments = new Attachments();
+            attachments.setFilename("QRCode.png");
+            attachments.setType("image/png");
+            attachments.setDisposition("attachment");
+            attachments.setContent(encodedFile);
+            mail.addAttachments(attachments);
+
+            // Envoi avec SendGrid
+            //SendGrid sg = new SendGrid("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"); // 🔹 Replace with your actual API key
+            // SendGrid sg = new SendGrid("  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");
+            SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+
+            // Clé API dans les variables d'environnement
+            Request request = new Request();
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+            System.out.println("Email envoyé, statut : " + response.getStatusCode());
+        } catch (IOException e) {
+            System.err.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
+        }
+    }
+
+private static byte[] readFileAsBytes(String filePath) throws IOException {
+    File file = new File(filePath);
+    FileInputStream fileInputStream = new FileInputStream(file);
+    byte[] fileData = new byte[(int) file.length()];
+    fileInputStream.read(fileData);
+    fileInputStream.close();
+    return fileData;
+}
 
 }

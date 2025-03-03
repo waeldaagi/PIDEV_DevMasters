@@ -11,8 +11,8 @@ import java.util.List;
 
 public class Example {
     // Twilio credentials
-    public static final String ACCOUNT_SID = "";
-    public static final String AUTH_TOKEN = "";
+    public static final String ACCOUNT_SID = "AC678175a2c147c2f13fa37faabbc4b5f2";
+    public static final String AUTH_TOKEN = "dcc8bbef2a5615ad8e47f8a3807f5706";
 
     // Initialize Twilio
     static {

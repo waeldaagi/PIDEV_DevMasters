@@ -80,6 +80,7 @@ public class ServiceEvennement implements IServices<Evennement> {
         List<Evennement> evenements = new ArrayList<>();
         try (Statement ste = cnx.createStatement();
              ResultSet rs = ste.executeQuery(sql)) {
+
             while (rs.next()) {
                 Evennement e = new Evennement();
                 e.setId_event(rs.getInt("id_event"));
@@ -98,6 +99,7 @@ public class ServiceEvennement implements IServices<Evennement> {
         }
         return evenements;
     }
+
 
     public Evennement getById(int idEvent) throws SQLException {
         String sql = "SELECT * FROM evennement WHERE id_event = ?";
@@ -158,15 +160,12 @@ public class ServiceEvennement implements IServices<Evennement> {
         List<String> contacts = new ArrayList<>();
         String query = "SELECT contact FROM participation WHERE id_event = ?";
 
-        try (Connection connection = myDataBase.getInstance().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-
+        try (PreparedStatement preparedStatement = cnx.prepareStatement(query)) {
             preparedStatement.setInt(1, eventId);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 String contact = resultSet.getString("contact");
-                // Vérifier que le contact n'est pas vide
                 if (contact != null && !contact.isEmpty()) {
                     contacts.add(contact);
                 }
@@ -178,6 +177,7 @@ public class ServiceEvennement implements IServices<Evennement> {
 
         return contacts;
     }
+
 
 
 
