@@ -154,9 +154,10 @@ public class AjoutParticipationController {
             mail.addAttachments(attachments);
 
             // Envoi avec SendGrid
-            //SendGrid sg = new SendGrid("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"); // 🔹 Replace with your actual API key
-            // SendGrid sg = new SendGrid("  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");
+
             SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+            //l'api key doit etre les variables d'environnement
+            //api est : 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
 
             // Clé API dans les variables d'environnement
             Request request = new Request();
