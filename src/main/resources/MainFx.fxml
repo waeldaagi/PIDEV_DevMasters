@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="main-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+    <VBox spacing="40" alignment="CENTER" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+        <!-- Titre -->
+        <Label text="Gestion des Projets et Équipes" styleClass="header-label">
+            <font>
+                <Font name="System Bold" size="32.0" />
+            </font>
+            <padding>
+                <Insets bottom="40.0"/>
+            </padding>
+        </Label>
+
+        <!-- Conteneur pour les boutons -->
+        <VBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20.0"/>
+            </padding>
+            <Button fx:id="btnEquipes" onAction="#handleEquipesButton" text="Gérer les Équipes" styleClass="main-button" prefWidth="250" prefHeight="50"/>
+            <Button fx:id="btnProjets" onAction="#handleProjetsButton" text="Gérer les Projets" styleClass="main-button" prefWidth="250" prefHeight="50"/>
+        </VBox>
+    </VBox>
+</AnchorPane> 

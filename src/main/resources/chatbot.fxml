@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="600.0" prefWidth="400.0" styleClass="chat-pane" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatbotController">
+    <VBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+        <!-- Titre -->
+        <Label text="Assistant Projet IA" styleClass="header-label">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+
+        <!-- Zone de chat -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="chat-scroll">
+            <VBox fx:id="chatBox" spacing="10" styleClass="chat-box"/>
+        </ScrollPane>
+
+        <!-- Zone de saisie et bouton d'envoi -->
+        <HBox spacing="10" alignment="CENTER">
+            <TextField fx:id="messageInput" promptText="Posez votre question..." HBox.hgrow="ALWAYS"/>
+            <Button onAction="#handleSendMessage" text="Envoyer" styleClass="send-button"/>
+        </HBox>
+
+        <!-- Suggestions de questions -->
+        <VBox spacing="5">
+            <Label text="Questions suggérées:" styleClass="suggestion-label"/>
+            <Button onAction="#handleSuggestion" text="Comment gérer efficacement un projet ?" styleClass="suggestion-button"/>
+            <Button onAction="#handleSuggestion" text="Quelles sont les meilleures pratiques pour la gestion d'équipe ?" styleClass="suggestion-button"/>
+            <Button onAction="#handleSuggestion" text="Comment définir les priorités dans un projet ?" styleClass="suggestion-button"/>
+        </VBox>
+    </VBox>
+</AnchorPane> 
