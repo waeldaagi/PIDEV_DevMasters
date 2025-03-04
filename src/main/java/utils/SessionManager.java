@@ -31,7 +31,7 @@ public class SessionManager {
     }
 
     public static void logout() {
-        prefs.remove(ACCESS_TOKEN_KEY);
+        prefs.remove(ACCESS_TOKEN_KEY); // token
         prefs.remove(REFRESH_TOKEN_KEY);
     }
 
