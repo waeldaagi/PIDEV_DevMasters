@@ -7,10 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EquipeServise implements Iservise<Equipe> {
+public class EquipeService implements Iservise<Equipe> {
     private Connection cnx;
 
-    public EquipeServise() {
+    public EquipeService() {
         cnx = myDb.getmyDb().getCnx();
     }
 
@@ -56,7 +56,6 @@ public class EquipeServise implements Iservise<Equipe> {
         try (Statement st = cnx.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Equipe equipe = new Equipe();
-                equipe.setIdEquipe(rs.getInt("id_equipe"));
                 equipe.setNomEquipe(rs.getString("nom_equipe"));
                 equipe.setNbrEmployee(rs.getInt("nbr_employee"));
                 equipe.setNomTeqlead(rs.getString("nom_teqlead"));

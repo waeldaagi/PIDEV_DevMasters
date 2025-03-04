@@ -6,7 +6,6 @@ public class Equipe {
     private String nomEquipe;
     private int nbrEmployee;
     private String nomTeqlead;
-
     // Constructor
     public Equipe() {} // No-argument constructor
 
@@ -51,7 +50,6 @@ public class Equipe {
     @Override
     public String toString() {
         return "Equipe{" +
-                "idEquipe=" + idEquipe +
                 ", nomEquipe='" + nomEquipe + '\'' +
                 ", nbrEmployee=" + nbrEmployee +
                 ", nomTeqlead='" + nomTeqlead + '\'' +

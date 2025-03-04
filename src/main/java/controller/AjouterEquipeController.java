@@ -10,7 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Equipe;
-import service.EquipeServise;
+import service.EquipeService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,7 +26,7 @@ public class AjouterEquipeController {
     @FXML
     private TextField nomTechLeadTextField;
 
-    private final EquipeServise equipeService = new EquipeServise();
+    private final EquipeService equipeService = new EquipeService();
 
     @FXML
     private void ajouterEquipe(ActionEvent event) {
