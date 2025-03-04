@@ -84,7 +84,7 @@ public class AjoutParticipationController {
             return;
         }
 
-        int idUser = 12; // Remplace par la vraie ID utilisateur
+        int idUser = 13; // Remplace par la vraie ID utilisateur
         LocalDate dateParticipation = LocalDate.now();
         Date dateParticipationUtil = Date.from(dateParticipation.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -139,8 +139,8 @@ public class AjoutParticipationController {
     private void sendEmailWithQRCode(String recipientEmail, String username, String filePath) {
         Email from = new Email("khiarisahar55@gmail.com"); // Remplace avec ton email
         Email to = new Email(recipientEmail);
-        Content content = new Content("text/plain", "test");
-        Mail mail = new Mail(from, "test", to, content);
+        Content content = new Content("text/plain", "scann me");
+        Mail mail = new Mail(from, "Pass Event", to, content);
 
         try {
             // Lire le fichier QR code

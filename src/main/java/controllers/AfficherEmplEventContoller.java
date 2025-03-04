@@ -107,7 +107,7 @@ public class AfficherEmplEventContoller {
 
     // Méthode pour ouvrir la fenêtre d'ajout de participation
     private void ouvrirAjoutParticipation(int idEvent) {
-        int idUser = 12; // Remplace ça par load réel de l'utilisateur connecté
+        int idUser = 13; // Remplace ça par load réel de l'utilisateur connecté
         try {
             if (serviceParticipant.checkParticipation(idEvent, idUser)) {
                 showAlert("Information", "Vous avez déjà participé à cet événement.", Alert.AlertType.INFORMATION);
