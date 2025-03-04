@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane stylesheets="@/styles/signup.css"
+            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="controllers.SignUpController">
+
+    <ImageView fitHeight="800" fitWidth="1080" layoutX="0" layoutY="0">
+        <image>
+            <Image preserveRatio="true" url="@images/gestionhum.jpg"/>
+        </image>
+    </ImageView>
+
+    <AnchorPane styleClass="overlay"></AnchorPane>
+
+    <!-- Signup Form -->
+    <VBox alignment="CENTER" maxWidth="400" spacing="20" styleClass="form-container"
+          AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50">
+        <Label styleClass="header-label" text="CREATE ACCOUNT" />
+        <Label styleClass="subtext-label" text="Sign up to get started" />
+
+        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field" />
+        <TextField fx:id="emailField" promptText="Email" styleClass="input-field" />
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field" />
+        <TextField fx:id="phoneNumberField" promptText="Phone Number" styleClass="input-field" />
+        <TextField fx:id="addressField" promptText="Address" styleClass="input-field" />
+        <DatePicker fx:id="birthDateField" promptText="Birth Date" styleClass="input-field" />
+
+        <Button fx:id="signupButton" onAction="#handleSignUp" styleClass="signup-button" text="SIGN UP" />
+
+        <Button text="Already have an account? Login" onAction="#redirectToSignIn" styleClass="redirect-button" />
+    </VBox>
+</AnchorPane>
