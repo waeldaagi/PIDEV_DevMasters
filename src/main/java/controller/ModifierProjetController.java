@@ -1,97 +1,123 @@
 package controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import models.Equipe;
 import models.Projet;
+import service.EquipeService;
 import service.ProjetService;
 
-import java.io.IOException;
+import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class ModifierProjetController {
-
-    @FXML
-    private TextField idProjetTextField;
-
-    @FXML
-    private TextField nomProjetTextField;
+public class ModifierProjetController implements Initializable {
 
     @FXML
-    private TextField dureeTextField;
+    private TextField nomProjetField;
 
     @FXML
-    private TextField managerTextField;
+    private DatePicker deadlinePicker;
 
     @FXML
-    private TextField nomClientTextField;
+    private TextField managerField;
 
     @FXML
-    private TextField idEquipeTextField;
-
-    private final ProjetService projetService = new ProjetService();
+    private TextField nomClientField;
 
     @FXML
-    public void modifierProjet(ActionEvent event) {
-        // Validation des champs
-        if (idProjetTextField.getText().isEmpty() || nomProjetTextField.getText().isEmpty() ||
-                dureeTextField.getText().isEmpty() || managerTextField.getText().isEmpty() ||
-                nomClientTextField.getText().isEmpty() || idEquipeTextField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Champs vides", "Veuillez remplir tous les champs.");
-            return;
-        }
+    private ComboBox<Equipe> equipeComboBox;
 
-        // Validation de l'ID du projet et de l'ID de l'équipe
-        int idProjet, idEquipe;
+    private Projet projetActuel;
+    private ProjetService projetService = new ProjetService();
+    private EquipeService equipeService = new EquipeService();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        chargerEquipes();
+    }
+
+    public void setProjet(Projet projet) {
+        this.projetActuel = projet;
+        populateFields();
+    }
+
+    private void chargerEquipes() {
         try {
-            idProjet = Integer.parseInt(idProjetTextField.getText());
-            idEquipe = Integer.parseInt(idEquipeTextField.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Veuillez entrer des nombres valides pour l'ID du projet et l'ID de l'équipe.");
-            return;
-        }
-
-        try {
-            // Créer un objet Projet avec les nouvelles valeurs
-            Projet projetModifie = new Projet(nomProjetTextField.getText(), dureeTextField.getText(),
-                    managerTextField.getText(), nomClientTextField.getText(), idEquipe);
-            projetModifie.setId_projet(idProjet); // Assurez-vous que setIdProjet existe dans votre classe Projet
-
-            // Appeler le service pour modifier le projet
-            projetService.modifier(projetModifie);
-
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Le projet a été modifié avec succès !");
-
+            List<Equipe> equipes = equipeService.getAll(new Equipe());
+            equipeComboBox.getItems().addAll(equipes);
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Une erreur s'est produite lors de la modification du projet : " + e.getMessage());
+            showAlert("Erreur", "Erreur lors du chargement des équipes : " + e.getMessage());
+        }
+    }
+
+    private void populateFields() {
+        if (projetActuel != null) {
+            nomProjetField.setText(projetActuel.getNom_projet());
+            deadlinePicker.setValue(projetActuel.getDeadline().toLocalDate());
+            managerField.setText(projetActuel.getManager());
+            nomClientField.setText(projetActuel.getNom_client());
+            equipeComboBox.setValue(projetActuel.getEquipe());
         }
     }
 
     @FXML
-    public void retour(ActionEvent event) {
+    private void handleSaveButtonClick() {
+        if (!validateFields()) {
+            return;
+        }
+
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/afficherProjet.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran précédent.");
+            // Mettre à jour les données du projet
+            projetActuel.setNom_projet(nomProjetField.getText());
+            projetActuel.setDeadline(Date.valueOf(deadlinePicker.getValue()));
+            projetActuel.setManager(managerField.getText());
+            projetActuel.setNom_client(nomClientField.getText());
+            projetActuel.setEquipe(equipeComboBox.getValue());
+
+            // Sauvegarder les modifications
+            projetService.modifier(projetActuel);
+            
+            showAlert("Succès", "Projet modifié avec succès");
+            closeWindow();
+        } catch (SQLException e) {
+            showAlert("Erreur", "Erreur lors de la modification du projet : " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    @FXML
+    private void handleCancelButtonClick() {
+        closeWindow();
+    }
+
+    private boolean validateFields() {
+        if (nomProjetField.getText().isEmpty() || 
+            deadlinePicker.getValue() == null ||
+            managerField.getText().isEmpty() ||
+            nomClientField.getText().isEmpty() ||
+            equipeComboBox.getValue() == null) {
+            
+            showAlert("Erreur", "Tous les champs sont obligatoires");
+            return false;
+        }
+        return true;
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) nomProjetField.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }

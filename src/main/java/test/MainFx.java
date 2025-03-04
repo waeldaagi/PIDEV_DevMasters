@@ -6,23 +6,30 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class MainFx extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            // Charger le fichier FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainFx.fxml"));
+            Parent root = loader.load();
+            
+            // Créer la scène
+            Scene scene = new Scene(root);
+            
+            // Configurer la fenêtre principale
+            primaryStage.setTitle("Gestion des Projets et Équipes");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.show();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader LOADER = new FXMLLoader(getClass().getResource("/MENU.fxml"));
-        Parent root = LOADER.load();
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Ajouter Equipe");
-        primaryStage.setMaximized(true); // Maximise la fenêtre
-        primaryStage.show();
-
     }
 }

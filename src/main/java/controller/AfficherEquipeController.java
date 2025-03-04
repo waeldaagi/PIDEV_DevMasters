@@ -2,32 +2,43 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import models.Equipe;
-import service.EquipeServise;
+import service.EquipeService;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 
 public class AfficherEquipeController implements Initializable {
 
     @FXML
-    private TextField searchField;
+    private TableView<Equipe> listeEquipes;
 
     @FXML
-    private ListView<Equipe> listeEquipes;
+    private TableColumn<Equipe, Integer> idColumn;
 
+    @FXML
+    private TableColumn<Equipe, String> nomEquipeColumn;
+
+    @FXML
+    private TableColumn<Equipe, Integer> nbrEmployeeColumn;
+
+    @FXML
+    private TableColumn<Equipe, String> nomTeqleadColumn;
+
+    @FXML
+    private TextField searchField;
 
     @FXML
     private Button ajouterEquipeButton;
@@ -35,14 +46,24 @@ public class AfficherEquipeController implements Initializable {
     @FXML
     private Button modifierEquipeButton;
 
-    private final EquipeServise equipeService = new EquipeServise();
+    @FXML
+    private Button supprimerEquipeButton;
+
+    private EquipeService equipeService = new EquipeService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Configure TableView columns
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("idEquipe"));
+        nomEquipeColumn.setCellValueFactory(new PropertyValueFactory<>("nomEquipe"));
+        nbrEmployeeColumn.setCellValueFactory(new PropertyValueFactory<>("nbrEmployee"));
+        nomTeqleadColumn.setCellValueFactory(new PropertyValueFactory<>("nomTeqlead"));
+
+        // Load teams into the TableView
         try {
             loadTeams();
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors du chargement des équipes : " + e.getMessage());
         }
     }
 
@@ -60,7 +81,7 @@ public class AfficherEquipeController implements Initializable {
             ObservableList<Equipe> observableList = FXCollections.observableArrayList(equipes);
             listeEquipes.setItems(observableList);
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors de la recherche des équipes : " + e.getMessage());
         }
     }
 
@@ -69,24 +90,39 @@ public class AfficherEquipeController implements Initializable {
         try {
             loadTeams();
         } catch (SQLException e) {
-            e.printStackTrace();
+            showAlert("Erreur", "Erreur lors du chargement des équipes : " + e.getMessage());
         }
     }
 
     @FXML
-    private void ajouterEquipe() {
+    private void ajouterEquipe(ActionEvent event) {
         try {
-            // Load the "ajoutEquipe.fxml" file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ajoutEquipe.fxml"));
+            
+            if (loader.getLocation() == null) {
+                showAlert("Erreur", "Le fichier FXML n'a pas été trouvé");
+                return;
+            }
+            
             Parent root = loader.load();
-
-            // Get the current stage
-            Stage stage = (Stage) ajouterEquipeButton.getScene().getWindow();
-
-            // Set the new scene
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter une équipe");
             stage.setScene(new Scene(root));
+            stage.setResizable(false); // Optionnel : empêcher le redimensionnement
+            
+            // Rafraîchir la liste après l'ajout
+            stage.setOnHiding((windowEvent) -> {
+                try {
+                    loadTeams();
+                } catch (SQLException e) {
+                    showAlert("Erreur", "Erreur lors du rechargement des équipes : " + e.getMessage());
+                }
+            });
+            
             stage.show();
+            
         } catch (IOException e) {
+            showAlert("Erreur", "Erreur lors du chargement de la vue : " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -112,53 +148,39 @@ public class AfficherEquipeController implements Initializable {
                 stage.setScene(new Scene(root));
                 stage.show(); // Show the new window
             } catch (IOException e) {
-                e.printStackTrace();
+                showAlert("Erreur", "Erreur lors du chargement de la vue : " + e.getMessage());
             }
         } else {
-            System.out.println("Aucune équipe sélectionnée.");
+            showAlert("Avertissement", "Veuillez sélectionner une équipe à modifier.");
         }
     }
+
     @FXML
-    private void handleSupprimerButtonClick(ActionEvent event) {
+    private void handleSupprimerButtonClick() {
+        // Get the selected team
         Equipe selectedEquipe = listeEquipes.getSelectionModel().getSelectedItem();
 
-        if (selectedEquipe == null) {
-            showAlert(Alert.AlertType.WARNING, "Aucune équipe sélectionnée", "Veuillez sélectionner une équipe à supprimer.");
-            return;
-        }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Supprimer l'équipe ?");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer l'équipe : " + selectedEquipe.getNomEquipe() + " ?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
+        if (selectedEquipe != null) {
             try {
-                // Appeler votre service pour supprimer l'équipe
-                EquipeServise equipeService = new EquipeServise(); // Assurez-vous d'instancier votre service
-                equipeService.supprimer(selectedEquipe.getIdEquipe()); // Supprimer par ID
+                // Delete the team from the database
+                equipeService.supprimer(selectedEquipe.getIdEquipe());
 
-                // Rafraîchir la liste après la suppression
-                listeEquipes.getItems().remove(selectedEquipe); // Mettez à jour la ListView
-                // ou bien :
-                // List<Equipe> equipes = equipeService.getAll(new Equipe()); // Récupérer la liste mise à jour
-                // listeEquipes.setItems(FXCollections.observableArrayList(equipes)); // Mettre à jour la ListView
-
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "L'équipe a été supprimée avec succès.");
-
+                // Reload the teams in the TableView
+                loadTeams();
+                showAlert("Succès", "Équipe supprimée avec succès.");
             } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la suppression de l'équipe : " + e.getMessage());
-                e.printStackTrace(); // Important pour le débogage
+                showAlert("Erreur", "Erreur lors de la suppression de l'équipe : " + e.getMessage());
             }
+        } else {
+            showAlert("Avertissement", "Veuillez sélectionner une équipe à supprimer.");
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }

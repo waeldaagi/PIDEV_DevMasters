@@ -5,7 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Equipe;
-import service.EquipeServise;
+import service.EquipeService;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -23,7 +23,7 @@ public class ModifierEquipeController implements Initializable {
     private TextField nomTechLeadTextField;
 
     private Equipe equipe;
-    private final EquipeServise equipeService = new EquipeServise();
+    private final EquipeService equipeService = new EquipeService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

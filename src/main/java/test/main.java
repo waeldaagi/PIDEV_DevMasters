@@ -2,7 +2,7 @@ package test;
 
 import models.Equipe;
 import models.Projet;
-import service.EquipeServise;
+import service.EquipeService;
 import service.ProjetService;
 
 import java.sql.SQLException;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class main {
     public static void main(String[] args) {
         ProjetService projetService = new ProjetService();
-        EquipeServise equipeServise = new EquipeServise();
+        EquipeService equipeService = new EquipeService();
         Equipe e = new Equipe("don",55,"sabri");
    //     Projet p = new Projet("java","30 jour","motaz",4);
         try {

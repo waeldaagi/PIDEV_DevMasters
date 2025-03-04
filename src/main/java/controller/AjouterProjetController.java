@@ -1,105 +1,174 @@
 package controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import models.Equipe;
 import models.Projet;
+import service.EquipeService;
 import service.ProjetService;
 
-import java.io.IOException;
+import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class AjouterProjetController {
-
-    @FXML
-    private TextField nomProjetTextField;
-
-    @FXML
-    private TextField dureeTextField;
+public class AjouterProjetController implements Initializable {
 
     @FXML
-    private TextField managerTextField;
+    private TextField nomProjetField;
 
     @FXML
-    private TextField nomClientTextField;
+    private DatePicker deadlinePicker;
 
     @FXML
-    private TextField idEquipeTextField;
-
-    private final ProjetService projetService = new ProjetService();
+    private TextField managerField;
 
     @FXML
-    public void ajouterProjet(ActionEvent event) {
-        // Validation des champs
-        if (nomProjetTextField.getText().isEmpty() || dureeTextField.getText().isEmpty() ||
-                managerTextField.getText().isEmpty() || nomClientTextField.getText().isEmpty() ||
-                idEquipeTextField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Champs vides", "Veuillez remplir tous les champs.");
-            return;
-        }
+    private TextField nomClientField;
 
-        // Validation de l'ID de l'équipe
-        int idEquipe;
+    @FXML
+    private ComboBox<Equipe> equipeComboBox;
+
+    private EquipeService equipeService = new EquipeService();
+    private ProjetService projetService = new ProjetService();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Définir la date du jour comme valeur par défaut
+        deadlinePicker.setValue(LocalDate.now());
+        
+        // Configurer le ComboBox
+        setupEquipeComboBox();
+        
+        // Charger les équipes
+        chargerEquipes();
+    }
+
+    private void setupEquipeComboBox() {
+        // Configurer comment les équipes sont affichées dans le ComboBox
+        equipeComboBox.setConverter(new StringConverter<Equipe>() {
+            @Override
+            public String toString(Equipe equipe) {
+                if (equipe == null) {
+                    return "";
+                }
+                return equipe.getNomEquipe();
+            }
+
+            @Override
+            public Equipe fromString(String string) {
+                return null; // Non nécessaire pour notre cas
+            }
+        });
+
+        // Ajouter un prompt text
+        equipeComboBox.setPromptText("Sélectionner une équipe");
+    }
+
+    private void chargerEquipes() {
         try {
-            idEquipe = Integer.parseInt(idEquipeTextField.getText());
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Format incorrect", "Veuillez entrer un ID d'équipe valide.");
-            return;
-        }
-
-        try {
-            // Créer un objet Projet avec les nouvelles valeurs
-            Projet projet = new Projet(nomProjetTextField.getText(), dureeTextField.getText(),
-                    managerTextField.getText(), nomClientTextField.getText(), idEquipe);
-
-            // Appeler le service pour ajouter le projet
-            projetService.ajouter(projet);
-
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Le projet a été ajouté avec succès !");
-
+            List<Equipe> equipes = equipeService.getAll(new Equipe());
+            equipeComboBox.getItems().clear(); // Nettoyer les items existants
+            equipeComboBox.getItems().addAll(equipes);
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de base de données", "Une erreur s'est produite lors de l'ajout du projet : " + e.getMessage());
+            showAlert("Erreur", "Erreur lors du chargement des équipes : " + e.getMessage());
         }
     }
 
     @FXML
-    public void retour(ActionEvent event) {
+    private void ajouterProjet() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/votre_ecran_precedent.fxml")); // Remplacez par le chemin correct
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran précédent.");
+            // Validation des champs
+            if (!validateFields()) {
+                return;
+            }
+
+            LocalDate localDate = deadlinePicker.getValue();
+            if (localDate == null) {
+                showAlert("Erreur", "Veuillez sélectionner une date limite");
+                return;
+            }
+
+            Equipe equipeSelectionnee = equipeComboBox.getValue();
+            if (equipeSelectionnee == null) {
+                showAlert("Erreur", "Veuillez sélectionner une équipe");
+                return;
+            }
+
+            // Création du projet
+            Projet projet = new Projet(
+                nomProjetField.getText(),
+                Date.valueOf(localDate),
+                managerField.getText(),
+                nomClientField.getText(),
+                equipeSelectionnee
+            );
+
+            // Debug: afficher l'équipe sélectionnée
+            System.out.println("Équipe sélectionnée : " + equipeSelectionnee.getNomEquipe() + 
+                             " (ID: " + equipeSelectionnee.getIdEquipe() + ")");
+
+            // Ajout dans la base de données
+            projetService.ajouter(projet);
+            
+            // Afficher un message de succès
+            showAlert("Succès", "Projet ajouté avec succès");
+            
+            // Fermer la fenêtre
+            closeWindow();
+            
+        } catch (SQLException e) {
+            showAlert("Erreur", "Erreur lors de l'ajout du projet : " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    private boolean validateFields() {
+        if (nomProjetField.getText().isEmpty()) {
+            showAlert("Erreur", "Le nom du projet est obligatoire");
+            return false;
+        }
+        
+        if (managerField.getText().isEmpty()) {
+            showAlert("Erreur", "Le manager est obligatoire");
+            return false;
+        }
+        
+        if (nomClientField.getText().isEmpty()) {
+            showAlert("Erreur", "Le nom du client est obligatoire");
+            return false;
+        }
+        
+        if (equipeComboBox.getValue() == null) {
+            showAlert("Erreur", "Veuillez sélectionner une équipe");
+            return false;
+        }
+
+        return true;
+    }
+
+    @FXML
+    private void retour() {
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) nomProjetField.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(title.equals("Succès") ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(message);
         alert.showAndWait();
-    }
-    @FXML
-    public void afficherProjets(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/afficherProjet.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger l'écran des projets.");
-        }
     }
 }

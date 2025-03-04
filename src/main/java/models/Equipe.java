@@ -6,7 +6,6 @@ public class Equipe {
     private String nomEquipe;
     private int nbrEmployee;
     private String nomTeqlead;
-
     // Constructor
     public Equipe() {} // No-argument constructor
 
@@ -16,6 +15,12 @@ public class Equipe {
         this.nomTeqlead = nomTeqlead;
     }
 
+    public Equipe(int idEquipe, String nomEquipe, int nbrEmployee, String nomTeqlead) {
+        this.idEquipe = idEquipe;
+        this.nomEquipe = nomEquipe;
+        this.nbrEmployee = nbrEmployee;
+        this.nomTeqlead = nomTeqlead;
+    }
 
     public int getIdEquipe() {
         return idEquipe;
@@ -50,12 +55,7 @@ public class Equipe {
 
     @Override
     public String toString() {
-        return "Equipe{" +
-                "idEquipe=" + idEquipe +
-                ", nomEquipe='" + nomEquipe + '\'' +
-                ", nbrEmployee=" + nbrEmployee +
-                ", nomTeqlead='" + nomTeqlead + '\'' +
-                '}';
+        return nomEquipe;
     }
 
 }
