@@ -101,7 +101,7 @@ public class AjoutParticipationController {
 
             // 🔹 Prepare QR Code Data
             String qrData = "https://sahar-khiari.github.io/evnets_participer/event_participation.html?event_id=" + idEvent + "&username=" + username + "&role=" + role;
-            String filePath = "C:/Users/PC/Desktop/QRCode_" + username + ".png";
+            String filePath = "C:/Users/PC/Documents/GitHub/PIDEV_DevMasters/QRCode_" + username + ".png";
 
             // 🔹 Generate QR Code
             QRCodeGenerator.generateQRCode(qrData, filePath);
