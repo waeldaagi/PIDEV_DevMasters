@@ -35,6 +35,11 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.image.ImageView;
+import services.GoogleCalendarService;
+
+
+
+
 
 public class AjoutOffreRecrutementController {
 
@@ -83,11 +88,13 @@ public class AjoutOffreRecrutementController {
 
     @FXML
     void ajouter_offre(ActionEvent event) {
+        // Ensure all fields are filled
         if (date_pub.getValue() == null || date_limite.getValue() == null || poste.getValue() == null || salaire.getText().trim().isEmpty()) {
             showAlert("Erreur", "Tous les champs doivent être remplis !");
             return;
         }
 
+        // Validate salaire value
         int salaireValue;
         try {
             salaireValue = Integer.parseInt(salaire.getText().trim());
@@ -100,14 +107,16 @@ public class AjoutOffreRecrutementController {
             return;
         }
 
-        try {
-            OffreRecrutement offre = new OffreRecrutement(
-                    Date.valueOf(date_pub.getValue()),
-                    Date.valueOf(date_limite.getValue()),
-                    salaireValue,
-                    poste.getValue().trim() // Updated to use ChoiceBox value
-            );
+        // Create the OffreRecrutement object
+        OffreRecrutement offre = new OffreRecrutement(
+                Date.valueOf(date_pub.getValue()),
+                Date.valueOf(date_limite.getValue()),
+                salaireValue,
+                poste.getValue().trim() // ChoiceBox value
+        );
 
+        try {
+            // Add the offer to the database
             serviceOffre.ajouter(offre);
 
             // **🔔 Show a Toast Notification**
@@ -116,6 +125,13 @@ public class AjoutOffreRecrutementController {
                     .text("Votre offre de recrutement a été ajoutée avec succès.")
                     .position(Pos.BOTTOM_RIGHT)
                     .showConfirm();
+
+            // Integrate with Google Calendar API
+            try {
+                GoogleCalendarService.addEventToCalendar(offre); // Add the event to Google Calendar
+            } catch (Exception e) {
+                showAlert("Erreur", "Une erreur est survenue lors de l'ajout de l'événement à Google Calendar : " + e.getMessage());
+            }
 
             // Redirect to the offer list
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherOffreRecrutement.fxml"));
@@ -127,11 +143,14 @@ public class AjoutOffreRecrutementController {
             stage.setScene(new Scene(root));
             stage.setTitle("Liste des Offres");
             stage.show();
+
         } catch (SQLException e) {
             showAlert("Erreur SQL", "Une erreur SQL est survenue : " + e.getMessage());
         } catch (IOException e) {
             showAlert("Erreur", "Une erreur est survenue lors du chargement de la page : " + e.getMessage());
         }
+          // Commit the transaction after insertion
+
     }
 
     private void showAlert(String title, String message) {
