@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.RemplacentRhController"
+            stylesheets="@../styles/sidebar.css , @../styles/remplacent-rh.css"
+            prefHeight="720" prefWidth="1080">
+
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebarRh.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15" alignment="CENTER" styleClass="container">
+
+            <VBox spacing="20" alignment="CENTER" styleClass="card">
+                <Label text="Ajouter un Remplaçant" styleClass="header-label"/>
+
+                <ComboBox fx:id="employeeComboBox" promptText="Sélectionner un employé disponible" styleClass="combo-box"/>
+                <ComboBox fx:id="congeComboBox" promptText="Sélectionner un congé à remplacer" styleClass="combo-box"/>
+                <ComboBox fx:id="posteComboBox" promptText="Sélectionner le poste remplacé" styleClass="combo-box"/>
+
+                <Button fx:id="assignButton" text="Assigner" styleClass="assign-button"/>
+                <Button fx:id="historyButton" text="🔍 Historique" styleClass="history-button" onAction="#openHistoriqueRemplacent"/>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.HistoriquecongeRhController"
+            stylesheets="@../styles/sidebar.css , @../styles/historiqueconge-rh.css"
+            prefHeight="720" prefWidth="1080">
+
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebarRh.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15" alignment="CENTER" styleClass="container">
+
+            <HBox spacing="10" styleClass="search-bar">
+                <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-field"/>
+                <Button fx:id="searchButton" text="🔍" styleClass="search-button"/>
+            </HBox>
+
+            <ListView fx:id="congeListView" styleClass="conge-list"/>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="approveButton" text="Approuver" styleClass="approve-button"/>
+                <Button fx:id="declineButton" text="Refuser" styleClass="decline-button"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

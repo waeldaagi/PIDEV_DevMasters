@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AfficherProjetsController">
+    <VBox spacing="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <!-- Titre -->
+        <Label text="Gestion des Projets" textFill="#0077b6">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <!-- Barre de recherche et boutons -->
+        <HBox spacing="10">
+            <TextField fx:id="searchField" promptText="Rechercher un projet..." prefWidth="300"/>
+            <Button onAction="#handleSearchButtonClick" text="Rechercher" styleClass="action-button"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#handleChatbotButtonClick" text="Assistant IA" styleClass="action-button"/>
+            <Button onAction="#handleAjouterButtonClick" text="Ajouter un projet" styleClass="action-button"/>
+        </HBox>
+
+        <!-- TableView pour les projets -->
+        <TableView fx:id="projetTableView" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="nomProjetColumn" text="Nom du Projet" prefWidth="150"/>
+                <TableColumn fx:id="deadlineColumn" text="Date Limite" prefWidth="100"/>
+                <TableColumn fx:id="managerColumn" text="Manager" prefWidth="120"/>
+                <TableColumn fx:id="clientColumn" text="Client" prefWidth="120"/>
+                <TableColumn fx:id="equipeColumn" text="Équipe" prefWidth="150"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane> 

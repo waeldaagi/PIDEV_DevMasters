@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.listEmployeController"
+            stylesheets="@../styles/sidebar.css, @../styles/listemploye.css"
+            prefHeight="720" prefWidth="1080">
+
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebar.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <ListView fx:id="listView" styleClass="content-area"/>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAddEmploye" text="➕ Add Employee" styleClass="add-button"/>
+                <Button fx:id="btnModifyEmploye" text="✏️ Modify" styleClass="modify-button"/>
+                <Button fx:id="btnDeleteEmploye" text="🗑️ Delete" styleClass="delete-button"/>
+                <Button fx:id="btnPromoteEmploye" text="⬆️ Promote" styleClass="promote-button"/>
+                <Button fx:id="btnDemoteEmploye" text="⬇️ Demote" styleClass="demote-button"/>
+                <Button fx:id="btnBanEmployee" text="🚫 Ban" styleClass="ban-button"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,76 @@
+
+
+/* ComboBox */
+#filterComboBox {
+    -fx-background-color: #ECF0F1;
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495E;
+    -fx-border-radius: 5;
+    -fx-border-color: #BDC3C7;
+    -fx-padding: 10px;
+}
+
+#filterComboBox .button {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* ComboBox on hover */
+#filterComboBox:hover {
+    -fx-background-color: #D5DBDB;
+}
+
+/* VBox inside BorderPane */
+.center {
+    -fx-background-color: white;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+/* LineChart */
+#lineChart {
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+}
+
+#lineChart .chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+#lineChart .axis {
+    -fx-font-size: 14px;
+    -fx-fill: #BDC3C7;
+}
+
+/* Axis labels */
+#categoryAxis {
+    -fx-label-fill: #34495E;
+}
+
+#numberAxis {
+    -fx-label-fill: #34495E;
+}
+
+/* Line Chart Series */
+.line-chart .series-line {
+    -fx-stroke-width: 3;
+    -fx-stroke-line-cap: round;
+}
+
+.line-chart .series-line {
+    -fx-stroke: #3498DB; /* Change this for different series colors */
+}
+
+/* LineChart hover effect */
+.line-chart .chart-series-line {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 15, 0, 0, 5);
+}
+
+
+/* Title label for ComboBox */
+#filterComboBox {
+    -fx-padding: 10px;
+}

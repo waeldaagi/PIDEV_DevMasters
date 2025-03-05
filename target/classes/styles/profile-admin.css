@@ -1,0 +1,67 @@
+/* Profile Form Background */
+.profile-form {
+    -fx-background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent black */
+    -fx-padding: 20px;
+    -fx-border-radius: 10px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-pref-width: 400px;
+    -fx-min-height: 400px;
+}
+
+/* Title of Profile Section */
+.header-label {
+    -fx-font-size: 24px;
+    -fx-text-fill: #2a5298; /* Dark blue */
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 20px 0;
+    -fx-alignment: center;
+}
+
+/* TextField for Input Fields */
+.input-field {
+    -fx-background-color: transparent;
+    -fx-border-color: #2a5298; /* Dark blue */
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-pref-width: 300px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* Update Button */
+.update-button {
+    -fx-background-color: #1e3c72; /* Dark blue */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-pref-width: 200px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 2, 2);
+}
+
+.update-button:hover {
+    -fx-background-color: #2a5298; /* Lighter blue on hover */
+    -fx-scale-x: 1.08;
+    -fx-scale-y: 1.08;
+}
+
+/* TextField for Date Picker */
+.date-picker {
+    -fx-background-color: transparent;
+    -fx-border-color: #2a5298;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+
+/* Label for Input Fields */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+    -fx-padding: 5px 0;
+}
