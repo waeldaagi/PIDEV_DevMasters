@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.wael.ModifierProjetController">
+    <VBox spacing="15" alignment="CENTER" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
+        <!-- Titre -->
+        <Label text="Modifier le Projet" textFill="#0077b6">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <!-- Formulaire -->
+        <GridPane vgap="10" hgap="10">
+            <Label text="Nom du projet:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomProjetField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Date limite:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="deadlinePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Manager:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="managerField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Client:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomClientField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Équipe:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="equipeComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <!-- Boutons -->
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Enregistrer" onAction="#handleSaveButtonClick" styleClass="action-button"/>
+            <Button text="Annuler" onAction="#handleCancelButtonClick" styleClass="action-button"/>
+        </HBox>
+    </VBox>
+</AnchorPane>

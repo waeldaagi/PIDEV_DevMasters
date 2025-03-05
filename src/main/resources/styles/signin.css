@@ -1,0 +1,107 @@
+/* Background styling */
+AnchorPane {
+    -fx-background-color: linear-gradient(to right, #1e3c72, #2a5298);
+}
+
+/* Semi-transparent overlay for better contrast */
+.overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-pref-width: 1080px;
+    -fx-pref-height: 720px;
+}
+
+/* Glassmorphism effect for the login form */
+.form-container {
+    -fx-padding: 40px;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 15px;
+    -fx-border-width: 1px;
+    -fx-backdrop-filter: blur(10px);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0, 3, 3);
+}
+
+/* Header Label */
+.header-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+/* Subtext */
+.subtext-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #dcdcdc;
+}
+
+/* Input Fields */
+.input-field {
+    -fx-pref-height: 50px;
+    -fx-pref-width: 350px;
+    -fx-font-size: 15px;
+    -fx-padding: 12px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+}
+
+.input-field:focused {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-border-color: white;
+}
+
+/* Checkbox */
+.checkbox {
+    -fx-text-fill: #ffffff;
+}
+
+/* Hyperlinks */
+.forgot-link {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-underline: false;
+}
+
+.forgot-link:hover {
+    -fx-underline: true;
+}
+
+/* Login Button */
+.login-button {
+    -fx-background-color: linear-gradient(to right, #ff7e5f, #feb47b);
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-pref-height: 55px;
+    -fx-pref-width: 350px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 2, 2);
+}
+
+.login-button:hover {
+    -fx-background-color: linear-gradient(to right, #feb47b, #ff7e5f);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.redirect-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(220, 228, 234, 0.91);
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-font-weight: bold;
+    -fx-border: 1px solid rgb(200, 212, 220);
+    -fx-border-radius: 30px;
+    -fx-cursor: hand;
+}
+
+.redirect-button:hover {
+    -fx-background-color: rgba(46, 134, 193, 0.18);
+    -fx-text-fill: white;
+}
+

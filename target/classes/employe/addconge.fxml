@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AddCongeController"
+            stylesheets="@../styles/sidebar.css, @../styles/addconge.css"
+            prefHeight="720" prefWidth="1080">
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebaremploye.fxml"/>
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="15" alignment="CENTER" styleClass="form-container">
+
+            <Label text="Ajouter un Congé" styleClass="form-title"/>
+
+            <Label text="Type de Congé:"/>
+            <ComboBox fx:id="typeCongeComboBox"/>
+
+            <Label text="Date Début:"/>
+            <DatePicker fx:id="dateDebutPicker"/>
+
+            <Label text="Date Fin:"/>
+            <DatePicker fx:id="dateFinPicker"/>
+
+            <Label text="Justificatif (Sélectionner une image):"/>
+            <HBox spacing="10">
+                <Button fx:id="selectImageButton" text="📂 Sélectionner" styleClass="select-button"/>
+                <Label fx:id="imagePathLabel" text="Aucune image sélectionnée" styleClass="image-path-label"/>
+            </HBox>
+
+            <ImageView fx:id="selectedImageView" fitWidth="250" fitHeight="150" preserveRatio="true"/>
+
+            <Button fx:id="submitCongeButton" text="Soumettre" styleClass="submit-button"/>
+        </VBox>
+    </center>
+
+</BorderPane>

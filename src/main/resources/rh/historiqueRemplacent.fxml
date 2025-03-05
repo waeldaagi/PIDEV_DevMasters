@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.HistoriqueRemplacentController"
+            stylesheets="@../styles/sidebar.css, @../styles/historiqueconge.css"
+            prefHeight="720" prefWidth="1080">
+
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebarRh.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="15" alignment="CENTER" styleClass="container">
+
+            <Label text="Historique des Remplaçants" styleClass="header-label"/>
+
+            <TextField fx:id="searchField" promptText="Rechercher un remplaçant..." styleClass="search-bar"/>
+
+            <ListView fx:id="remplacentListView" styleClass="list-view"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

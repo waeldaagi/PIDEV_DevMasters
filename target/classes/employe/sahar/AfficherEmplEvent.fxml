@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.sahar.AfficherEmplEventContoller"
+            stylesheets="@../../styles/sidebar.css, @../../styles/style3.css"
+            prefHeight="720" prefWidth="1080">
+
+   <left>
+      <VBox fx:id="sidebarContainer" styleClass="sidebar">
+         <fx:include source="../../components/sidebaremploye.fxml"/>
+      </VBox>
+   </left>
+
+   <center>
+      <AnchorPane prefHeight="523.0" prefWidth="602.0">
+         <children>
+            <ListView fx:id="events_empl" layoutX="12.0" layoutY="139.0" prefHeight="374.0" prefWidth="586.0" />
+            <TextField fx:id="searchField" layoutX="206.0" layoutY="37.0" prefHeight="26.0" prefWidth="330.0" />
+            <Label layoutX="8.0" layoutY="37.0" prefHeight="26.0" prefWidth="242.0" text="       Chercher un evennement " />
+            <Label layoutX="5.0" layoutY="104.0" prefHeight="26.0" prefWidth="550.0" text="                                      Afin de participer, veuillez sélectionner un événement" />
+         </children>
+      </AnchorPane>
+   </center>
+
+</BorderPane>

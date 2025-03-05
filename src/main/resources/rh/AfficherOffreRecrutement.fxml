@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="720" prefWidth="1080" stylesheets="@../styles/sidebar.css, @../styles/style2.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.yas.AfficherOffreRecrutementController">
+
+   <left>
+      <VBox fx:id="sidebarContainer" styleClass="sidebar">
+         <fx:include source="../components/sidebarRh.fxml"/>
+      </VBox>
+   </left>
+
+   <center>
+      <AnchorPane prefHeight="720" prefWidth="1080">
+         <children>
+            <AnchorPane fx:id="anchorPane" layoutY="-14.0" prefHeight="720" prefWidth="1080">
+               <children>
+                  <Button layoutX="180.0" layoutY="461.0" mnemonicParsing="false" onAction="#demande_go"
+                          prefHeight="42.0" prefWidth="458.0" text="Sélectionner une offre pour afficher les demandes"/>
+
+                  <Label layoutX="642.0" layoutY="106.0" prefHeight="18.0" prefWidth="231.0"
+                         text="Sélectionnez une offre pour la supprimer:"/>
+
+                  <ChoiceBox fx:id="poste" layoutX="703.0" layoutY="265.0" prefHeight="30.0" prefWidth="175.0"/>
+                  <Label layoutX="660.0" layoutY="272.0" text="POSTE:"/>
+
+                  <Button layoutX="660.0" layoutY="220.0" mnemonicParsing="false" onAction="#go_update_offre"
+                          prefHeight="42.0" prefWidth="231.0" text="Update une offre"/>
+
+                  <Label layoutX="642.0" layoutY="177.0" text="Sélectionnez une offre, remplissez le champ &quot;Post&quot;"/>
+                  <Label layoutX="642.0" layoutY="195.0" text="puis cliquez sur :"/>
+               </children>
+            </AnchorPane>
+
+            <TextField fx:id="id_offre" layoutX="401.0" layoutY="137.0" prefHeight="26.0" prefWidth="66.0"/>
+            <ListView fx:id="list_offre" layoutX="23.0" layoutY="48.0" prefHeight="392.0" prefWidth="614.0"/>
+
+            <Button layoutX="660.0" layoutY="115.0" mnemonicParsing="false" onAction="#delete_offre"
+                    prefHeight="42.0" prefWidth="231.0" text="Delete une offre"/>
+
+            <Button layoutX="651.0" layoutY="353.0" mnemonicParsing="false" onAction="#exporte_pdf"
+                    prefHeight="42.0" prefWidth="220.0" text="Exporter les offres en PDF"/>
+
+            <Button layoutX="658.0" layoutY="44.0" mnemonicParsing="false" onAction="#go_ajout"
+                    prefHeight="42.0" prefWidth="231.0" text="Ajouter une offre"/>
+         </children>
+      </AnchorPane>
+   </center>
+
+</BorderPane>

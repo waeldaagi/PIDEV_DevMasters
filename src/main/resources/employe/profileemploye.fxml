@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ProfileEmployeeController"
+            stylesheets="@../styles/profile-admin.css"
+            prefHeight="450.0" prefWidth="400.0">
+
+    <VBox alignment="CENTER" spacing="15" layoutX="50" layoutY="30">
+        <Label text="Employee Profile" styleClass="header-label"/>
+
+        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field"/>
+        <TextField fx:id="emailField" promptText="Email" styleClass="input-field"/>
+        <TextField fx:id="phoneField" promptText="Phone Number" styleClass="input-field"/>
+        <TextField fx:id="addressField" promptText="Address" styleClass="input-field"/>
+        <DatePicker fx:id="birthDateField" promptText="Birth Date" styleClass="input-field"/>
+
+        <Button fx:id="updateButton" text="Update Profile" styleClass="update-button" onAction="#handleUpdate"/>
+    </VBox>
+
+</AnchorPane>

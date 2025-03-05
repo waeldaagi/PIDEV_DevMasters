@@ -1,0 +1,97 @@
+/* Form Container */
+.form-container {
+    -fx-background-color: white;
+    -fx-border-color: rgba(42, 82, 152, 0.4);
+    -fx-border-radius: 12px;
+    -fx-padding: 25px;
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+    -fx-max-width: 500px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 5, 5);
+}
+
+/* Form Title */
+.form-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2a5298;
+    -fx-padding: 10px 0;
+    -fx-alignment: center;
+    -fx-underline: true;
+}
+
+/* Labels */
+
+
+/* Input Fields */
+.combo-box, .date-picker, .text-field {
+    -fx-background-color: #f7f9fc;
+    -fx-text-fill: #1e3c72;
+    -fx-border-color: #2a5298;
+    -fx-border-radius: 6px;
+    -fx-padding: 8px;
+    -fx-pref-width: 280px;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 4, 0, 2, 2);
+}
+
+.combo-box:hover, .date-picker:hover, .text-field:hover {
+    -fx-border-color: #ffd700;
+}
+
+/* Image Selection Container */
+.image-container {
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+/* Image Selection Button */
+.select-button {
+    -fx-background-color: linear-gradient(to right, #2a5298, #1e3c72);
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 7px 14px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 2, 2);
+}
+
+.select-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e3c72, #2a5298);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Image Path Label */
+.image-path-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #1e3c72;
+}
+
+/* Image Preview */
+.selectedImageView {
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(42, 82, 152, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 4, 4);
+}
+
+/* Submit Button */
+.submit-button {
+    -fx-background-color: linear-gradient(to right, #2a5298, #1e3c72);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+    -fx-pref-width: 280px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6, 0, 3, 3);
+    -fx-cursor: hand;
+}
+
+.submit-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e3c72, #2a5298);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}

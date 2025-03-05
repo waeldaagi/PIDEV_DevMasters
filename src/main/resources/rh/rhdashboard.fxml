@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.EmployeeDashboardController"
+            stylesheets="@../styles/sidebar.css, @../styles/dashboardemploye.css"
+            prefHeight="720" prefWidth="1080">
+
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebarRh.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="20" alignment="CENTER" styleClass="dashboard-container">
+
+            <Label text="Tableau de Bord rh" styleClass="dashboard-title"/>
+
+
+        </VBox>
+    </center>
+
+</BorderPane>
