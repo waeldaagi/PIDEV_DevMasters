@@ -1,5 +1,5 @@
 package controllers;
-
+/////////// affichage pour l'admin voir liste des participant de chaque event////
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

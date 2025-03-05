@@ -34,7 +34,7 @@ import javafx.collections.ObservableList;
 
 import services.Example;
 
-
+///////////////////// affichage pour l'admin //////////
 public class AfficherEvennementController {
     @FXML
     private ListView<HBox> list_event; // The ListView that will display the events

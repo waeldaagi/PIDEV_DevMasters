@@ -35,6 +35,7 @@ import java.util.Base64;
 
 public class AjoutParticipationController {
 
+   // private static final String API1="SG.CQv52eNiQn-w22fbBwrCwg.-brppsCKxwc2FHjgebg8y7TLDZpJ5f7yVCwmErjjQ-w";
     @FXML
     private TextField contact;
 
@@ -155,6 +156,7 @@ public class AjoutParticipationController {
 
             // Envoi avec SendGrid
 
+           // SendGrid sg = new SendGrid(System.getenv(API1));
             SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
             //l'api key doit etre les variables d'environnement
             //api est : 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
