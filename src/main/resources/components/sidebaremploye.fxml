@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.SidebarEmployeeController"
+      alignment="TOP_LEFT"
+      spacing="15"
+      styleClass="sidebar"
+      prefWidth="230"
+      prefHeight="720">
+
+    <Label text="employee Panel" styleClass="sidebar-title"/>
+
+    <Button fx:id="profileButton" styleClass="profile-button">
+        <graphic>
+            <ImageView fx:id="profileImage" fitHeight="50" fitWidth="50"/>
+        </graphic>
+    </Button>
+
+    <Button fx:id="btnHome" text="🏠 Home" styleClass="sidebar-button"/>
+    <Button fx:id="btnaddconge" text="👤 ajouter conge" styleClass="sidebar-button"/>
+    <Button fx:id="btnHistorique" text="👥 List conge" styleClass="sidebar-button"/>
+    <Button fx:id="btnaffempev" text="employe event" styleClass="sidebar-button"/>
+
+    <Pane prefHeight="20"/>
+
+    <Button fx:id="btnLogout" text="🚪 Logout" styleClass="logout-button"/>
+
+</VBox>

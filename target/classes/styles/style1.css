@@ -1,0 +1,78 @@
+/* Scope styles to main content area */
+#list_event {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 8px;
+    -fx-padding: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 2, 2);
+}
+
+#list_event .list-cell {
+    -fx-padding: 12px;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent transparent #eeeeee transparent;
+}
+
+#list_event .list-cell:hover {
+    -fx-background-color: #f7f7f7;
+}
+
+#list_event .list-cell:filled:selected {
+    -fx-background-color: #0078d7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Scoped Labels */
+#id_event_delete, .content-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 5px;
+}
+
+/* Scoped Buttons (Prevents Sidebar Buttons from Being Affected) */
+.content-area .button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #0078d7;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 2, 2);
+}
+
+.content-area .button:hover {
+    -fx-background-color: #005bb5;
+}
+
+.content-area .button:pressed {
+    -fx-background-color: #004080;
+}
+
+/* Scoped Primary Action Buttons */
+.content-area .action-button {
+    -fx-background-color: #0078d7;
+}
+
+.content-area .action-button:hover {
+    -fx-background-color: #005bb5;
+}
+
+.content-area .action-button:pressed {
+    -fx-background-color: #004080;
+}
+
+/* Scoped Danger Buttons */
+.content-area .action-button-danger {
+    -fx-background-color: #d32f2f;
+}
+
+.content-area .action-button-danger:hover {
+    -fx-background-color: #b71c1c;
+}
+
+.content-area .action-button-danger:pressed {
+    -fx-background-color: #8b0000;
+}

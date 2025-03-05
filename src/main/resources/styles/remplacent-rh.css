@@ -1,0 +1,90 @@
+.container {
+    -fx-padding: 30px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 12, 0, 0, 6);
+}
+
+.header-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 10px 0;
+}
+
+.combo-box-container {
+    -fx-padding: 15px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: #bdc3c7;
+    -fx-background-color: #f8f9fa;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.combo-box {
+    -fx-pref-width: 320px;
+    -fx-padding: 12px;
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #bdc3c7;
+    -fx-font-size: 15px;
+    -fx-text-fill: #2c3e50;
+}
+
+.combo-box:hover {
+    -fx-border-color: #2980b9;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 8px;
+}
+
+.combo-box .list-view .list-cell {
+    -fx-padding: 10px;
+    -fx-font-size: 15px;
+    -fx-text-fill: #2c3e50;
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.assign-button {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 25px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+}
+
+.assign-button:hover {
+    -fx-background-color: #218838;
+}
+
+.history-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 25px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 8, 0, 0, 4);
+}
+
+.history-button:hover {
+    -fx-background-color: #0056b3;
+}

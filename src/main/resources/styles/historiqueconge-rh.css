@@ -1,0 +1,140 @@
+
+.container {
+    -fx-background-color: white;
+    -fx-border-color: rgba(42, 82, 152, 0.6);
+    -fx-border-radius: 12px;
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 5, 5);
+}
+
+
+.search-bar {
+    -fx-padding: 12px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-background-color: #f7f9fc;
+    -fx-border-radius: 8px;
+    -fx-border-color: rgba(42, 82, 152, 0.5);
+}
+
+/* Search Field */
+.search-field {
+    -fx-pref-width: 400px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-border-color: #2a5298;
+    -fx-border-radius: 8px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 2, 2);
+}
+
+.search-field:focused {
+    -fx-border-color: #ffd700;
+    -fx-effect: dropshadow(gaussian, rgba(255, 215, 0, 0.3), 5, 0, 2, 2);
+}
+
+/* Search Button */
+.search-button {
+    -fx-background-color: linear-gradient(to right, #2a5298, #1e3c72);
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 16px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0, 2, 2);
+}
+
+.search-button:hover {
+    -fx-background-color: linear-gradient(to right, #1e3c72, #2a5298);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ================================
+   🔹 ListView Styling
+   ================================ */
+.conge-list {
+    -fx-pref-width: 500px;
+    -fx-pref-height: 380px;
+    -fx-border-color: rgba(42, 82, 152, 0.5);
+    -fx-border-radius: 10px;
+    -fx-background-color: #ffffff;
+    -fx-padding: 12px;
+}
+
+/* Individual List Items */
+.conge-list .list-cell {
+    -fx-padding: 14px;
+    -fx-font-size: 14px;
+    -fx-border-color: rgba(42, 82, 152, 0.4);
+    -fx-border-radius: 8px;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 4, 0, 2, 2);
+}
+
+/* List item when hovered */
+.conge-list .list-cell:hover {
+    -fx-background-color: #f1f4fc;
+}
+
+/* Selected List Item */
+.conge-list .list-cell:selected {
+    -fx-background-color: #2a5298;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Image inside the ListView */
+.conge-list .image-view {
+    -fx-fit-width: 60px;
+    -fx-fit-height: 60px;
+    -fx-border-radius: 6px;
+    -fx-border-color: rgba(42, 82, 152, 0.4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 5, 0, 2, 2);
+}
+
+
+
+
+.conge-list {
+    -fx-pref-width: 450px;
+    -fx-pref-height: 350px;
+}
+
+.approve-button {
+    -fx-background-color: #28a745;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-pref-width: 180px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+}
+
+.approve-button:hover {
+    -fx-background-color: #218838;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.decline-button {
+    -fx-background-color: #dc3545;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 20px;
+    -fx-pref-width: 180px;
+    -fx-border-radius: 8px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 2, 2);
+}
+
+.decline-button:hover {
+    -fx-background-color: #c82333;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}

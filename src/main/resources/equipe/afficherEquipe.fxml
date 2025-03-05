@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane prefHeight="720" prefWidth="1080" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@../styles/sidebar.css, @../styles/styles.css"
+            fx:controller="controllers.wael.AfficherEquipeController">
+
+    <!-- Sidebar on the left -->
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebar.fxml"/>
+        </VBox>
+    </left>
+
+    <!-- Main content in the center -->
+    <center>
+        <VBox spacing="20">
+            <BorderPane.margin>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </BorderPane.margin>
+
+            <!-- Title -->
+            <Label text="Liste des Équipes" textFill="#0077b6" styleClass="header-label">
+                <font>
+                    <Font name="System Bold" size="28.0" />
+                </font>
+            </Label>
+
+            <!-- Search bar and load button -->
+            <HBox spacing="10">
+                <TextField fx:id="searchField" promptText="Rechercher par nom ou techlead" prefWidth="300" styleClass="search-field"/>
+                <Button onAction="#handleSearchButtonClick" text="Rechercher" styleClass="action-button"/>
+                <Button onAction="#handleLoadTeamsButtonClick" text="Charger la liste" styleClass="action-button"/>
+            </HBox>
+
+            <!-- TableView for Teams -->
+            <TableView fx:id="listeEquipes" VBox.vgrow="ALWAYS" styleClass="list-view">
+                <columns>
+                    <TableColumn fx:id="nomEquipeColumn" text="Nom de l'équipe" prefWidth="200"/>
+                    <TableColumn fx:id="nbrEmployeeColumn" text="Nombre d'employés" prefWidth="150"/>
+                    <TableColumn fx:id="nomTeqleadColumn" text="Techlead" prefWidth="200"/>
+                </columns>
+            </TableView>
+
+            <!-- Buttons for Adding and Modifying Teams -->
+            <HBox alignment="CENTER" spacing="20">
+                <Button fx:id="ajouterEquipeButton" onAction="#ajouterEquipe" text="Ajouter Équipe" styleClass="action-button"/>
+                <Button fx:id="modifierEquipeButton" onAction="#handleModifierButtonClick" text="Modifier" styleClass="action-button"/>
+                <Button fx:id="supprimerEquipeButton" onAction="#handleSupprimerButtonClick" text="Supprimer" styleClass="action-button"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

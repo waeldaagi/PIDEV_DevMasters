@@ -1,0 +1,61 @@
+/* General Styles */
+AnchorPane {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 20px;
+}
+
+/* Text Fields */
+#remarque, #contact {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 2, 2);
+}
+
+#remarque:focused, #contact:focused {
+    -fx-border-color: #0078d7;
+    -fx-border-width: 2px;
+}
+
+/* Labels */
+Label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 5px;
+}
+
+/* Choice Boxes */
+#role_p, #depart_participant, #experience_event {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+#role_p:hover, #depart_participant:hover, #experience_event:hover {
+    -fx-background-color: #f7f7f7;
+}
+
+/* Buttons */
+Button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #0078d7;
+    -fx-text-fill: white;
+    -fx-border-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 2, 2);
+}
+
+Button:hover {
+    -fx-background-color: #005bb5;
+}
+
+Button:pressed {
+    -fx-background-color: #004080;
+}

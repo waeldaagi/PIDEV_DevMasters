@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.sahar.AfficherEvennementController"
+            stylesheets=" @../../styles/sidebar.css, @../../styles/style1.css"
+            prefHeight="720" prefWidth="1080">
+
+   <left>
+      <VBox fx:id="sidebarContainer" styleClass="sidebar">
+         <fx:include source="../../components/sidebar.fxml"/>
+      </VBox>
+   </left>
+
+   <center>
+      <AnchorPane fx:id="mainContent" styleClass="content-area" prefHeight="424.0" prefWidth="662.0">
+         <children>
+            <TextField fx:id="id_event_delete" layoutX="321.0" layoutY="200.0" prefHeight="26.0" prefWidth="118.0" />
+            <ListView fx:id="list_event" layoutX="14.0" layoutY="14.0" prefHeight="354.0" prefWidth="463.0" />
+            <Button layoutX="550.0" layoutY="226.0" mnemonicParsing="false" onAction="#go_update_evennement" prefHeight="26.0" prefWidth="90.0" text="Update" />
+            <Button layoutX="553.0" layoutY="297.0" mnemonicParsing="false" onAction="#delete_evennement" prefHeight="26.0" prefWidth="83.0" text="Delete" />
+            <Label layoutX="461.0" layoutY="266.0" styleClass="content-label" text="      sélectionner un événement pour le supprimer" />
+            <Label layoutX="475.0" layoutY="191.0" styleClass="content-label" text="sélectionner un événement pour le modifier" />
+            <Label layoutX="517.0" layoutY="80.0" styleClass="content-label" text="sélectionner un événement " />
+            <Button fx:id="voir" layoutX="526.0" layoutY="123.0" mnemonicParsing="false" onAction="#voirListP" prefHeight="26.0" prefWidth="134.0" text="voir liste participants" />
+            <Button layoutX="61.0" layoutY="384.0" mnemonicParsing="false" onAction="#pdf_exp" prefHeight="26.0" prefWidth="143.0" text="exporter un pdf détaillée" />
+            <Button layoutX="544.0" layoutY="355.0" mnemonicParsing="false" onAction="#annuler_event" prefHeight="26.0" prefWidth="98.0" text="Annuler" />
+            <Button layoutX="269.0" layoutY="384.0" mnemonicParsing="false" onAction="#ajout_ev" prefHeight="26.0" prefWidth="162.0" text="Ajouter un événement" />
+         </children>
+      </AnchorPane>
+   </center>
+
+
+</BorderPane>
