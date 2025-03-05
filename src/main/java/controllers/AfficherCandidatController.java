@@ -1,12 +1,11 @@
 package controllers;
-
+// hedhi l page mta li choufha el candidat
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import models.OffreRecrutement;
-import services.OpenAIService;
 import services.OpenRouterService;
 import services.ServiceDemande;
 import services.ServiceOffreRecrutement;
