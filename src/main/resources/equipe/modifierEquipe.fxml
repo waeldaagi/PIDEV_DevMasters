@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="main-pane" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.wael.ModifierEquipeController">
+
+    <!-- Header with Logo and Title -->
+    <VBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+        <!-- Logo -->
+        <ImageView fitHeight="100.0" fitWidth="100.0">
+            <image>
+                <Image url="@../images/im.png" />
+            </image>
+        </ImageView>
+
+        <!-- Title -->
+        <Label styleClass="header-label" text="Modifier l'Équipe">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
+    </VBox>
+
+    <!-- Form for Modifying a Team -->
+    <GridPane hgap="10" layoutX="150.0" layoutY="212.0" vgap="10">
+        <Label styleClass="form-label" text="Nom de l'équipe:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nomEquipeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+        <Label styleClass="form-label" text="Nombre d'employés:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField fx:id="nbrEmployeeTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+        <Label styleClass="form-label" text="Nom du Techlead:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField fx:id="nomTechLeadTextField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+    </GridPane>
+
+    <!-- Buttons -->
+    <HBox alignment="CENTER" layoutX="150.0" layoutY="320.0" spacing="20.0" />
+     <Button layoutX="138.0" layoutY="366.0" onAction="#modifierEquipe" styleClass="action-button" text="Modifier" />
+     <Button layoutX="266.0" layoutY="366.0" onAction="#annuler" styleClass="action-button" text="Annuler" />
+</AnchorPane>

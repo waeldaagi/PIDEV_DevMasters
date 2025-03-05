@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ModifyCongeController"
+            stylesheets="@../styles/sidebar.css , @../styles/modifyconge.css"
+            prefHeight="400" prefWidth="600">
+
+    <center>
+        <VBox spacing="15" alignment="CENTER" styleClass="container">
+
+            <Label text="Modifier le Congé" styleClass="form-title"/>
+
+            <Label text="Type de Congé:"/>
+            <ComboBox fx:id="typeCongeComboBox"/>
+
+            <Label text="Date Début:"/>
+            <DatePicker fx:id="dateDebutPicker"/>
+
+            <Label text="Date Fin:"/>
+            <DatePicker fx:id="dateFinPicker"/>
+
+            <HBox spacing="15" alignment="CENTER">
+                <Button fx:id="saveButton" text="Sauvegarder" styleClass="save-button"/>
+                <Button fx:id="cancelButton" text="Annuler" styleClass="cancel-button"/>
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

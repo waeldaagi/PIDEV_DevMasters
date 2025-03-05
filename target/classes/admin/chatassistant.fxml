@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ChatAssistantController"
+            stylesheets="@../styles/sidebar.css, @../styles/chatassistant.css"
+            prefHeight="720" prefWidth="1080">
+    <left>
+        <VBox fx:id="sidebarContainer" styleClass="sidebar">
+            <fx:include source="../components/sidebar.fxml"/>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="20" alignment="CENTER" styleClass="chat-container">
+            <HBox alignment="CENTER_LEFT" styleClass="chat-header">
+                <Text text="🤖" styleClass="chat-icon"/>
+                <Text text=" Chat Assistant" styleClass="chat-title"/>
+            </HBox>
+
+            <ListView fx:id="chatListView" styleClass="chat-list" VBox.vgrow="ALWAYS"/>
+
+            <HBox spacing="15" alignment="CENTER" styleClass="input-container">
+                <TextField fx:id="messageField" promptText="Ask me anything about HR, business, or finance..."
+                           styleClass="chat-input" HBox.hgrow="ALWAYS"/>
+                <Button fx:id="sendButton" text="Send" styleClass="chat-send-button" minWidth="120"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
