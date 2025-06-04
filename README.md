@@ -1,73 +1,65 @@
-RH Management – Projet PIDEV Java
-Overview
-Ce projet a été réalisé dans le cadre du module PIDEV 3A à Esprit School of Engineering.
-Il s'agit d'une application Java dédiée à la gestion des ressources humaines (RH), intégrant des fonctionnalités telles que la gestion des employés, des événements, des candidatures, et bien plus encore.
+# RH Management siteweb – Projet PIDEV Web
 
-Features
-Gestion des utilisateurs
-Authentification avec rôles (admin, RH, employé, etc.)
+## Overview
 
-Création, modification et suppression de comptes utilisateurs
+Ce projet a été réalisé dans le cadre du module PIDEV 3A à **Esprit School of Engineering**.  
+Il s'agit d'un site web web dédiée à la gestion des ressources humaines (RH), intégrant des fonctionnalités de gestion des employés, des événements, des candidatures, et plus encore.
 
-Interface de profil utilisateur
+## Features
+
+ Gestion des utilisateurs
+- Authentification et rôles (admin, RH, employé, etc.)
+- Création, modification et suppression des comptes
+- Interface de profil utilisateur
 
 Gestion des événements et participation
-Création et planification d’événements internes
+- Création et planification d’événements internes
+- Participation aux événements (avec QR Code généré)
+- Envoi de mails de confirmation (SendGrid)
+- Envoi de SMS en cas d’annulation (Twilio)
+- Prédiction de la participation selon le type et l’historique
 
-Participation aux événements (génération de QR Code)
-
-Envoi de mails de confirmation (via SendGrid)
-
-Notification SMS en cas d’annulation (via Twilio)
-
-Prédiction de la participation basée sur des données historiques
-
-Gestion des offres de recrutement
-Création et publication d’offres d’emploi
-
-Consultation des offres par les candidats
-
-Suivi des candidatures
+ Gestion des offres de recrutement
+- Création et publication d’offres d’emploi
+- Consultation des offres par les candidats
+- Suivi des candidatures
 
 Gestion des demandes d'emploi
-Dépôt de candidatures avec CV
+- Dépôt de candidatures avec CV
+- Suivi du statut des demandes
 
-Suivi de l’état des candidatures
+ Gestion des congés
+- Soumission de demandes de congés par les employés
+- Validation ou refus des congés par l’administration
+- Historique des congés
 
-Gestion des congés
-Soumission des demandes de congés par les employés
-
-Validation ou refus des congés par les RH
-
-Historique des congés
-
-Gestion des équipes et des projets
-Création de projets internes
-
-Suivi de l’avancement et du statut des projets
+ Gestion des équipes et des projets
+- Création de projets internes
+- Suivi d’avancement ou de statut de projet
 
 
-Backend
-Java 17
+## Tech Stack
 
-Spring Boot
+### Frontend
+- HTML / CSS / JavaScript
+- Bootstrap
 
-Hibernate / JPA
+### Backend
+- javaFX
+- java
+- Doctrine ORM
+- API REST
 
-REST APIs
+### Other Tools & APIs
+- SendGrid API
+- Twilio API
+- API Ninjas
+- Composer
+- Git / GitHub
 
-Frontend
-JavaFX ou autre framework graphique (si applicable)
+## Directory Structure
 
-FXML, CSS
 
-Outils et APIs
-Maven
-
-SendGrid API
-
-Twilio API
-
-API Ninjas (QR Code)
-
-Git / GitHub
+## Installation
+composer install
+symfony server:start
