@@ -54,12 +54,6 @@ Gestion des demandes d'emploi
 - SendGrid API
 - Twilio API
 - API Ninjas
-- Composer
 - Git / GitHub
 
-## Directory Structure
 
-
-## Installation
-composer install
-symfony server:start
